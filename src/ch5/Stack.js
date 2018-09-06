@@ -1,28 +1,31 @@
+const LinkedList = require('./LinkedList')
+
 class Stack {
   constructor() {
-    this._elements = []
-    this._count = 0
+    this._elements = new LinkedList()
   }
 
   get size() {
-    return this._count
+    return this._elements.length
   }
 
   isEmpty() {
-    return this._count === 0
+    return this._elements.isEmpty()
   }
 
   top() {
-    return (this.isEmpty()) ? null : this._elements[this._count - 1]
+    return this._elements.front
   }
 
   pop() {
     if (this.isEmpty()) throw new Error(Stack.prototype.messages.emptyStackError)
-    return this._elements[--this._count]
+    const ret = this._elements.front
+    this._elements.deleteAt(0)
+    return ret
   }
 
   push(val) {
-    this._elements[this._count++] = val
+    this._elements.insertFirst(val)
   }
 }
 

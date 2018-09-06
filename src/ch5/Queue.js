@@ -17,7 +17,7 @@ class Queue {
   }
 
   isEmpty() {
-    return this.size === 0
+    return this._elements.isEmpty()
   }
 
   get size() {
