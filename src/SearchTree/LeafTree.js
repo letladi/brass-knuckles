@@ -37,11 +37,7 @@ class LeafTree {
   isEmpty() {
     return isNull(this.root.left)
   }
-  /*
-    current interval = node.left U node.right.left U node.right.right
-    This method groups the first two intervals into A (node.left & node.right.left),
-    and then groups the merged intervals with the last interval (node.right.right)
-  */
+  
   rotateLeft(node) {
     assertLeftRotationConditions(node)
 
