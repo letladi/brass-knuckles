@@ -1,17 +1,19 @@
-const { last, first } = require('../util/') 
+const LinkedList = require('./LinkedList')
 
 class Queue {
   constructor() {
-    this._elements = []
+    this._elements = new LinkedList()
   }
 
   enqueue(val) {
-    this._elements.push(val)
+    this._elements.insertLast(val)
   }
 
   dequeue() {
     if (this.isEmpty()) throw new Error(this.messages.dequeueEmptyQueueError)
-    return this._elements.shift()
+    const ret = this.front
+    this._elements.deleteAt()
+    return ret
   }
 
   isEmpty() {
@@ -23,11 +25,11 @@ class Queue {
   }
 
   get front() {
-    return this.isEmpty() ? null : first(this._elements)
+    return this._elements.front
   }
 
   get back() {
-    return this.isEmpty() ? null : last(this._elements)
+    return this._elements.back
   }
 }
 

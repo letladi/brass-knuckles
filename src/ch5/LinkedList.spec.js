@@ -61,8 +61,8 @@ describe('LinkedList', () => {
             list.insertFirst(2)
             expect(list.front).toEqual(2)
         })
-        test('throws exception if list is empty', () => {
-            expect(() => list.front).toThrow(Error)
+        test('returns null if list is empty', () => {
+            expect(list.front).toEqual(null)
         })
     })
 
@@ -72,8 +72,8 @@ describe('LinkedList', () => {
             list.insertLast(2)
             expect(list.back).toEqual(2)
         })
-        test('throws exception if list is empty', () => {
-            expect(() => list.back).toThrow(Error)
+        test('returns null if list is empty', () => {
+            expect(list.back).toEqual(null)
         })
     })
 
@@ -627,27 +627,6 @@ describe('LinkedList', () => {
         })
     })
 
-    describe('#quickSort', () => {
-      test('#quickSort({ 34->67->23->12->78->56->36->79->5->32->66 }) = { 5->12->23->32->34->36->56->66->67->78->79 }', () => {
-          const nums = [34, 67, 23, 12, 78, 56, 36, 79, 5, 32, 66]
-          nums.forEach((el) => list.insertLast(el))
-          list.quickSort()
-          expect(list.entries()).toEqual([5, 12, 23, 32, 34, 36, 56, 66, 67, 78, 79])
-      })
-      test('#quickSort({ 13->7->15->8->12->30->3->20 }) = { 3->7->8->12->13->15->20->30 }', () => {
-          const nums = [13, 7, 15, 8, 12, 30, 3, 20]
-          nums.forEach((el) => list.insertLast(el))
-          list.quickSort()
-          expect(list.entries()).toEqual([3, 7, 8, 12, 13, 15, 20, 30])
-      })
-      test('#quickSort({ 10->18->25->30->23->17->45->35 }) = { 10->17->18->23->25->30->35->45 }', () => {
-          const nums = [10, 18, 25, 30, 23, 17, 45, 35]
-          nums.forEach((el) => list.insertLast(el))
-          list.quickSort()
-          expect(list.entries()).toEqual([10, 17, 18, 23, 25, 30, 35, 45])
-      })
-    })
-
     describe('#swap', () => {
       test('{ List: 1->2->3->4->5 } : swap(0, 4) = { List: 5->2->3->4->1 }', () => {
         const nums = [1,2,3,4,5]
@@ -664,23 +643,23 @@ describe('LinkedList', () => {
       })
     })
 
-    describe('#quickSort', () => {
-      test('#quickSort({ 34->67->23->12->78->56->36->79->5->32->66 }) = { 5->12->23->32->34->36->56->66->67->78->79 }', () => {
+    describe('#sort', () => {
+      test('#sort({ 34->67->23->12->78->56->36->79->5->32->66 }) = { 5->12->23->32->34->36->56->66->67->78->79 }', () => {
           const nums = [34, 67, 23, 12, 78, 56, 36, 79, 5, 32, 66]
           nums.forEach((el) => list.insertLast(el))
-          list.quickSort()
+          list.sort()
           expect(list.entries()).toEqual([5, 12, 23, 32, 34, 36, 56, 66, 67, 78, 79])
       })
-      test('#quickSort({ 13->7->15->8->12->30->3->20 }) = { 3->7->8->12->13->15->20->30 }', () => {
+      test('#sort({ 13->7->15->8->12->30->3->20 }) = { 3->7->8->12->13->15->20->30 }', () => {
           const nums = [13, 7, 15, 8, 12, 30, 3, 20]
           nums.forEach((el) => list.insertLast(el))
-          list.quickSort()
+          list.sort()
           expect(list.entries()).toEqual([3, 7, 8, 12, 13, 15, 20, 30])
       })
-      test('#quickSort({ 10->18->25->30->23->17->45->35 }) = { 10->17->18->23->25->30->35->45 }', () => {
+      test('#sort({ 10->18->25->30->23->17->45->35 }) = { 10->17->18->23->25->30->35->45 }', () => {
           const nums = [10, 18, 25, 30, 23, 17, 45, 35]
           nums.forEach((el) => list.insertLast(el))
-          list.quickSort()
+          list.sort()
           expect(list.entries()).toEqual([10, 17, 18, 23, 25, 30, 35, 45])
       })
     })

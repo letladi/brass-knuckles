@@ -22,13 +22,11 @@ class LinkedList {
     }
 
     get front() {
-        if (this.isEmpty()) throw Error('list is empty')
-        return this._first.info;
+        return (this.isEmpty()) ? null : this._first.info
     }
 
     get back() {
-        if (this.isEmpty()) throw Error('list is empty')
-        return this._last.info;
+        return (this.isEmpty()) ? null : this._last.info
     }
 
     each(cb) {
@@ -386,10 +384,9 @@ class LinkedList {
         return deleted ? max.info : false
     }
 
-    quickSort() {
+    sort(compare = (a, b) => a > b ? 1 : -1) {
       const entries = this.entries()
-      // sort(entries)
-      entries.sort((a, b) => a > b ? 1 : -1)
+      entries.sort(compare)
       this.destroy()
       entries.forEach((el) => this.insertLast(el))
     }

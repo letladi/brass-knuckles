@@ -13,8 +13,7 @@ class Stack {
   }
 
   top() {
-    if (this.isEmpty()) return null
-    return this._elements[this._count - 1]
+    return (this.isEmpty()) ? null : this._elements[this._count - 1]
   }
 
   pop() {
