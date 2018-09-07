@@ -7,9 +7,9 @@
     "test": "jest",
     "test:watch": "npm test -- --watch"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["data-structures", "algorithms", "trees"],
+  "author": "Letladi Sebesho",
+  "license": "MIT",
   "devDependencies": {
     "jest": "^23.5.0"
   }

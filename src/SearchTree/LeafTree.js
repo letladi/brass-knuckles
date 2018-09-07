@@ -1,5 +1,5 @@
 const assert = require('assert')
-const Node = require('./Node')
+const Stack = require('../ch1/Stack')
 const { isNull } = require('../util/')
 
 const assertLeftRotationConditions = (node) => {
@@ -18,8 +18,8 @@ const swapKeys = (node1, node2) => {
   node2.key = tempKey
 }
 
-const isLeaf = () => {
-  return isNull(this.right)
+const isLeaf = (node) => {
+  return isNull(node.right)
 }
 
 const copyNode = (target, source) => {
@@ -29,15 +29,37 @@ const copyNode = (target, source) => {
   return target
 }
 
+const getNewNode = (key = null, left = null, right = null) => ({
+  key,
+  left,
+  right
+})
+
+const inOrderTraversal = (rootNode, cb) => {
+  const stack = new Stack()
+  let current = rootNode
+  while (!isNull(current) || !stack.isEmpty()) {
+    if (!isNull(current) || !isLeaf(current)) {
+      stack.push(current)
+      current = current.left
+    } else {
+      current = stack.pop()
+      cb(current)
+      current = current.right
+    }
+  }
+
+}
+
 class LeafTree {
   constructor() {
-    this.root = new Node()
+    this.root = getNewNode()
   }
 
   isEmpty() {
     return isNull(this.root.left)
   }
-  
+
   rotateLeft(node) {
     assertLeftRotationConditions(node)
 
@@ -78,18 +100,17 @@ class LeafTree {
   }
 
   insert(key, val) {
-    if (this.isEmpty()) this.root = new Node(key, val)
+    if (this.isEmpty()) this.root = getNewNode(key, val)
     else {
       let current = this.root
       while (!isLeaf(current)) {
         current = (key < current.key) ? current.left : current.right
       }
-      /* duplicates keys not allowed */
       if (current.key === key)
         return false
       else {
-        let oldLeaf = new Node(current.key, current.left)
-        const newLeaf = new Node(key, val)
+        let oldLeaf = getNewNode(current.key, current.left)
+        const newLeaf = getNewNode(key, val)
         if (current.key < key) {
           current.left = oldLeaf
           current.right = newLeaf
@@ -136,4 +157,26 @@ class LeafTree {
       }
     }
   }
+  // Note; putting a default argument of node = this.root causes RangeError: Maximum call stack size exceeded
+  traverse(node, cb) {
+    if (node) {
+      cb(node)
+      this.traverse(node.left, cb)
+      this.traverse(node.right, cb)
+    }
+  }
+
+  get leaveCount() {
+    let count = 0
+    this.traverse(this.root, (node) => count += isLeaf(node) ? 1 : 0)
+    return count
+  }
+
+  get nodeCount() {
+    let count = 0
+    this.traverse(this.root, () => count++)
+    return count
+  }
 }
+
+module.exports = LeafTree
