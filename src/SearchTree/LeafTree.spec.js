@@ -1,7 +1,7 @@
 const assert = require('assert')
 const LeafTree = require('./LeafTree')
 
-describe('LeafTree', () => {
+xdescribe('LeafTree', () => {
   let tree = null
   beforeEach(() => tree = new LeafTree())
 
