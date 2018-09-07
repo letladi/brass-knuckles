@@ -1,5 +1,6 @@
 const assert = require('assert')
 const Stack = require('../ch1/Stack')
+const Node = require('./LeafTreeNode')
 const { isNull } = require('../util/')
 
 const assertLeftRotationConditions = (node) => {
@@ -18,10 +19,6 @@ const swapKeys = (node1, node2) => {
   node2.key = tempKey
 }
 
-const isLeaf = (node) => {
-  return isNull(node.right)
-}
-
 const copyNode = (target, source) => {
   target.key = source.key
   target.left = source.left
@@ -29,35 +26,13 @@ const copyNode = (target, source) => {
   return target
 }
 
-const getNewNode = (key = null, left = null, right = null) => ({
-  key,
-  left,
-  right
-})
-
-const inOrderTraversal = (rootNode, cb) => {
-  const stack = new Stack()
-  let current = rootNode
-  while (!isNull(current) || !stack.isEmpty()) {
-    if (!isNull(current) || !isLeaf(current)) {
-      stack.push(current)
-      current = current.left
-    } else {
-      current = stack.pop()
-      cb(current)
-      current = current.right
-    }
-  }
-
-}
-
 class LeafTree {
   constructor() {
-    this.root = getNewNode()
+    this.root = new Node()
   }
 
   isEmpty() {
-    return isNull(this.root.left)
+    return this.root.isEmpty()
   }
 
   rotateLeft(node) {
@@ -93,24 +68,24 @@ class LeafTree {
   find(key) {
     if (this.isEmpty()) return null
     let current = this.root
-    while (!isLeaf(current)) {
+    while (!current.isLeaf()) {
       current = (key < current.key) ? current.left : current.right
     }
-    return (current.key === key) ? current.left : null
+    return (current.key === key) ? current.value : null
   }
 
   insert(key, val) {
-    if (this.isEmpty()) this.root = getNewNode(key, val)
+    if (this.isEmpty()) this.root = new Node(key, val)
     else {
       let current = this.root
-      while (!isLeaf(current)) {
+      while (!current.isLeaf()) {
         current = (key < current.key) ? current.left : current.right
       }
       if (current.key === key)
         return false
       else {
-        let oldLeaf = getNewNode(current.key, current.left)
-        const newLeaf = getNewNode(key, val)
+        let oldLeaf = new Node(current.key, current.left)
+        const newLeaf = new Node(key, val)
         if (current.key < key) {
           current.left = oldLeaf
           current.right = newLeaf
@@ -127,9 +102,9 @@ class LeafTree {
   delete(key) {
     if (this.isEmpty())
       return null
-    else if (isLeaf(this.root)) {
+    else if (this.root.isLeaf()) {
       if (this.root.key === key) {
-        const deleteVal = this.root.left
+        const deleteVal = this.root.value
         this.root.left = null
         return deleteVal
       } else
@@ -139,7 +114,7 @@ class LeafTree {
       let currentParent = null
       let currentSibling = null
 
-      while (!isLeaf(current)) {
+      while (!current.isLeaf()) {
         currentParent = current
         if (key < current.key) {
           current = currentParent.left
@@ -153,28 +128,40 @@ class LeafTree {
         return null
       else {
         copyNode(currentParent, currentSibling)
-        return current.left
+        return current.value
       }
     }
   }
-  // Note; putting a default argument of node = this.root causes RangeError: Maximum call stack size exceeded
-  traverse(node, cb) {
-    if (node) {
-      cb(node)
-      this.traverse(node.left, cb)
-      this.traverse(node.right, cb)
+
+  traverse(cb) {
+    let current = this.root
+    const stack = new Stack()
+
+    while (current || !stack.isEmpty()) {
+      if (current) {
+        stack.push(current)
+        current = current.left
+      } else {
+        current = stack.pop()
+        cb(current)
+        current = current.right
+      }
     }
   }
 
   get leaveCount() {
     let count = 0
-    this.traverse(this.root, (node) => count += isLeaf(node) ? 1 : 0)
+    if (this.isEmpty()) return count
+
+    this.traverse((node) => count += node.isLeaf() ? 1 : 0)
     return count
   }
 
   get nodeCount() {
     let count = 0
-    this.traverse(this.root, () => count++)
+    if (this.isEmpty()) return count
+
+    this.traverse(() => count++)
     return count
   }
 }

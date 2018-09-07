@@ -33,6 +33,10 @@ class Node {
     else
       throw new Error(Node.prototype.messages.invalidAssignmentOfRightChild)
   }
+
+  isEmpty() {
+    return isNull(this._left)
+  }
 }
 
 Node.prototype.messages = {

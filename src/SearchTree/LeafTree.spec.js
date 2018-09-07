@@ -1,7 +1,7 @@
 const assert = require('assert')
 const LeafTree = require('./LeafTree')
 
-xdescribe('LeafTree', () => {
+describe('LeafTree', () => {
   let tree = null
   beforeEach(() => tree = new LeafTree())
 
@@ -24,10 +24,18 @@ xdescribe('LeafTree', () => {
     it('should be >= log n')
     it('should be <= (n - 1)(n + 2) / 2n (approx. 0.5n)')
   })
-  xdescribe('#find', () => {
-    it('returns null if the tree is empty')
-    it('returns null if the a value associated with the query key is not in the tree')
-    it('returns the value associated with the query key if it exists in the tree')
+  describe('#find', () => {
+    it('returns null if the tree is empty', () => {
+      expect(tree.find(1)).toEqual(null)
+    })
+    it('returns null if the a value associated with the query key is not in the tree', () => {
+      [[1, 'one'], [2, 'two']].forEach(([key, val]) => tree.insert(key, val))
+      expect(tree.find(3)).toEqual(null)
+    })
+    it('returns the value associated with the query key if it exists in the tree', () => {
+      [[1, 'one'], [2, 'two']].forEach(([key, val]) => tree.insert(key, val))
+      expect(tree.find(2)).toEqual('two')
+    })
   })
   describe('#insert', () => {
     it('returns false (fails) if we attempt to insert a key that already exists in the tree', () => {
@@ -45,9 +53,11 @@ xdescribe('LeafTree', () => {
       tree.insert(1, 'one')
       expect(tree.insert(2, 'two')).toEqual(true)
     })
-    it('increases the leaveCount of the tree', () => {
+    it('increases the leaveCount of the tree by one', () => {
       tree.insert(1, 'one')
+      expect(tree.leaveCount).toEqual(1)
       tree.insert(2, 'two')
+      expect(tree.leaveCount).toEqual(2)
       tree.insert(3, 'three')
       expect(tree.leaveCount).toEqual(3)
     })
@@ -55,7 +65,7 @@ xdescribe('LeafTree', () => {
       tree.insert(1, 'one')
       expect(tree.nodeCount).toEqual(1)
     })
-    it('increases the nodeCount by two on subsequent inserts', () => {
+    it('increases the nodeCount by two after the first insert', () => {
       tree.insert(1, 'one')
       const prevCount = tree.nodeCount
       tree.insert(2, 'two')
@@ -63,11 +73,38 @@ xdescribe('LeafTree', () => {
     })
   })
   describe('.leaveCount', () => {
-    it('an empty tree will have 0 leaves')
-    it('counts the number of leaves in the tree')
+    it('is 0 if empty', () => {
+      expect(tree.leaveCount).toEqual(0)
+    })
+    it('counts the number of leaves in the tree', () => {
+      tree.insert(1, 'one')
+      tree.insert(2, 'two')
+      tree.insert(3, 'three')
+      expect(tree.leaveCount).toEqual(3)
+    })
   })
-  xdescribe('#delete', () => {
-    it('returns null is deletion failed (like when tree is empty)')
-    it('returns the value associated with the deleted key')
+  describe('.nodeCount', () => {
+    it('is 0 if empty', () => {
+      expect(tree.nodeCount).toEqual(0)
+    })
+    it('counts total number of nodes in the leaves', () => {
+      tree.insert(1, 'one')
+      tree.insert(2, 'two')
+      expect(tree.nodeCount).toEqual(3)
+    })
+  })
+  describe('#delete', () => {
+    it('returns null is deletion failed (when tree is empty)', () => {
+      expect(tree.delete(1)).toEqual(null)
+    })
+    it('returns null if deletion failed (when key does not exist in the tree)', () => {
+      tree.insert(1, 'one')
+      expect(tree.delete(2)).toEqual(null)
+    })
+    it('returns and removes the value associated with the deleted key', () => {
+      tree.insert(1, 'one')
+      expect(tree.delete(1)).toEqual('one')
+      expect(tree.delete(1)).toEqual(null)
+    })
   })
 })

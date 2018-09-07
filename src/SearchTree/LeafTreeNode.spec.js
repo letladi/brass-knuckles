@@ -62,7 +62,7 @@ describe('LeafTreeNode', () => {
       expect(node.right).toEqual(rightChild)
     })
   })
-  xdescribe('.right=', () => {
+  describe('.right=', () => {
     it('resets the right node', () => {
       const node1 = new Node(2, 'two')
       const node2 = new Node(3, 'three')
@@ -83,6 +83,16 @@ describe('LeafTreeNode', () => {
       const node2 = new Node(3, 'three')
       const node = new Node(1, node1, node2)
       expect(() => node.right = null).not.toThrow()
+    })
+  })
+  describe('#isEmpty', () => {
+    it('is true when the left node is null', () => {
+      const node = new Node()
+      expect(node.isEmpty()).toEqual(true)
+    })
+    it('is false if the left node is not null', () => {
+      const node = new Node(1, 'one')
+      expect(node.isEmpty()).toEqual(false)
     })
   })
 })
