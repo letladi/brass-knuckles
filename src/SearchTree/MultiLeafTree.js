@@ -10,7 +10,7 @@ const initializeListWith = (val) => {
 
 const addToValueList = (node, val) => {
   const list = node.value
-  list.insertLast(val)
+  list.insertFirst(val)
 }
 
 class MultiLeafTree extends LeafTree {

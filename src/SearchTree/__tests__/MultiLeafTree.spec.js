@@ -18,7 +18,7 @@ describe('MultiLeafTree', () => {
       tree.insert(1, 1)
       tree.insert(2, 'two')
       tree.insert(3, 'three')
-      expect(tree.find(1)).toEqual(['one', 1])
+      expect(tree.find(1)).toEqual([1, 'one'])
       expect(tree.find(2)).toEqual(['two'])
       expect(tree.find(3)).toEqual(['three'])
     })
@@ -34,7 +34,7 @@ describe('MultiLeafTree', () => {
     it('returns an array of the values for the given key', () => {
       tree.insert(1, 'one')
       tree.insert(1, 1)
-      expect(tree.delete(1)).toEqual(['one', 1])
+      expect(tree.delete(1)).toEqual([1, 'one'])
     })
     it('removes all values associated with the given key', () => {
       tree.insert(1, 'one')
