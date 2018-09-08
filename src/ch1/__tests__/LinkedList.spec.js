@@ -153,11 +153,11 @@ describe('LinkedList', () => {
         })
     })
 
-    describe('#destroy', () => {
+    describe('#clear', () => {
         test('resets list to initial state', () => {
             const nums = [1, 2, 3, 4, 5]
             nums.forEach((el) => list.insertLast(el))
-            list.destroy();
+            list.clear();
             expect(list.isEmpty()).toEqual(true)
         })
     })

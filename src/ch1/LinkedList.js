@@ -41,7 +41,7 @@ class LinkedList {
         }
     }
 
-    destroy() {
+    clear() {
         this._reset()
     }
 
@@ -387,7 +387,7 @@ class LinkedList {
     sort(compare = (a, b) => a > b ? 1 : -1) {
       const entries = this.entries()
       entries.sort(compare)
-      this.destroy()
+      this.clear()
       entries.forEach((el) => this.insertLast(el))
     }
 
@@ -466,7 +466,7 @@ class LinkedList {
       let walker1Val = walker1.next()
       let walker2Val = walker2.next()
 
-      this.destroy()
+      this.clear()
 
       while (walker1Val.done === false || walker2Val.done === false) {
         if (walker1Val.done) {

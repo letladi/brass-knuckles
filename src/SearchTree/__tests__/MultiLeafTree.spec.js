@@ -31,10 +31,16 @@ describe('MultiLeafTree', () => {
       tree.insert(1, 'one')
       expect(tree.delete(2)).toEqual([])
     })
-    it('returns and removes an array of the values for the given key', () => {
+    it('returns an array of the values for the given key', () => {
       tree.insert(1, 'one')
       tree.insert(1, 1)
       expect(tree.delete(1)).toEqual(['one', 1])
+    })
+    it('removes all values associated with the given key', () => {
+      tree.insert(1, 'one')
+      tree.insert(1, 1)
+      tree.delete(1)
+      expect(tree.find(1)).toEqual([])
     })
   })
   describe('#insert', () => {

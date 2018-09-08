@@ -15,8 +15,8 @@ const addToValueList = (node, val) => {
 
 class MultiLeafTree extends LeafTree {
   find(key) {
-    const value = super.find(key)
-    return value ? value.entries() : []
+    const valueList = super.find(key)
+    return valueList ? valueList.entries() : []
   }
 
   insert(key, val) {
@@ -45,8 +45,13 @@ class MultiLeafTree extends LeafTree {
   }
 
   delete(key) {
-    const value = super.delete(key)
-    return value ? value.entries() : []
+    const valueList = super.delete(key)
+    let values = []
+    if (valueList) {
+      values = valueList.entries()
+      valueList.clear()
+    }
+    return values
   }
 }
 
