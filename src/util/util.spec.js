@@ -12,12 +12,4 @@ describe('utilities', () => {
       })
     })
   })
-  describe('isEven()', () => {
-    it('is true for even integers', () => {
-      [0, 2, 4, 6].forEach((evenNum) => expect(util.isEven(evenNum)).toEqual(true))
-    })
-    it('false for odd integers', () => {
-      [1, 3, 5, 7].forEach((oddNum) => expect(util.isEven(oddNum)).toEqual(false))
-    })
-  })
 })

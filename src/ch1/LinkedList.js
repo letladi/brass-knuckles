@@ -1,5 +1,5 @@
 const Node = require('./Node/LinkedListNode')
-const { isEven, isNull } = require('../util/')
+const { isNull } = require('../util/')
 
 class LinkedList {
   constructor() {
@@ -194,7 +194,6 @@ class LinkedList {
     let deleted = false
     if (this.isEmpty()) deleted = false
     else {
-      let found = false
       let prev = null
       let current = this._first
 
@@ -279,7 +278,6 @@ class LinkedList {
     const len = this.length
     const numElementsToBeLeftInCurrentList = Math.ceil(len / 2)
     this._count = numElementsToBeLeftInCurrentList
-    let indexOfFirstElementInSecondList = numElementsToBeLeftInCurrentList
     let count = 0
     let current = this._first
     let prev = null
