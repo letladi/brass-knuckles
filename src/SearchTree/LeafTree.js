@@ -166,8 +166,8 @@ class LeafTree {
   }
 
   _heightHelper(node = this.root) {
-    if (node == null) return -1;
-    return 1 + Math.max(this._heightHelper(node.left), this._heightHelper(node.right));
+    if (isNull(node)) return -1
+    return 1 + Math.max(this._heightHelper(node.left), this._heightHelper(node.right))
   }
 
   get height() {

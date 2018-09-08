@@ -4,13 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint src/**/*.js --fix",
     "test": "jest",
     "test:watch": "npm test -- --watch"
   },
-  "keywords": ["data-structures", "algorithms", "trees"],
+  "keywords": [
+    "data-structures",
+    "algorithms",
+    "trees"
+  ],
   "author": "Letladi Sebesho",
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^5.5.0",
+    "eslint-plugin-jest": "^21.22.0",
     "jest": "^23.5.0"
   }
 }
