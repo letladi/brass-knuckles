@@ -164,6 +164,15 @@ class LeafTree {
     this.traverse(() => count++)
     return count
   }
+
+  _heightHelper(node = this.root) {
+    if (node == null) return -1;
+    return 1 + Math.max(this._heightHelper(node.left), this._heightHelper(node.right));
+  }
+
+  get height() {
+    return this._heightHelper(this.root)
+  }
 }
 
 module.exports = LeafTree

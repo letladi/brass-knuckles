@@ -1,9 +1,27 @@
 const assert = require('assert')
 const LeafTree = require('./LeafTree')
 
+function range(start, end, includeEnd = true) {
+  const ret = []
+  for (i = start, max = (includeEnd) ? end + 1 : end; i < max; i++) {
+    ret.push([i, i * 2])
+  }
+  return ret
+}
+
+function populate(tree, numElements) {
+  range(1, numElements).forEach(([key, val]) => tree.insert(key, val))
+}
+
 describe('LeafTree', () => {
   let tree = null
   beforeEach(() => tree = new LeafTree())
+
+  xdescribe('tree properties', () => {
+    test('if height = h; leaveCount <= 2**h')
+    test('if height = h; leaveCount >= h + 1')
+    test('if interiorNodeCount = h; leaveCount = h + 1')
+  })
 
   xdescribe('rotateLeft()', () => {
     it('only performs rotation on interior node')
@@ -15,12 +33,19 @@ describe('LeafTree', () => {
     it('only performs rotation if node.left is an interior node')
     it('maintains valid key order relation')
   })
-  xdescribe('#height', () => {
-    it('should be >= Math.ceil(log n)')
-    it('should be <= n - 1')
-    it('returns the maximum height of the tree')
+  describe('#height', () => {
+    it('should be >= Math.ceil(log n)', () => {
+      populate(tree, 25)
+      const logN = Math.log2(tree.nodeCount)
+      expect(tree.height).toBeGreaterThanOrEqual(Math.ceil(logN))
+    })
+    it('should be <= n - 1', () => {
+      populate(tree, 25)
+      const n = tree.nodeCount
+      expect(tree.height).toBeLessThanOrEqual(n - 1)
+    })
   })
-  xdescribe('#depth', () => {
+  xdescribe('#averageDepth', () => {
     it('should be >= log n')
     it('should be <= (n - 1)(n + 2) / 2n (approx. 0.5n)')
   })
