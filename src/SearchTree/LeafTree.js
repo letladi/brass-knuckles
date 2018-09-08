@@ -173,6 +173,13 @@ class LeafTree {
   get height() {
     return this._heightHelper(this.root)
   }
+
+  get interiorNodeCount() {
+    let count = 0
+    if (this.isEmpty()) return count
+    this.traverse((node) => count += node.isLeaf() ? 0 : 1)
+    return count
+  }
 }
 
 module.exports = LeafTree

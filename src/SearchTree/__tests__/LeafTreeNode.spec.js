@@ -1,4 +1,4 @@
-const Node = require('./LeafTreeNode')
+const Node = require('../LeafTreeNode')
 
 describe('LeafTreeNode', () => {
   let node = null

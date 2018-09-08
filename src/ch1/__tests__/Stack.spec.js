@@ -1,4 +1,4 @@
-const Stack = require('./stack')
+const Stack = require('../Stack')
 
 describe('Stack', () => {
   let stack = null
@@ -27,7 +27,7 @@ describe('Stack', () => {
       })
     })
   })
-  
+
   describe('#pop', () => {
     it('should remove and return elements from the stack', () => {
       [1,2].forEach((el) => stack.push(el))

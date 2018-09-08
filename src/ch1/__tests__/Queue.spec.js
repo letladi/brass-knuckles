@@ -1,4 +1,4 @@
-const Queue = require('./queue')
+const Queue = require('../Queue')
 
 const populate = (queue) => [1, 2].forEach((el) => queue.enqueue(el))
 

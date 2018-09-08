@@ -1,4 +1,4 @@
-const Node = require('./Node');
+const Node = require('./Node/LinkedListNode');
 
 const isEven = (n) => n % 2 === 0
 

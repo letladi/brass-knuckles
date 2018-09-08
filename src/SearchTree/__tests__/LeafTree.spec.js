@@ -1,5 +1,5 @@
 const assert = require('assert')
-const LeafTree = require('./LeafTree')
+const LeafTree = require('../LeafTree')
 
 function range(start, end, includeEnd = true) {
   const ret = []
@@ -17,10 +17,21 @@ describe('LeafTree', () => {
   let tree = null
   beforeEach(() => tree = new LeafTree())
 
-  xdescribe('tree properties', () => {
-    test('if height = h; leaveCount <= 2**h')
-    test('if height = h; leaveCount >= h + 1')
-    test('if interiorNodeCount = h; leaveCount = h + 1')
+  describe('tree properties', () => {
+    test('if height = h; leaveCount <= 2**h', () => {
+      populate(tree, 20)
+      const height = tree.height
+      expect(tree.leaveCount).toBeLessThanOrEqual(2**height)
+    })
+    test('if height = h; leaveCount >= h + 1', () => {
+      populate(tree, 20)
+      const height = tree.height
+      expect(tree.leaveCount).toBeGreaterThanOrEqual(height + 1)
+    })
+    test('if interiorNodeCount = h; leaveCount = h + 1', () => {
+      populate(tree, 20)
+      expect(tree.interiorNodeCount).toEqual(tree.leaveCount - 1)
+    })
   })
 
   xdescribe('rotateLeft()', () => {
@@ -45,7 +56,7 @@ describe('LeafTree', () => {
       expect(tree.height).toBeLessThanOrEqual(n - 1)
     })
   })
-  xdescribe('#averageDepth', () => {
+  xdescribe('#averageDepth (of the leaves)', () => {
     it('should be >= log n')
     it('should be <= (n - 1)(n + 2) / 2n (approx. 0.5n)')
   })

@@ -1,4 +1,4 @@
-const OrderedLinkedList = require('./OrderedLinkedList')
+const OrderedLinkedList = require('../OrderedLinkedList')
 
 describe('OrderedLinkedList', () => {
     let list = null

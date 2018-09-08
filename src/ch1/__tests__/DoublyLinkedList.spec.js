@@ -1,4 +1,4 @@
-const { DoublyLinkedList } = require('./DoublyLinkedList')
+const DoublyLinkedList = require('../DoublyLinkedList')
 
 describe('DoublyLinkedList', () => {
     let list = null

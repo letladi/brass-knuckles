@@ -1,4 +1,4 @@
-const { Node } = require('./DoublyLinkedList')
+const Node = require('../DoublyLinkedListNode')
 
 describe('DoublyLinkedList Node', () => {
     test('should create obj with default values', () => {

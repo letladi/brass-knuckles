@@ -1,4 +1,4 @@
-const Node = require('./Node')
+const Node = require('../LinkedListNode')
 
 describe('Node', () => {
     test('should create object with default null values', () => {

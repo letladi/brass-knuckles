@@ -1,4 +1,4 @@
-const Node = require('./Node')
+const Node = require('./Node/LinkedListNode')
 const LinkedList = require('./LinkedList')
 
 class OrderedLinkedList extends LinkedList {
@@ -51,7 +51,7 @@ class OrderedLinkedList extends LinkedList {
                 this._count++
             }
         }
-        
+
         return true
     }
 
