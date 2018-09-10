@@ -84,7 +84,7 @@ class LeafTree {
       if (current.key === key)
         return false
       else {
-        let oldLeaf = new Node(current.key, current.left)
+        let oldLeaf = new Node(current.key, current.value)
         const newLeaf = new Node(key, val)
         if (current.key < key) {
           current.left = oldLeaf
@@ -179,6 +179,30 @@ class LeafTree {
     if (this.isEmpty()) return count
     this.traverse((node) => count += node.isLeaf() ? 0 : 1)
     return count
+  }
+
+  intervalFind(a, b) {
+    let resultList = null
+    const stack = new Stack()
+    stack.push(this.root)
+
+    while (!stack.isEmpty()) {
+      const current = stack.pop()
+      if (current.isLeaf()) {
+        if (a <= current.key && current.key < b) {
+          const temp = new Node(current.key, current.value, resultList)
+          resultList = temp
+        }
+      } else if (b <= current.key) {
+        stack.push(current.left)
+      } else if (current.key <= a) {
+        stack.push(current.right)
+      } else {
+        stack.push(current.left)
+        stack.push(current.right)
+      }
+    }
+    return resultList
   }
 }
 

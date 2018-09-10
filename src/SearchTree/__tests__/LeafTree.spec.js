@@ -107,6 +107,15 @@ describe('LeafTree', () => {
       tree.insert(2, 'two')
       expect(tree.nodeCount).toEqual(prevCount + 2)
     })
+    it('all the key value pairs inserted will exist in the tree (bug-fix where subsequent inserts over-writes previous ones)', () => {
+      tree.insert(1, 'one')
+      tree.insert(2, 'two')
+      tree.insert(3, 'three')
+
+      expect(tree.find(1)).toEqual('one')
+      expect(tree.find(2)).toEqual('two')
+      expect(tree.find(3)).toEqual('three')
+    })
   })
   describe('.leaveCount', () => {
     it('is 0 if empty', () => {
@@ -142,5 +151,10 @@ describe('LeafTree', () => {
       expect(tree.delete(1)).toEqual('one')
       expect(tree.delete(1)).toEqual(null)
     })
+  })
+  xdescribe('#intervalFind', () => {
+    it('returns an array [[key, val]] which contains an array')
+    it('returns null if there are no elements in the specified interval')
+    it('excludes elements equal to the closing interval key')
   })
 })

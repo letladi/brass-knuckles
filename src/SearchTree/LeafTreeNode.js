@@ -7,6 +7,10 @@ class Node {
     this.right = right
   }
 
+  static isNode(val) {
+    return val instanceof Node
+  }
+
   isLeaf() {
     return isNull(this._right)
   }
@@ -28,7 +32,7 @@ class Node {
   }
 
   set right(val) {
-    if ((val instanceof Node) || isNull(val))
+    if (Node.isNode(val) || isNull(val))
       this._right = val
     else
       throw new Error(Node.prototype.messages.invalidAssignmentOfRightChild)
