@@ -24,7 +24,7 @@ class Node {
   }
 
   get value() {
-    return this.isLeaf() ? this._left : null
+    return this.isLeaf() || !Node.isNode(this._left) ? this._left : null
   }
 
   get right() {

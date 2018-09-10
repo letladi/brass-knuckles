@@ -23,6 +23,29 @@ describe('MultiLeafTree', () => {
       expect(tree.find(3)).toEqual(['three'])
     })
   })
+  xdescribe('#intervalFind', () => {
+    it('returns a type of linked list of the pointers in the interval', () => {
+      const intervalValues = [[1, 'one'], [2, 'two'], [3, 'three'], [4, 'four']]
+      populateForIntervalTest(tree)
+
+      let interval = tree.intervalFind(1, 5)
+      intervalValues.forEach(([key, val]) => {
+        expect(interval.key).toEqual(key)
+        expect(interval.value).toEqual(val)
+        interval = interval.right
+      })
+    })
+    it('the value of each interval key is an array of values associated with that key')
+    it('returns null if there are no elements in the specified interval', () => {
+      populateForIntervalTest(tree)
+      expect(tree.intervalFind(8, 10)).toEqual(null)
+    })
+    it('excludes elements equal to the closing interval key', () => {
+      populateForIntervalTest(tree)
+      const interval = tree.intervalFind(1, 2)
+      expect(interval.right).toEqual(null)
+    })
+  })
   describe('#delete', () => {
     it('returns [] if deletion failed (when tree is empty)', () => {
       expect(tree.delete(1)).toEqual([])

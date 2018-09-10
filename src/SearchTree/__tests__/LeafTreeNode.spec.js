@@ -20,11 +20,16 @@ describe('LeafTreeNode', () => {
       const node = new Node(1, dataVal)
       expect(node.value).toEqual(dataVal)
     })
-    it('returns null if the node does not have a data value (is not a leaf)', () => {
+    it('returns null if the node does not have a data value', () => {
       const node2 = new Node(3, 'three')
       const node3 = new Node(4, 'four')
       const node = new Node(1, node2, node3)
       expect(node.value).toEqual(null)
+    })
+    it('returns the data value if the node has a value and a right link (not necessarily a leaf)', () => {
+      const node2 = new Node(3, 'three')
+      const node = new Node(1, 'one', node2)
+      expect(node.value).toEqual('one')
     })
   })
   describe('.left', () => {

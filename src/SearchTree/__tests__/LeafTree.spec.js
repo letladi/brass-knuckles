@@ -152,9 +152,35 @@ describe('LeafTree', () => {
       expect(tree.delete(1)).toEqual(null)
     })
   })
-  xdescribe('#intervalFind', () => {
-    it('returns an array [[key, val]] which contains an array')
-    it('returns null if there are no elements in the specified interval')
-    it('excludes elements equal to the closing interval key')
+  describe('#intervalFind', () => {
+    function populateForIntervalTest(tree) {
+      tree.insert(1, 'one')
+      tree.insert(2, 'two')
+      tree.insert(3, 'three')
+      tree.insert(4, 'four')
+      tree.insert(5, 'five')
+      tree.insert(6, 'six')
+      tree.insert(7, 'seven')
+    }
+    it('returns a type of linked list of the pointers in the interval', () => {
+      const intervalValues = [[1, 'one'], [2, 'two'], [3, 'three'], [4, 'four']]
+      populateForIntervalTest(tree)
+
+      let interval = tree.intervalFind(1, 5)
+      intervalValues.forEach(([key, val]) => {
+        expect(interval.key).toEqual(key)
+        expect(interval.value).toEqual(val)
+        interval = interval.right
+      })
+    })
+    it('returns null if there are no elements in the specified interval', () => {
+      populateForIntervalTest(tree)
+      expect(tree.intervalFind(8, 10)).toEqual(null)
+    })
+    it('excludes elements equal to the closing interval key', () => {
+      populateForIntervalTest(tree)
+      const interval = tree.intervalFind(1, 2)
+      expect(interval.right).toEqual(null)
+    })
   })
 })
