@@ -23,10 +23,20 @@ describe('MultiLeafTree', () => {
       expect(tree.find(3)).toEqual(['three'])
     })
   })
-  xdescribe('#intervalFind', () => {
-    it('returns a type of linked list of the pointers in the interval', () => {
-      const intervalValues = [[1, 'one'], [2, 'two'], [3, 'three'], [4, 'four']]
-      populateForIntervalTest(tree)
+  describe('#intervalFind', () => {
+    function populateForIntervalTest(tree) {
+      tree.insert(1, 1)
+      tree.insert(1, 'one')
+      tree.insert(2, 2)
+      tree.insert(2, 'two')
+      tree.insert(3, 'three')
+      tree.insert(4, 'four')
+      tree.insert(5, 'five')
+    }
+    beforeEach(() =>   populateForIntervalTest(tree))
+    it('returns a type of linked list of the pointers in the interval (the value of each node being an array)', () => {
+      const intervalValues = [[1, ['one', 1]], [2, ['two', 2]], [3, ['three']], [4, ['four']]]
+
 
       let interval = tree.intervalFind(1, 5)
       intervalValues.forEach(([key, val]) => {
@@ -35,13 +45,10 @@ describe('MultiLeafTree', () => {
         interval = interval.right
       })
     })
-    it('the value of each interval key is an array of values associated with that key')
     it('returns null if there are no elements in the specified interval', () => {
-      populateForIntervalTest(tree)
       expect(tree.intervalFind(8, 10)).toEqual(null)
     })
     it('excludes elements equal to the closing interval key', () => {
-      populateForIntervalTest(tree)
       const interval = tree.intervalFind(1, 2)
       expect(interval.right).toEqual(null)
     })

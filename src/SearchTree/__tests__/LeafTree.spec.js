@@ -183,4 +183,7 @@ describe('LeafTree', () => {
       expect(interval.right).toEqual(null)
     })
   })
+  xdescribe('LeafTree.makeTree')
+  xdescribe('#toArray')
+  xdescribe('#fromList')
 })
