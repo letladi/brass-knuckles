@@ -1,7 +1,6 @@
 const assert = require('assert')
 const Stack = require('../ch1/Stack')
 const Node = require('./LeafTreeNode')
-const { isNull } = require('../util/')
 
 const assertLeftRotationConditions = (node) => {
   assert(!node.isLeaf(), 'can only perform left rotation on interior error')

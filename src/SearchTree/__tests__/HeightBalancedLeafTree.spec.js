@@ -1,6 +1,4 @@
-const Tree = require('./HeightBalancedLeafTree')
-
-describe('HeightBalancedLeafTree', () => {
+xdescribe('HeightBalancedLeafTree', () => {
   describe('properties', () => {
     test('if leaveCount = N; height <= 1.44logN')
     test('if height = h; leaveCount >= ')
@@ -8,12 +6,12 @@ describe('HeightBalancedLeafTree', () => {
   describe('#insert', () => {
 
   })
-  xdescribe('rotateLeft()', () => {
+  describe('rotateLeft()', () => {
     it('only performs rotation on interior node')
     it('only performs rotation if node.right is an interior node')
     it('maintains valid key order relation')
   })
-  xdescribe('rotateRight()', () => {
+  describe('rotateRight()', () => {
     it('only performs rotation on interior node')
     it('only performs rotation if node.left is an interior node')
     it('maintains valid key order relation')
