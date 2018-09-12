@@ -33,17 +33,6 @@ describe('LeafTree', () => {
       expect(tree.interiorNodeCount).toEqual(tree.leaveCount - 1)
     })
   })
-
-  xdescribe('rotateLeft()', () => {
-    it('only performs rotation on interior node')
-    it('only performs rotation if node.right is an interior node')
-    it('maintains valid key order relation')
-  })
-  xdescribe('rotateRight()', () => {
-    it('only performs rotation on interior node')
-    it('only performs rotation if node.left is an interior node')
-    it('maintains valid key order relation')
-  })
   describe('#height', () => {
     it('should be >= Math.ceil(log n)', () => {
       populate(tree, 25)
