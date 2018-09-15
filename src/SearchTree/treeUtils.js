@@ -1,7 +1,5 @@
 const assert = require('assert')
 
-
-
 const swapKeys = (node1, node2) => {
   const tempKey = node1.key
   node1.key = node2.key
@@ -13,12 +11,7 @@ const height = node => {
   return 1 + Math.max(height(node.left), height(node.right))
 }
 
-const copyNode = (target, source) => {
-  target.key = source.key
-  target.left = source.left
-  target.right = source.right
-  return target
-}
+const copyNode = (target, src) => Object.assign(target, src)
 
 const assertLeftRotationConditions = (node) => {
   assert(!node.isLeaf(), 'can only perform left rotation on interior error')
@@ -26,8 +19,8 @@ const assertLeftRotationConditions = (node) => {
 }
 
 const assertRightRotationConditions = node => {
-  assert(!node.isLeaf(), 'can only perform left rotation on interior error')
-  assert(!node.left.isLeaf(), 'can only perform left rotation if node.left is interior node')
+  assert(!node.isLeaf(), 'can only perform right rotation on interior error')
+  assert(!node.left.isLeaf(), 'can only perform right rotation if node.left is interior node')
 }
 
 const rotateRight = node => {
