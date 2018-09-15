@@ -11,21 +11,6 @@ class LeafTree {
     return this.root.isEmpty()
   }
 
-  rotateLeft(node) {
-    assertLeftRotationConditions(node)
-
-    swapKeys(node, node.right)
-    const temp = node.left
-
-    node.left = node.right
-    node.right = node.right.right
-
-    node.left.right = node.left.left
-    node.left.left = temp
-
-    return node
-  }
-
   find(key) {
     if (this.isEmpty()) return null
     let current = this.root

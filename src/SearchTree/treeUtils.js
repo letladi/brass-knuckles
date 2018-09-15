@@ -45,9 +45,25 @@ const rotateRight = node => {
   return node
 }
 
+const rotateLeft = node => {
+  assertLeftRotationConditions(node)
+
+  swapKeys(node, node.right)
+  const temp = node.left
+
+  node.left = node.right
+  node.right = node.right.right
+
+  node.left.right = node.left.left
+  node.left.left = temp
+
+  return node
+}
+
 module.exports = {
   height,
   swapKeys,
   copyNode,
   rotateRight,
+  rotateLeft,
 }
