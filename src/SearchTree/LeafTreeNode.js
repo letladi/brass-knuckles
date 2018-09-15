@@ -41,10 +41,6 @@ class Node {
   isEmpty() {
     return isNull(this._left)
   }
-
-  get height() {
-    return this.isLeaf() ? 0 : 1 + Math.max(this.left.height, this.right.height)
-  }
 }
 
 Node.prototype.messages = {

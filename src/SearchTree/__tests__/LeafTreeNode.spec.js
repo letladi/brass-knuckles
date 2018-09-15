@@ -100,24 +100,4 @@ describe('LeafTreeNode', () => {
       expect(node.isEmpty()).toEqual(false)
     })
   })
-
-  function getLeafNode(key, val) {
-    return new Node(key, val)
-  }
-
-  describe('.height', () => {
-    it("= 0 if it's a leaf", () => {
-      const node = getLeafNode(1, 'one')
-      expect(node.height).toEqual(0)
-    })
-    it("= 1 + Math.max(left.height, right.height) if it's not a leaf", () => {
-      const node0 = new Node(1, 'one')
-      const node1 = new Node(2, 'two')
-      const node2 = new Node(3, node0, node1)
-      const node3 = new Node(4, 'four')
-      const testNode = new Node(5, node2, node3)
-
-      expect(testNode.height).toEqual(2)
-    })
-  })
 })

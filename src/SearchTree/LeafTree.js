@@ -1,29 +1,6 @@
-const assert = require('assert')
 const Stack = require('../ch1/Stack')
 const Node = require('./LeafTreeNode')
-
-const assertLeftRotationConditions = (node) => {
-  assert(!node.isLeaf(), 'can only perform left rotation on interior error')
-  assert(!node.right.isLeaf(), 'can only perform left rotation if node.right is interior node')
-}
-
-const assertRightRotationConditions = node => {
-  assert(!node.isLeaf(), 'can only perform left rotation on interior error')
-  assert(!node.left.isLeaf(), 'can only perform left rotation if node.right is interior node')
-}
-
-const swapKeys = (node1, node2) => {
-  const tempKey = node1.key
-  node1.key = node2.key
-  node2.key = tempKey
-}
-
-const copyNode = (target, source) => {
-  target.key = source.key
-  target.left = source.left
-  target.right = source.right
-  return target
-}
+const util = require('./treeUtils')
 
 class LeafTree {
   constructor() {
@@ -45,21 +22,6 @@ class LeafTree {
 
     node.left.right = node.left.left
     node.left.left = temp
-
-    return node
-  }
-
-  rotateRight(node) {
-    assertRightRotationConditions(node)
-
-    swapKeys(node, node.left)
-    const temp = node.right
-
-    node.right = node.left
-    node.left = node.left.left
-
-    node.right.left = node.right.right
-    node.right.right = temp
 
     return node
   }
@@ -126,7 +88,7 @@ class LeafTree {
       if (current.key !== key)
         return null
       else {
-        copyNode(currentParent, currentSibling)
+        util.copyNode(currentParent, currentSibling)
         return current.value
       }
     }
@@ -164,13 +126,8 @@ class LeafTree {
     return count
   }
 
-  _heightHelper(node = this.root) {
-    if ((node.isLeaf())) return 0
-    return 1 + Math.max(this._heightHelper(node.left), this._heightHelper(node.right))
-  }
-
   get height() {
-    return this._heightHelper(this.root)
+    return util.height(this.root)
   }
 
   get interiorNodeCount() {
