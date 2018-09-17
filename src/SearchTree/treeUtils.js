@@ -53,10 +53,13 @@ const rotateLeft = node => {
   return node
 }
 
+const weight = node => node.isLeaf() ? 1 : weight(node.left) + weight(node.right)
+
 module.exports = {
   height,
   swapKeys,
   copyNode,
   rotateRight,
   rotateLeft,
+  weight,
 }

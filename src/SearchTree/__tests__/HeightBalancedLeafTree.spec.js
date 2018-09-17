@@ -1,19 +1,18 @@
 xdescribe('HeightBalancedLeafTree', () => {
   describe('properties', () => {
+    const leaveCountForBalancedTree = '(3+√5 / 2√5)(1+√5 / 2)^h - (3-√5 / 2√5)(1-√5 / 2)^h'
     test('if leaveCount = N; height <= 1.44logN')
-    test('if height = h; leaveCount >= ')
+    test(`if height = h; leaveCount >= ${ leaveCountForBalancedTree }`)
   })
   describe('#insert', () => {
-
+    it('returns false if insertion failed (like when the key already exists in the tree)')
+    it('returns true if insertion succeeded')
+    it('maintains tree balance criteria')
   })
-  describe('rotateLeft()', () => {
-    it('only performs rotation on interior node')
-    it('only performs rotation if node.right is an interior node')
-    it('maintains valid key order relation')
-  })
-  describe('rotateRight()', () => {
-    it('only performs rotation on interior node')
-    it('only performs rotation if node.left is an interior node')
-    it('maintains valid key order relation')
+  describe('#delete', () => {
+    it('returns true if deletion succeeded')
+    it('returns false if deletion failed (like if tree is empty)')
+    it('returns false if deletion failed (like when key does not exist in the tree)')
+    it('maintains tree balance criteria')
   })
 })

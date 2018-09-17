@@ -91,6 +91,7 @@ describe('tree utilities', () => {
       util.rotateRight(node)
       expect(leftRef.left).toEqual(leftRightRef)
     })
+    it('maintains valid key order relation')
   })
   describe('rotateLeft()', () => {
     it('throws exception if node is not interior node', () => {
@@ -137,8 +138,20 @@ describe('tree utilities', () => {
       util.rotateLeft(node)
       expect(node.left.right).toEqual(rightLeftRef)
     })
+    it('maintains valid key order relation')
   })
-  xdescribe('')
+  describe('weight(node)', () => {
+    it('= 1 for leaf node', () => {
+      const node = new Node(1, 'one')
+      expect(util.weight(node)).toEqual(1)
+    })
+    it('=weight(node.left)+ weight(node.right) for interior node', () => {
+      const node1 = new Node(1, 'one')
+      const node2 = new Node(2, 'two')
+      const node = new Node(3, node1, node2)
+      expect(util.weight(node)).toEqual(2)
+    })
+  })
 })
 
 function getNodeThatIsReadyForRotation() {
