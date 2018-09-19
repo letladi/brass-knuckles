@@ -145,6 +145,13 @@ class LeafTree {
     }
     return resultList
   }
+
+  /* the average depth of the leaves; the average over all objects of the distance
+    we have to go to reach that object
+  */
+  get averageDepth() {
+
+  }
 }
 
 module.exports = LeafTree

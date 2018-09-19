@@ -33,7 +33,7 @@ describe('LeafTree', () => {
       expect(tree.interiorNodeCount).toEqual(tree.leaveCount - 1)
     })
   })
-  describe('#height', () => {
+  describe('.height', () => {
     it('should be >= Math.ceil(log n)', () => {
       populate(tree, 25)
       const logN = Math.log2(tree.nodeCount)
@@ -45,9 +45,19 @@ describe('LeafTree', () => {
       expect(tree.height).toBeLessThanOrEqual(n - 1)
     })
   })
-  xdescribe('#averageDepth (of the leaves)', () => {
-    it('should be >= log n')
-    it('should be <= (n - 1)(n + 2) / 2n (approx. 0.5n)')
+  describe('.averageDepth (of the leaves)', () => {
+    it('should be >= log n', () => {
+      const N = 30
+      populate(tree, N)
+      const longN = Math.log2(N)
+      expect(tree.averageDepth).toBeGreaterThanOrEqual(longN)
+    })
+    it('should be <= (n - 1)(n + 2) / 2n (approx. 0.5n)', () => {
+      const n = 30
+      populate(tree, n)
+      const expectedMaximumDepth = (n - 1) * (n + 2) / 2 * n
+      expect(tree.averageDepth).toBeLessThanOrEqual(expectedMaximumDepth)
+    })
   })
   describe('#find', () => {
     it('returns null if the tree is empty', () => {
