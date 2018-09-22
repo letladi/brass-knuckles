@@ -1,4 +1,7 @@
-const { testWithDifferentKeyInsertionOrders } = require('./util')
+const {
+  testKeyOrder,
+  testWithDifferentKeyInsertionOrders
+} = require('./util')
 const util = require('../treeUtils')
 const Tree = require('../HeightBalancedLeafTree')
 
@@ -101,21 +104,6 @@ function testDeletion(getTree) {
       let numKeysToDelete = Math.floor(numEl / 4)
       while (numKeysToDelete--) tree.delete(numKeysToDelete)
     })
-}
-
-function testKeyOrder(getTree, beforeVerification = (tree) => tree) {
-  it('maintains order of the keys', () => {
-    const tree = getTree()
-    beforeVerification(tree)
-    tree.traverse((node) => {
-      if (!node.isLeaf()) {
-        const rKey = node.right.key
-        const lKey = node.left.key
-        expect(lKey).toBeLessThan(node.key)
-        expect(node.key).toBeLessThanOrEqual(rKey)
-      }
-    })
-  })
 }
 
 function testBalanceCriteria(getTree, beforeVerification = (tree) => tree) {

@@ -31,6 +31,21 @@ function prepareTree(numElements, TreeConstructor, populate) {
   return tree
 }
 
+function testKeyOrder(getTree, beforeVerification = (tree) => tree) {
+  it('maintains order of the keys', () => {
+    const tree = getTree()
+    beforeVerification(tree)
+    tree.traverse((node) => {
+      if (!node.isLeaf()) {
+        const rKey = node.right.key
+        const lKey = node.left.key
+        expect(lKey).toBeLessThan(node.key)
+        expect(node.key).toBeLessThanOrEqual(rKey)
+      }
+    })
+  })
+}
+
 function testForWhenKeysAreInsertedInOrder(testFn, TreeConstructor) {
   describe('when elements are inserted with increasing key order', () => {
     testFn((numEl) => prepareTree(numEl, TreeConstructor, populateInOrder))
@@ -56,5 +71,6 @@ function testWithDifferentKeyInsertionOrders(testFn, TreeConstructor) {
 }
 
 module.exports = {
+  testKeyOrder,
   testWithDifferentKeyInsertionOrders
 }

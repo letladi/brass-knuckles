@@ -1,4 +1,4 @@
-const LeafTree = require('./src/Tree/HeightBalancedLeafTree')
+const LeafTree = require('./src/Tree/WeightBalancedLeafTree')
 
 const tree = new LeafTree()
 
@@ -10,4 +10,4 @@ tree.insert(5, 'five')
 tree.insert(6, 'six')
 tree.insert(7, 'seven')
 
-console.log(tree.delete(4))
+//console.log(tree.delete(4))

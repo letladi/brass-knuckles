@@ -17,7 +17,7 @@ class WeightBalancedLeafTree extends LeafTree {
       let current = this.root
       while (!current.isLeaf()) {
         stack.push(current)
-        current = (current.key > key) ? current.left : current.right
+        current = (key < current.key) ? current.left : current.right
       }
 
       if (current.key === key) return false
