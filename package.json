@@ -18,6 +18,10 @@
   "devDependencies": {
     "eslint": "^5.5.0",
     "eslint-plugin-jest": "^21.22.0",
-    "jest": "^23.5.0"
+    "jest": "^23.5.0",
+    "lodash": "^4.17.11"
+  },
+  "jest": {
+    "testMatch": ["**/?(*.)+(spec|test).js"]
   }
 }

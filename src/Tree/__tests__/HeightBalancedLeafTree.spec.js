@@ -1,7 +1,7 @@
 xdescribe('HeightBalancedLeafTree', () => {
   describe('properties', () => {
     const leaveCountForBalancedTree = '(3+√5 / 2√5)(1+√5 / 2)^h - (3-√5 / 2√5)(1-√5 / 2)^h'
-    test('if leaveCount = N; height <= 1.44logN')
+    test('if leaveCount = N; height <= 1.44logN', () => {})
     test(`if height = h; leaveCount >= ${ leaveCountForBalancedTree }`)
   })
   describe('#insert', () => {

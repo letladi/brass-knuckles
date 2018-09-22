@@ -91,7 +91,6 @@ describe('tree utilities', () => {
       util.rotateRight(node)
       expect(leftRef.left).toEqual(leftRightRef)
     })
-    it('maintains valid key order relation')
   })
   describe('rotateLeft()', () => {
     it('throws exception if node is not interior node', () => {
@@ -138,7 +137,6 @@ describe('tree utilities', () => {
       util.rotateLeft(node)
       expect(node.left.right).toEqual(rightLeftRef)
     })
-    it('maintains valid key order relation')
   })
   describe('weight(node)', () => {
     it('= 1 for leaf node', () => {

@@ -1,4 +1,4 @@
-describe('WeightBalancedLeafTree', () => {
+xdescribe('WeightBalancedLeafTree', () => {
   describe('tree properties', () => {
     test('if h >= 2; leaveCount >= (1 / 1-α)^h')
     test('if leaveCount = 2; height <= log(1 / 1-α)n = (1 / log2(1 / 1-α)) * log2n')
