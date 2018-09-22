@@ -1,105 +1,20 @@
 const assert = require('assert')
-const {
-  populateInOrder,
-  populateInReverseOrder,
-  populateInRandomOrder,
-} = require('./util')
+const { testWithDifferentKeyInsertionOrders } = require('./util')
 const LeafTree = require('../LeafTree')
-
-function testTreeProperties(prepareTree) {
-  test('if height = h; leaveCount <= 2**h', () => {
-    const tree = prepareTree()
-    const height = tree.height
-    expect(tree.leaveCount).toBeLessThanOrEqual(2**height)
-  })
-  test('if height = h; leaveCount >= h + 1', () => {
-    const tree = prepareTree()
-    const height = tree.height
-    expect(tree.leaveCount).toBeGreaterThanOrEqual(height + 1)
-  })
-  test('if interiorNodeCount = h; leaveCount = h + 1', () => {
-    const tree = prepareTree()
-    expect(tree.interiorNodeCount).toEqual(tree.leaveCount - 1)
-  })
-}
 
 describe('LeafTree', () => {
   let tree = null
   beforeEach(() => tree = new LeafTree())
 
   describe('tree properties', () => {
-    describe('when elements are inserted with increasing key order', () => {
-      testTreeProperties(() => {
-        const tree = new LeafTree()
-        populateInOrder(tree, 20)
-        return tree
-      })
-    })
-    describe('when elements are inserted with decreasing key order', () => {
-      testTreeProperties(() => {
-        const tree = new LeafTree()
-        populateInReverseOrder(tree, 20)
-        return tree
-      })
-    })
-    describe('when elements are inserted with random key order', () => {
-      testTreeProperties(() => {
-        const tree = new LeafTree()
-        populateInRandomOrder(tree, 100)
-        return tree
-      })
-    })
+    testWithDifferentKeyInsertionOrders(testTreeProperties, LeafTree)
   })
-
-  function testTreeHeight(prepareTree) {
-    it('should be >= Math.ceil(log n)', () => {
-      const tree = prepareTree()
-      const logN = Math.log2(tree.nodeCount)
-      expect(tree.height).toBeGreaterThanOrEqual(Math.ceil(logN))
-    })
-    it('should be <= n - 1', () => {
-      const tree = prepareTree()
-      const n = tree.nodeCount
-      expect(tree.height).toBeLessThanOrEqual(n - 1)
-    })
-  }
 
   describe('.height', () => {
-    describe('when elements are inserted with increasing key order', () => {
-      testTreeHeight(() => {
-        const tree = new LeafTree()
-        populateInOrder(tree, 20)
-        return tree
-      })
-    })
-    describe('when elements are inserted with decreasing key order', () => {
-      testTreeHeight(() => {
-        const tree = new LeafTree()
-        populateInReverseOrder(tree, 20)
-        return tree
-      })
-    })
-    describe('when elements are inserted with random key order', () => {
-      testTreeHeight(() => {
-        const tree = new LeafTree()
-        populateInRandomOrder(tree, 100)
-        return tree
-      })
-    })
+    testWithDifferentKeyInsertionOrders(testTreeHeight, LeafTree)
   })
   xdescribe('.averageDepth (of the leaves)', () => {
-    it('should be >= log n', () => {
-      const N = 30
-      populateInOrder(tree, N)
-      const longN = Math.log2(N)
-      expect(tree.averageDepth).toBeGreaterThanOrEqual(longN)
-    })
-    it('should be <= (n - 1)(n + 2) / 2n (approx. 0.5n)', () => {
-      const n = 30
-      populateInOrder(tree, n)
-      const expectedMaximumDepth = (n - 1) * (n + 2) / 2 * n
-      expect(tree.averageDepth).toBeLessThanOrEqual(expectedMaximumDepth)
-    })
+    it('should be <= (n - 1)(n + 2) / 2n (approx. 0.5n)')
   })
 
   describe('#find', () => {
@@ -252,9 +167,6 @@ describe('LeafTree', () => {
   })
   xdescribe('LeafTree.makeTree')
   xdescribe('#toArray', () => {
-    function populateWithDataSortedInAscendingOrder(tree) {
-
-    }
     test('returns the elements in ascending key order', () => {
       it('works if elements are inserted in ascending order')
       it('works if elements are inserted in descending order')
@@ -263,3 +175,35 @@ describe('LeafTree', () => {
   })
   xdescribe('#fromList')
 })
+
+function testTreeProperties(getTree) {
+  const numEl = 100
+  test('if height = h; leaveCount <= 2**h', () => {
+    const tree = getTree(numEl)
+    const height = tree.height
+    expect(tree.leaveCount).toBeLessThanOrEqual(2**height)
+  })
+  test('if height = h; leaveCount >= h + 1', () => {
+    const tree = getTree(numEl)
+    const height = tree.height
+    expect(tree.leaveCount).toBeGreaterThanOrEqual(height + 1)
+  })
+  test('if interiorNodeCount = h; leaveCount = h + 1', () => {
+    const tree = getTree(numEl)
+    expect(tree.interiorNodeCount).toEqual(tree.leaveCount - 1)
+  })
+}
+
+function testTreeHeight(getTree) {
+  const numEl = 20
+  it('should be >= Math.ceil(log n)', () => {
+    const tree = getTree(numEl)
+    const logN = Math.log2(tree.nodeCount)
+    expect(tree.height).toBeGreaterThanOrEqual(Math.ceil(logN))
+  })
+  it('should be <= n - 1', () => {
+    const tree = getTree(numEl)
+    const n = tree.nodeCount
+    expect(tree.height).toBeLessThanOrEqual(n - 1)
+  })
+}

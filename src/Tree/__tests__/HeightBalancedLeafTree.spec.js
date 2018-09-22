@@ -1,81 +1,17 @@
-const {
-  populateInOrder,
-  populateInReverseOrder,
-  populateInRandomOrder,
-} = require('./util')
+const { testWithDifferentKeyInsertionOrders } = require('./util')
 const util = require('../treeUtils')
 const Tree = require('../HeightBalancedLeafTree')
 
 describe('HeightBalancedLeafTree', () => {
   describe('properties', () => {
-    describe('when elements are inserted with increasing key order', () => {
-      testTreeProperties((numElements = 200) => {
-        const tree = new Tree()
-        populateInOrder(tree, numElements)
-        return tree
-      })
-    })
-    describe('when elements are inserted with decreasing key order', () => {
-      testTreeProperties((numElements = 200) => {
-        const tree = new Tree()
-        populateInReverseOrder(tree, numElements)
-        return tree
-      })
-    })
-    describe('when elements are inserted with random key order', () => {
-      testTreeProperties((numElements = 200) => {
-        const tree = new Tree()
-        populateInRandomOrder(tree, numElements)
-        return tree
-      })
-    })
+    testWithDifferentKeyInsertionOrders(testTreeProperties, Tree)
   })
 
   describe('#insert', () => {
-    describe('when elements are inserted with increasing key order', () => {
-      testInsertion((numElements) => {
-        const tree = new Tree()
-        populateInOrder(tree, numElements)
-        return tree
-      })
-    })
-    describe('when elements are inserted with decreasing key order', () => {
-      testInsertion((numElements) => {
-        const tree = new Tree()
-        populateInReverseOrder(tree, numElements)
-        return tree
-      })
-    })
-    describe('when elements are inserted with random key order', () => {
-      testInsertion((numElements) => {
-        const tree = new Tree()
-        populateInRandomOrder(tree, numElements)
-        return tree
-      })
-    })
+    testWithDifferentKeyInsertionOrders(testInsertion, Tree)
   })
   describe('#delete', () => {
-    describe('when elements are inserted with increasing key order', () => {
-      testDeletion((numElements) => {
-        const tree = new Tree()
-        populateInOrder(tree, numElements)
-        return tree
-      })
-    })
-    describe('when elements are inserted with decreasing key order', () => {
-      testDeletion((numElements) => {
-        const tree = new Tree()
-        populateInReverseOrder(tree, numElements)
-        return tree
-      })
-    })
-    describe('when elements are inserted with random key order', () => {
-      testDeletion((numElements) => {
-        const tree = new Tree()
-        populateInRandomOrder(tree, numElements)
-        return tree
-      })
-    })
+    testWithDifferentKeyInsertionOrders(testDeletion, Tree)
   })
 })
 
@@ -95,15 +31,15 @@ const computeMaxHeight = leaveCount => {
 }
 
 function testTreeProperties(getTree) {
+  const numEl = 100
   const leaveCountForBalancedTree = '(3+√5 / 2√5)(1+√5 / 2)^h - (3-√5 / 2√5)(1-√5 / 2)^h'
   test('if leaveCount = N; height <= approx. 1.44logN', () => {
-    const numLeaves = 50
-    const tree = getTree(numLeaves)
-    expect(numLeaves).toEqual(tree.leaveCount)
+    const tree = getTree(numEl)
+    expect(numEl).toEqual(tree.leaveCount)
     expect(tree.height).toBeLessThanOrEqual(computeMaxHeight(tree.leaveCount))
   })
   test(`if height = h; leaveCount >= ${ leaveCountForBalancedTree }`, () => {
-    const tree = getTree()
+    const tree = getTree(numEl)
     expect(tree.leaveCount).toBeGreaterThanOrEqual(computeMinimumLeaveCount(tree.height))
   })
 }
@@ -122,8 +58,6 @@ function testInsertion(getTree) {
   testKeyOrder(() => getTree(numEl))
   testBalanceCriteria(() => getTree(numEl))
 }
-
-
 
 function testDeletion(getTree) {
   const numEl = 200

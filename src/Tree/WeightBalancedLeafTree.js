@@ -56,3 +56,5 @@ class WeightBalancedLeafTree extends LeafTree {
     return true
   }
 }
+
+module.exports = WeightBalancedLeafTree

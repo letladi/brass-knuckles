@@ -25,8 +25,36 @@ function populateInRandomOrder(tree, numElements) {
   data.forEach(([key, val]) => tree.insert(key, val))
 }
 
+function prepareTree(numElements, TreeConstructor, populate) {
+  const tree = new TreeConstructor()
+  populate(tree, numElements)
+  return tree
+}
+
+function testForWhenKeysAreInsertedInOrder(testFn, TreeConstructor) {
+  describe('when elements are inserted with increasing key order', () => {
+    testFn((numEl) => prepareTree(numEl, TreeConstructor, populateInOrder))
+  })
+}
+
+function testForWhenKeysAreInsertedInReverseOrder(testFn, TreeConstructor) {
+  describe('when elements are inserted with decreasing key order', () => {
+    testFn((numEl) => prepareTree(numEl, TreeConstructor, populateInReverseOrder))
+  })
+}
+
+function testForWhenKeysAreInsertedInRandomOrder(testFn, TreeConstructor) {
+  describe('when elements are inserted with random key order', () => {
+    testFn((numEl) => prepareTree(numEl, TreeConstructor, populateInRandomOrder))
+  })
+}
+
+function testWithDifferentKeyInsertionOrders(testFn, TreeConstructor) {
+  testForWhenKeysAreInsertedInOrder(testFn, TreeConstructor)
+  testForWhenKeysAreInsertedInReverseOrder(testFn, TreeConstructor)
+  testForWhenKeysAreInsertedInRandomOrder(testFn, TreeConstructor)
+}
+
 module.exports = {
-  populateInOrder,
-  populateInReverseOrder,
-  populateInRandomOrder,
+  testWithDifferentKeyInsertionOrders
 }
