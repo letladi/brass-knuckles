@@ -3,6 +3,7 @@ const Node = require('./LeafTreeNode')
 const Stack = require('../ch1/Stack')
 const { height, rotateLeft, rotateRight, copyNode } = require('./treeUtils')
 
+// TODO: Optimize storage/retrieval of height values
 class HeightBalancedLeafTree extends LeafTree {
   insert(key, val) {
     let current = null
@@ -32,7 +33,6 @@ class HeightBalancedLeafTree extends LeafTree {
           current.right = oldLeaf
         }
       }
-      // we now balance the tree; TODO; make insertion more efficient by storing height on the nodes instead of computing it each time
       this._balance(stack)
     }
     return true
@@ -42,16 +42,16 @@ class HeightBalancedLeafTree extends LeafTree {
     let current = null
     while (!stackedNodes.isEmpty()) {
       current = stackedNodes.pop()
-      let oldHeight = height(current)
+      const balanceFactor = height(current.left) - height(current.right)
 
-      if (height(current.left) - height(current.right) === 2) {
+      if (balanceFactor === 2) {
         if (height(current.left.left) - height(current.right) === 1) {
           rotateRight(current)
         } else {
           rotateLeft(current.left)
           rotateRight(current)
         }
-      } else if (height(current.left) - height(current.right) === -2) {
+      } else if (balanceFactor === -2) {
         if (height(current.right.right) - height(current.left) === 1) {
           rotateLeft(current)
         } else {
