@@ -1,7 +1,7 @@
 const LeafTree = require('./LeafTree')
 const Node = require('./LeafTreeNode')
 const Stack = require('../ch1/Stack')
-const { height, rotateLeft, rotateRight } = require('./treeUtils')
+const { height, rotateLeft, rotateRight, copyNode } = require('./treeUtils')
 
 class HeightBalancedLeafTree extends LeafTree {
   insert(key, val) {
@@ -32,32 +32,74 @@ class HeightBalancedLeafTree extends LeafTree {
           current.right = oldLeaf
         }
       }
-
       // we now balance the tree; TODO; make insertion more efficient by storing height on the nodes instead of computing it each time
-      let finished = false
-
-      while (!stack.isEmpty() && !finished) {
-        current = stack.pop()
-        let oldHeight = height(current)
-
-        if (height(current.left) - height(current.right) === 2) {
-          if (height(current.left.left) - height(current.right) === 1) {
-            rotateRight(current)
-          } else {
-            rotateLeft(current.left)
-            rotateRight(current)
-          }
-        } else if (height(current.left) - height(current.right) === -2) {
-          if (height(current.right.right) - height(current.left) === 1) {
-            rotateLeft(current)
-          } else {
-            rotateRight(current.right)
-            rotateLeft(current)
-          }
-        }
-        if (height(current) === oldHeight) finished = true
-      }
+      this._balance(stack)
     }
     return true
   }
+
+  _balance(stackedNodes) {
+    let current = null
+    while (!stackedNodes.isEmpty()) {
+      current = stackedNodes.pop()
+      let oldHeight = height(current)
+
+      if (height(current.left) - height(current.right) === 2) {
+        if (height(current.left.left) - height(current.right) === 1) {
+          rotateRight(current)
+        } else {
+          rotateLeft(current.left)
+          rotateRight(current)
+        }
+      } else if (height(current.left) - height(current.right) === -2) {
+        if (height(current.right.right) - height(current.left) === 1) {
+          rotateLeft(current)
+        } else {
+          rotateRight(current.right)
+          rotateLeft(current)
+        }
+      }
+    }
+  }
+
+  delete(key) {
+    if (this.isEmpty()) return null
+    else if (this.root.isLeaf()) {
+      if (this.root.key === key) {
+        const deleteVal = this.root.value
+        this.root.left = null
+        return deleteVal
+      }
+      return null
+    } else {
+      let current = this.root
+      let currentParent = null
+      let currentSibling = null
+      const stack = new Stack()
+
+      while (!current.isLeaf()) {
+        stack.push(current)
+        currentParent = current
+        if (key < current.key) {
+          current = currentParent.left
+          currentSibling = currentParent.right
+        } else {
+          current = currentParent.right
+          currentSibling = currentParent.left
+        }
+      }
+      if (current.key !== key) return null
+      else {
+        copyNode(currentParent, currentSibling)
+        /* currentParent is now a leaf so we remove it from the stack
+           before balancing the nodes
+        */
+        stack.pop()
+        this._balance(stack)
+        return current.value
+      }
+    }
+  }
 }
+
+module.exports = HeightBalancedLeafTree

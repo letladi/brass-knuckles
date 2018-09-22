@@ -46,15 +46,14 @@ class LeafTree {
   }
 
   delete(key) {
-    if (this.isEmpty())
-      return null
+    if (this.isEmpty()) return null
     else if (this.root.isLeaf()) {
       if (this.root.key === key) {
         const deleteVal = this.root.value
         this.root.left = null
         return deleteVal
-      } else
-        return null
+      }
+      return null
     } else {
       let current = this.root
       let currentParent = null

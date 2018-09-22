@@ -1,5 +1,9 @@
 const assert = require('assert')
-const { populateInOrder, populateInReverseOrder, populateInRandomOrder } = require('./util')
+const {
+  populateInOrder,
+  populateInReverseOrder,
+  populateInRandomOrder,
+} = require('./util')
 const LeafTree = require('../LeafTree')
 
 function testTreeProperties(prepareTree) {
@@ -41,22 +45,46 @@ describe('LeafTree', () => {
     describe('when elements are inserted with random key order', () => {
       testTreeProperties(() => {
         const tree = new LeafTree()
-        populateInRandomOrder(tree, 20)
+        populateInRandomOrder(tree, 100)
         return tree
       })
     })
   })
 
-  describe('.height', () => {
+  function testTreeHeight(prepareTree) {
     it('should be >= Math.ceil(log n)', () => {
-      populateInOrder(tree, 25)
+      const tree = prepareTree()
       const logN = Math.log2(tree.nodeCount)
       expect(tree.height).toBeGreaterThanOrEqual(Math.ceil(logN))
     })
     it('should be <= n - 1', () => {
-      populateInOrder(tree, 25)
+      const tree = prepareTree()
       const n = tree.nodeCount
       expect(tree.height).toBeLessThanOrEqual(n - 1)
+    })
+  }
+
+  describe('.height', () => {
+    describe('when elements are inserted with increasing key order', () => {
+      testTreeHeight(() => {
+        const tree = new LeafTree()
+        populateInOrder(tree, 20)
+        return tree
+      })
+    })
+    describe('when elements are inserted with decreasing key order', () => {
+      testTreeHeight(() => {
+        const tree = new LeafTree()
+        populateInReverseOrder(tree, 20)
+        return tree
+      })
+    })
+    describe('when elements are inserted with random key order', () => {
+      testTreeHeight(() => {
+        const tree = new LeafTree()
+        populateInRandomOrder(tree, 100)
+        return tree
+      })
     })
   })
   xdescribe('.averageDepth (of the leaves)', () => {
@@ -73,6 +101,7 @@ describe('LeafTree', () => {
       expect(tree.averageDepth).toBeLessThanOrEqual(expectedMaximumDepth)
     })
   })
+
   describe('#find', () => {
     it('returns null if the tree is empty', () => {
       expect(tree.find(1)).toEqual(null)
@@ -120,7 +149,7 @@ describe('LeafTree', () => {
       tree.insert(2, 'two')
       expect(tree.nodeCount).toEqual(prevCount + 2)
     })
-    it('all the key value pairs inserted will exist in the tree (bug-fix where subsequent inserts over-writes previous ones)', () => {
+    it('all the key value pairs inserted will exist in the tree', () => {
       tree.insert(1, 'one')
       tree.insert(2, 'two')
       tree.insert(3, 'three')
@@ -145,24 +174,49 @@ describe('LeafTree', () => {
     it('is 0 if empty', () => {
       expect(tree.nodeCount).toEqual(0)
     })
-    it('counts total number of nodes in the leaves', () => {
+    it('increases by one on the very first insert', () => {
+      tree.insert(1, 'one')
+      expect(tree.nodeCount).toEqual(1)
+    })
+    it('increases by two after every subsequent inserts', () => {
       tree.insert(1, 'one')
       tree.insert(2, 'two')
       expect(tree.nodeCount).toEqual(3)
+      tree.insert(3, 'three')
+      expect(tree.nodeCount).toEqual(5)
     })
   })
   describe('#delete', () => {
+    beforeEach(() => {
+      tree.insert(1, 'one')
+      tree.insert(2, 'two')
+      tree.insert(3, 'three')
+      tree.insert(4, 'four')
+      tree.insert(5, 'five')
+      tree.insert(6, 'six')
+      tree.insert(7, 'seven')
+    })
     it('returns null is deletion failed (when tree is empty)', () => {
+      tree = new LeafTree()
       expect(tree.delete(1)).toEqual(null)
     })
     it('returns null if deletion failed (when key does not exist in the tree)', () => {
       tree.insert(1, 'one')
-      expect(tree.delete(2)).toEqual(null)
+      expect(tree.delete(10)).toEqual(null)
     })
     it('returns and removes the value associated with the deleted key', () => {
-      tree.insert(1, 'one')
       expect(tree.delete(1)).toEqual('one')
       expect(tree.delete(1)).toEqual(null)
+    })
+    it('descreases leaveCount by 1', () => {
+      const oldLeaveCount = tree.leaveCount
+      tree.delete(4)
+      expect(tree.leaveCount).toEqual(oldLeaveCount - 1)
+    })
+    it('descreases nodeCount by two', () => {
+      const oldNodeCount = tree.nodeCount
+      tree.delete(4)
+      expect(tree.nodeCount).toEqual(oldNodeCount - 2)
     })
   })
   describe('#intervalFind', () => {

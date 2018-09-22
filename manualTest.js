@@ -1,4 +1,4 @@
-const LeafTree = require('./src/SearchTree/LeafTree')
+const LeafTree = require('./src/Tree/HeightBalancedLeafTree')
 
 const tree = new LeafTree()
 
@@ -10,4 +10,4 @@ tree.insert(5, 'five')
 tree.insert(6, 'six')
 tree.insert(7, 'seven')
 
-console.log('tree.intervalFind', tree.intervalFind(1, 5))
+console.log(tree.delete(4))
