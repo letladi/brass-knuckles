@@ -15,13 +15,13 @@ const addToValueList = (node, val) => {
 }
 
 class MultiLeafTree extends LeafTree {
-  find(key) {
-    const valueList = super.find(key)
-    return valueList ? valueList.entries() : []
+  find(key, lazy = true) {
+    const valueList = super.find(key) || new LinkedList()
+    return lazy ? valueList : valueList.entries()
   }
 
   intervalFind(a, b) {
-    let resultList = null
+    let resultList = new LinkedList()
     const stack = new Stack()
     stack.push(this.root)
 
@@ -29,8 +29,7 @@ class MultiLeafTree extends LeafTree {
       const current = stack.pop()
       if (current.isLeaf()) {
         if (a <= current.key && current.key < b) {
-          const temp = new Node(current.key, current.value.entries(), resultList)
-          resultList = temp
+          resultList.insertLast({ key: current.key, valueList: current.value })
         }
       } else if (b <= current.key) {
         stack.push(current.left)
@@ -70,13 +69,8 @@ class MultiLeafTree extends LeafTree {
   }
 
   delete(key) {
-    const valueList = super.delete(key)
-    let values = []
-    if (valueList) {
-      values = valueList.entries()
-      valueList.clear()
-    }
-    return values
+    const valueList = super.delete(key) || new LinkedList()
+    return valueList
   }
 }
 

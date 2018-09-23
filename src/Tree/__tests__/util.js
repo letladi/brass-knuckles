@@ -1,6 +1,10 @@
 const { shuffle } = require('lodash')
 
-function generateKeysAndValues(count, valGenerator = (key) => key * 2) {
+const valueGenerator = key => key * 2
+
+const duplicateValueGenerator = key => `${ valueGenerator(key) }`
+
+function generateKeysAndValues(count, valGenerator = valueGenerator) {
   const ret = []
   for (i = 1; i <= count; i++) {
     ret.push([i, valGenerator(i)])
@@ -77,7 +81,18 @@ function testWithDifferentKeyInsertionOrders(testFn, TreeConstructor) {
   testForWhenKeysAreInsertedInRandomOrder(testFn, TreeConstructor)
 }
 
+function addDuplicateValues(tree, numDuplicates, afterInsertCb = tree => tree) {
+  while (numDuplicates) {
+    tree.insert(numDuplicates, duplicateValueGenerator(numDuplicates))
+    afterInsertCb(tree)
+    numDuplicates--
+  }
+}
+
 module.exports = {
   testKeyOrder,
-  testWithDifferentKeyInsertionOrders
+  testWithDifferentKeyInsertionOrders,
+  valueGenerator,
+  duplicateValueGenerator,
+  addDuplicateValues,
 }

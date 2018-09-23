@@ -1,6 +1,7 @@
 const assert = require('assert')
 const {
   testKeyOrder,
+  valueGenerator,
   testWithDifferentKeyInsertionOrders
 } = require('./util')
 const { weight } = require('../treeUtils')
@@ -90,7 +91,7 @@ function testDeletion(getTree) {
   })
   it('returns the deleted value if deletion succeeded', () => {
     const tree = getTree(numEl)
-    const expectedDeletedValue = keyToDelete * 2 // generateKeysAndValues/util.js
+    const expectedDeletedValue = valueGenerator(keyToDelete)
     expect(tree.delete(keyToDelete)).toEqual(expectedDeletedValue)
   })
   it('decreases the leaveCount by one', () => {

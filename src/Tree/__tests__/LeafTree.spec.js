@@ -1,11 +1,10 @@
-const assert = require('assert')
-const { testWithDifferentKeyInsertionOrders } = require('./util')
+const {
+  valueGenerator,
+  testWithDifferentKeyInsertionOrders
+} = require('./util')
 const LeafTree = require('../LeafTree')
 
 describe('LeafTree', () => {
-  let tree = null
-  beforeEach(() => tree = new LeafTree())
-
   describe('tree properties', () => {
     testWithDifferentKeyInsertionOrders(testTreeProperties, LeafTree)
   })
@@ -74,7 +73,7 @@ function testFind(getTree) {
     const numEl = 100
     const tree = getTree(numEl)
     for (let key = 1; key <= numEl; key++) {
-      expect(tree.find(key)).toEqual(key * 2)
+      expect(tree.find(key)).toEqual(valueGenerator(key))
     }
   })
 }
@@ -188,7 +187,7 @@ function testDeletion(getTree) {
     let numKeysToDelete = Math.floor(numEl / 20)
     const tree = getTree(numEl)
     while (numKeysToDelete) {
-      expect(tree.delete(numKeysToDelete)).toEqual(numKeysToDelete * 2)
+      expect(tree.delete(numKeysToDelete)).toEqual(valueGenerator(numKeysToDelete))
       numKeysToDelete--
     }
   })
@@ -225,7 +224,7 @@ function testIntervalFind(getTree) {
     let key = intervalStart
     while (key < intervalEnd) {
       expect(interval.key).toEqual(key)
-      expect(interval.value).toEqual(key * 2)
+      expect(interval.value).toEqual(valueGenerator(key))
       interval = interval.right
       key++
     }
@@ -237,8 +236,8 @@ function testIntervalFind(getTree) {
     expect(tree.intervalFind(intervalStart, intervalEnd)).toEqual(null)
   })
   it('excludes elements equal to the closing interval key', () => {
-    const tree = getTree(Math.floor(numEl / 10))
-    const interval = tree.intervalFind(1, 2)
+    const tree = getTree(Math.floor(numEl))
+    const interval = tree.intervalFind(50, 51)
     expect(interval.right).toEqual(null)
   })
 }

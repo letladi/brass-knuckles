@@ -1,94 +1,163 @@
 const MultiLeafTree = require('../MultiLeafTree')
+const LinkedList = require('../../ch1/LinkedList')
+const {
+  valueGenerator,
+  duplicateValueGenerator,
+  addDuplicateValues,
+  testWithDifferentKeyInsertionOrders
+} = require('./util')
 
 describe('MultiLeafTree', () => {
   let tree = null
   beforeEach(() => tree = new MultiLeafTree())
 
   describe('#find', () => {
-    it('returns [] if there are no values associated with the given key (when tree is empty)', () => {
-      expect(tree.find(1)).toEqual([])
-    })
-    it('returns [] if there are no values associated with the given key (when key does not exist in the tree)', () => {
-      tree.insert(2, 'two')
-      tree.insert(3, 'three')
-      expect(tree.find(1)).toEqual([])
-    })
-    it('returns an array of values associated with the given key', () => {
-      tree.insert(1, 'one')
-      tree.insert(1, 1)
-      tree.insert(2, 'two')
-      tree.insert(3, 'three')
-      expect(tree.find(1)).toEqual([1, 'one'])
-      expect(tree.find(2)).toEqual(['two'])
-      expect(tree.find(3)).toEqual(['three'])
-    })
+    testWithDifferentKeyInsertionOrders(testFind, MultiLeafTree)
   })
   describe('#intervalFind', () => {
-    function populateForIntervalTest(tree) {
-      tree.insert(1, 1)
-      tree.insert(1, 'one')
-      tree.insert(2, 2)
-      tree.insert(2, 'two')
-      tree.insert(3, 'three')
-      tree.insert(4, 'four')
-      tree.insert(5, 'five')
-    }
-    beforeEach(() =>   populateForIntervalTest(tree))
-    it('returns a type of linked list of the pointers in the interval (the value of each node being an array)', () => {
-      const intervalValues = [[1, ['one', 1]], [2, ['two', 2]], [3, ['three']], [4, ['four']]]
-
-
-      let interval = tree.intervalFind(1, 5)
-      intervalValues.forEach(([key, val]) => {
-        expect(interval.key).toEqual(key)
-        expect(interval.value).toEqual(val)
-        interval = interval.right
-      })
-    })
-    it('returns null if there are no elements in the specified interval', () => {
-      expect(tree.intervalFind(8, 10)).toEqual(null)
-    })
-    it('excludes elements equal to the closing interval key', () => {
-      const interval = tree.intervalFind(1, 2)
-      expect(interval.right).toEqual(null)
-    })
+    testWithDifferentKeyInsertionOrders(testIntervalFind, MultiLeafTree)
   })
   describe('#delete', () => {
-    it('returns [] if deletion failed (when tree is empty)', () => {
-      expect(tree.delete(1)).toEqual([])
-    })
-    it('returns [] if deletion failed (when key does not exist in the tree)', () => {
-      tree.insert(1, 'one')
-      expect(tree.delete(2)).toEqual([])
-    })
-    it('returns an array of the values for the given key', () => {
-      tree.insert(1, 'one')
-      tree.insert(1, 1)
-      expect(tree.delete(1)).toEqual([1, 'one'])
-    })
-    it('removes all values associated with the given key', () => {
-      tree.insert(1, 'one')
-      tree.insert(1, 1)
-      tree.delete(1)
-      expect(tree.find(1)).toEqual([])
-    })
+    testWithDifferentKeyInsertionOrders(testDeletion, MultiLeafTree)
   })
   describe('#insert', () => {
-    it('increases the leaveCount for each unique key insert', () => {
-      tree.insert(1, 'one')
-      expect(tree.leaveCount).toEqual(1)
-      tree.insert(2, 'two')
-      expect(tree.leaveCount).toEqual(2)
-      tree.insert(3, 'three')
-      expect(tree.leaveCount).toEqual(3)
-    })
-    it('does not increase leaveCount for subsequent inserts of similar key values', () => {
-      tree.insert(1, 'one')
-      expect(tree.leaveCount).toEqual(1)
-      tree.insert(1, 'two')
-      expect(tree.leaveCount).toEqual(1)
-      tree.insert(1, 'three')
-      expect(tree.leaveCount).toEqual(1)
-    })
+    testWithDifferentKeyInsertionOrders(testInsertion, MultiLeafTree)
   })
 })
+
+function testFind(getTree) {
+  const numEl = 100
+  const duplicateNumEl = Math.floor(numEl / 4)
+  it('returns empty linked list if there are no values associated with the given key (when tree is empty)', () => {
+    const tree = getTree(0)
+    const randomKeyVal = 1
+    const values = tree.find(randomKeyVal)
+    expect(values.length).toEqual(0)
+  })
+  it('returns empty linked list if there are no values associated with the given key (when key does not exist in the tree)', () => {
+    const tree = getTree(numEl)
+    const nextKey = numEl + 1
+    const values = tree.find(nextKey)
+    expect(values.length).toEqual(0)
+  })
+  it('returns linked list of values associated with the given key', () => {
+    const tree = getTree(numEl)
+    addDuplicateValues(tree, duplicateNumEl)
+    let i = duplicateNumEl
+    while (i) {
+      const values = tree.find(i)
+      expect(values instanceof LinkedList).toEqual(true)
+      expect(values.entries()).toEqual([duplicateValueGenerator(i), valueGenerator(i)])
+      i--
+    }
+  })
+  it('returns an array of values associated with the given key if the "lazy" argument is set to false', () => {
+    const tree = getTree(numEl)
+    addDuplicateValues(tree, duplicateNumEl)
+    let i = duplicateNumEl
+    while (i) {
+      expect(tree.find(i, false)).toEqual([duplicateValueGenerator(i), valueGenerator(i)])
+      i--
+    }
+  })
+}
+
+function testIntervalFind(getTree) {
+  const numEl = 100
+  const duplicateNumEl = Math.floor(numEl / 4)
+  it('returns a linked list of the pointers in the interval (the value of each node being a linked list)', () => {
+    const tree = getTree(numEl)
+    addDuplicateValues(tree, duplicateNumEl)
+
+    const intervalStart = Math.floor(duplicateNumEl / 2)
+    const intervalEnd = intervalStart + 10
+
+    const interval = tree.intervalFind(intervalStart, intervalEnd)
+    let i = intervalEnd - 1
+    interval.each(({ key,  valueList }) => {
+      expect(valueList instanceof LinkedList).toEqual(true)
+      expect(key).toEqual(i)
+      expect(valueList.entries()).toEqual([duplicateValueGenerator(i), valueGenerator(i)])
+      i--
+    })
+  })
+  it('returns empty linked list if there are no elements in the specified interval', () => {
+    const tree = getTree(numEl)
+    addDuplicateValues(tree, duplicateNumEl)
+
+    const intervalStart = numEl + 2
+    const intervalEnd = intervalStart + 10
+
+    const interval = tree.intervalFind(intervalStart, intervalEnd)
+    expect(interval.isEmpty()).toEqual(true)
+  })
+  it('excludes elements equal to the closing interval key', () => {
+    const tree = getTree(numEl)
+    addDuplicateValues(tree, duplicateNumEl)
+
+    const intervalStart = Math.floor(numEl / 2)
+    const intervalEnd = intervalStart + 10
+
+    const interval = tree.intervalFind(intervalStart, intervalEnd)
+    expect(interval.length).toEqual(intervalEnd - intervalStart) // one less than the interval size
+  })
+}
+
+function testDeletion(getTree) {
+  const numEl = 100
+  const duplicateNumEl = Math.floor(numEl / 4)
+  const numToDelete = duplicateNumEl
+  it('returns empty linked list if deletion failed (when tree is empty)', () => {
+    const tree = getTree(0)
+    const randomKey = 1
+    const valueList = tree.delete(randomKey)
+    expect(valueList.length).toEqual(0)
+  })
+  it('returns empty linked list if deletion failed (when key does not exist in the tree)', () => {
+    const tree = getTree(numEl)
+    const nextKey = numEl + 1
+    const valueList = tree.delete(nextKey)
+    expect(valueList.length).toEqual(0)
+  })
+  it('returns a LinkedList of the values for the given key', () => {
+    const tree = getTree(numEl)
+    addDuplicateValues(tree, duplicateNumEl)
+    let i = duplicateNumEl
+    while (i) {
+      const valueList = tree.delete(i)
+      expect(valueList.entries()).toEqual([duplicateValueGenerator(i), valueGenerator(i)])
+      i--
+    }
+  })
+  it('removes all values associated with the given key', () => {
+    const tree = getTree(numEl)
+    addDuplicateValues(tree, duplicateNumEl)
+    let i = duplicateNumEl
+    while (i) {
+      const valueList = tree.delete(i)
+      expect(valueList.length).toEqual(2)
+      const valueListAfterDeletion = tree.delete(i)
+      expect(valueListAfterDeletion.length).toEqual(0)
+      i--
+    }
+  })
+}
+
+function testInsertion(getTree) {
+  const numEl = 100
+  it('increases the leaveCount for each unique key insert', () => {
+    let oldLeaveCount = 0
+    getTree(numEl, (tree) => {
+      expect(tree.leaveCount).toEqual(oldLeaveCount + 1)
+      oldLeaveCount = tree.leaveCount
+    })
+  })
+  it('does not increase leaveCount for subsequent inserts of similar key values', () => {
+    const duplicateNumEl = 20
+    const tree = getTree(numEl)
+    const oldLeaveCount = tree.leaveCount
+    addDuplicateValues(tree, duplicateNumEl, (tree) => {
+      expect(tree.leaveCount).toEqual(oldLeaveCount)
+    })
+  })
+}
