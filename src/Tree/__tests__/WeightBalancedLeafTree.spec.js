@@ -44,17 +44,6 @@ function testTreeProperties(getTree) {
 
 function testInsertion(getTree) {
   const numEl = 100
-  it('returns true if insertion succeeded', () => {
-    const tree = getTree(1)
-    const nextKey = numEl + 1
-    expect(tree.insert(nextKey, 'nextKey')).toEqual(true)
-
-  })
-  it('returns false if insertion failed (like when key already exists in the tree)', () => {
-    const tree = getTree(numEl)
-    const existingKey = Math.floor(numEl / 2)
-    expect(tree.insert(existingKey, 'existingKey')).toEqual(false)
-  })
   testBalanceCriteria(() => getTree(numEl))
   testKeyOrder(() => getTree(numEl))
 }
@@ -80,33 +69,6 @@ function testBalanceCriteria(getTree, beforeVerification = (tree) => tree) {
 function testDeletion(getTree) {
   const numEl = 200
   const keyToDelete = Math.floor(numEl / 2)
-  it('returns null if deletion failed (when tree is empty)', () => {
-    const tree = getTree(0)
-    expect(tree.delete(1)).toEqual(null)
-  })
-  it('returns null if deletion failed (when the key does not exist in the tree)', () => {
-    const tree = getTree(numEl)
-    const nextElKey = numEl + 1
-    expect(tree.delete(nextElKey)).toEqual(null)
-  })
-  it('returns the deleted value if deletion succeeded', () => {
-    const tree = getTree(numEl)
-    const expectedDeletedValue = valueGenerator(keyToDelete)
-    expect(tree.delete(keyToDelete)).toEqual(expectedDeletedValue)
-  })
-  it('decreases the leaveCount by one', () => {
-    const tree = getTree(numEl)
-    const oldLeaveCount = tree.leaveCount
-    tree.delete(keyToDelete)
-    const expectedLeaveCount = tree.leaveCount
-    expect(expectedLeaveCount).toEqual(oldLeaveCount - 1)
-  })
-  it('decreases the nodeCount by two', () => {
-    const tree = getTree(numEl)
-    const oldNodeCount = tree.nodeCount
-    tree.delete(keyToDelete)
-    expect(tree.nodeCount).toEqual(oldNodeCount - 2)
-  })
   testKeyOrder(
     () => getTree(numEl),
     (tree) => {
