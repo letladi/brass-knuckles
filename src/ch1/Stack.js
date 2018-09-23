@@ -27,6 +27,10 @@ class Stack {
   push(val) {
     this._elements.insertFirst(val)
   }
+
+  clear() {
+    this._elements.clear()
+  }
 }
 
 Stack.prototype.messages = {

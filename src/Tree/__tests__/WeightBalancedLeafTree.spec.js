@@ -16,16 +16,12 @@ describe('WeightBalancedLeafTree', () => {
   describe('#delete', () => {
     testWithDifferentKeyInsertionOrders(testDeletion, Tree)
   })
+  xdescribe('#averageDepth', () => {
+    testWithDifferentKeyInsertionOrders(testAverageDepth, Tree)
+  })
 })
 
 function testTreeProperties(getTree) {
-  const computeMinLeaveCount = (height, alpha) => {
-    return (1 / (1 - alpha)) ** height
-  }
-  const computeMaxHeight = (leaveCount, alpha) => {
-    return (1 / Math.log2(1 / (1 - alpha))) * Math.log2(leaveCount)
-  }
-
   const numEl = 100
   test('if height = h >= 2; leaveCount >= (1 / 1-α)^h', () => {
     const tree = getTree(numEl)
@@ -37,6 +33,12 @@ function testTreeProperties(getTree) {
     const tree = getTree(numEl)
     expect(tree.height).toBeLessThanOrEqual(computeMaxHeight(tree.leaveCount, tree.alpha))
   })
+  function computeMinLeaveCount(height, alpha) {
+    return (1 / (1 - alpha)) ** height
+  }
+  function computeMaxHeight(leaveCount, alpha) {
+    return (1 / Math.log2(1 / (1 - alpha))) * Math.log2(leaveCount)
+  }
 }
 
 function testInsertion(getTree) {
@@ -56,7 +58,7 @@ function testInsertion(getTree) {
   testKeyOrder(() => getTree(numEl))
 }
 
-const isBalanced = (node, alpha) => {
+function isBalanced(node, alpha) {
   return weight(node.left) >= alpha * weight(node) &&
     weight(node.right) >= alpha * weight(node)
 }
@@ -116,4 +118,9 @@ function testDeletion(getTree) {
       let numKeysToDelete = Math.floor(numEl / 4)
       while (numKeysToDelete--) tree.delete(numKeysToDelete)
     })
+}
+
+function testAverageDepth(getTree) {
+  const averageDepthFormula = '(-1 * logn) / (αlogα + (1-α)log(1-α))'
+  test(`if leaveCount = n; averageDepth <= ${ averageDepthFormula}`)
 }

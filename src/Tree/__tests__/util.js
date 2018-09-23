@@ -8,26 +8,33 @@ function generateKeysAndValues(count, valGenerator = (key) => key * 2) {
   return ret
 }
 
-function populateInOrder(tree, numElements) {
-  generateKeysAndValues(numElements).forEach(([key, val]) => tree.insert(key, val))
+function populateInOrder(tree, numElements, afterInsertCb) {
+  generateKeysAndValues(numElements).forEach(([key, val]) => {
+    tree.insert(key, val)
+    afterInsertCb(tree)
+  })
 }
 
-function populateInReverseOrder(tree, numElements) {
+function populateInReverseOrder(tree, numElements, afterInsertCb) {
   const data = generateKeysAndValues(numElements)
   for (let i = data.length - 1; i >= 0; i--) {
     tree.insert(data[i][0], data[i][1])
+    afterInsertCb(tree)
   }
 }
 
-function populateInRandomOrder(tree, numElements) {
+function populateInRandomOrder(tree, numElements, afterInsertCb) {
   const data = generateKeysAndValues(numElements)
   shuffle(data)
-  data.forEach(([key, val]) => tree.insert(key, val))
+  data.forEach(([key, val]) => {
+    tree.insert(key, val)
+    afterInsertCb(tree)
+  })
 }
 
-function prepareTree(numElements, TreeConstructor, populate) {
+function prepareTree(numElements, TreeConstructor, populate, afterInsertCb = (tree) => tree) {
   const tree = new TreeConstructor()
-  populate(tree, numElements)
+  populate(tree, numElements, afterInsertCb)
   return tree
 }
 
@@ -48,19 +55,19 @@ function testKeyOrder(getTree, beforeVerification = (tree) => tree) {
 
 function testForWhenKeysAreInsertedInOrder(testFn, TreeConstructor) {
   describe('when elements are inserted with increasing key order', () => {
-    testFn((numEl) => prepareTree(numEl, TreeConstructor, populateInOrder))
+    testFn((numEl, afterInsertCb) => prepareTree(numEl, TreeConstructor, populateInOrder, afterInsertCb))
   })
 }
 
 function testForWhenKeysAreInsertedInReverseOrder(testFn, TreeConstructor) {
   describe('when elements are inserted with decreasing key order', () => {
-    testFn((numEl) => prepareTree(numEl, TreeConstructor, populateInReverseOrder))
+    testFn((numEl, afterInsertCb) => prepareTree(numEl, TreeConstructor, populateInReverseOrder, afterInsertCb))
   })
 }
 
 function testForWhenKeysAreInsertedInRandomOrder(testFn, TreeConstructor) {
   describe('when elements are inserted with random key order', () => {
-    testFn((numEl) => prepareTree(numEl, TreeConstructor, populateInRandomOrder))
+    testFn((numEl, afterInsertCb) => prepareTree(numEl, TreeConstructor, populateInRandomOrder, afterInsertCb))
   })
 }
 

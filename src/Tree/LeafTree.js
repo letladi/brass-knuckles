@@ -1,6 +1,6 @@
 const Stack = require('../ch1/Stack')
 const Node = require('./LeafTreeNode')
-const util = require('./treeUtils')
+const { copyNode, height } = require('./treeUtils')
 
 class LeafTree {
   constructor() {
@@ -23,15 +23,18 @@ class LeafTree {
   insert(key, val) {
     if (this.isEmpty()) this.root = new Node(key, val)
     else {
+      const stack = new Stack()
       let current = this.root
       while (!current.isLeaf()) {
+        stack.push(current)
         current = (key < current.key) ? current.left : current.right
       }
-      if (current.key === key)
-        return false
+
+      if (current.key === key) return false
       else {
         let oldLeaf = new Node(current.key, current.value)
         const newLeaf = new Node(key, val)
+
         if (current.key < key) {
           current.left = oldLeaf
           current.right = newLeaf
@@ -41,6 +44,7 @@ class LeafTree {
           current.right = oldLeaf
         }
       }
+      this.balance(stack)
     }
     return true
   }
@@ -58,8 +62,10 @@ class LeafTree {
       let current = this.root
       let currentParent = null
       let currentSibling = null
+      const stack = new Stack()
 
       while (!current.isLeaf()) {
+        stack.push(current)
         currentParent = current
         if (key < current.key) {
           current = currentParent.left
@@ -69,13 +75,25 @@ class LeafTree {
           currentSibling = currentParent.left
         }
       }
-      if (current.key !== key)
-        return null
+      if (current.key !== key) return null
       else {
-        util.copyNode(currentParent, currentSibling)
+        copyNode(currentParent, currentSibling)
+        /* currentParent is now a leaf so we remove it from the stack
+           before balancing the nodes
+        */
+        stack.pop()
+        this.balance(stack)
         return current.value
       }
     }
+  }
+
+  /*
+    This function is overridden in subclasses which
+    balance their nodes in some way
+  */
+  balance(stackedNodes) {
+    stackedNodes.clear()
   }
 
   traverse(cb) {
@@ -111,7 +129,7 @@ class LeafTree {
   }
 
   get height() {
-    return util.height(this.root)
+    return height(this.root)
   }
 
   get interiorNodeCount() {

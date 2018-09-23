@@ -55,4 +55,13 @@ describe('Stack', () => {
       expect(ret1).toEqual(null)
     })
   })
+
+  describe('#clear', () => {
+    it('resets back to the initial state', () => {
+      [1, 2, 3].forEach((el) => stack.push(el))
+      stack.clear()
+      expect(stack.isEmpty()).toEqual(true)
+      expect(stack.size).toEqual(0)
+    })
+  })
 })

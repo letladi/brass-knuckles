@@ -55,6 +55,54 @@ const rotateLeft = node => {
 
 const weight = node => node.isLeaf() ? 1 : weight(node.left) + weight(node.right)
 
+// TODO: Optimize storage/retrieval of weight values
+const balanceByWeight = (nodeStack, alpha, epsilon) => {
+  let current = null
+  while (!nodeStack.isEmpty()) {
+    current = nodeStack.pop()
+    if (weight(current.right) < alpha * weight(current)) {
+      if (weight(current.left.left) > (alpha + epsilon) * weight(current)) {
+        rotateRight(current)
+      } else {
+        rotateLeft(current.left)
+        rotateRight(current)
+      }
+    } else if (weight(current.left) < alpha * weight(current)) {
+      if (weight(current.right.right) > (alpha + epsilon) * weight(current)) {
+        rotateLeft(current)
+      } else {
+        rotateRight(current.right)
+        rotateLeft(current)
+      }
+    }
+  }
+}
+
+// TODO: Optimize storage/retrieval of height values
+const balanceByHeight = (nodeStack) => {
+  let current = null
+  while (!nodeStack.isEmpty()) {
+    current = nodeStack.pop()
+    const balanceFactor = height(current.left) - height(current.right)
+
+    if (balanceFactor === 2) {
+      if (height(current.left.left) - height(current.right) === 1) {
+        rotateRight(current)
+      } else {
+        rotateLeft(current.left)
+        rotateRight(current)
+      }
+    } else if (balanceFactor === -2) {
+      if (height(current.right.right) - height(current.left) === 1) {
+        rotateLeft(current)
+      } else {
+        rotateRight(current.right)
+        rotateLeft(current)
+      }
+    }
+  }
+}
+
 module.exports = {
   height,
   swapKeys,
@@ -62,4 +110,6 @@ module.exports = {
   rotateRight,
   rotateLeft,
   weight,
+  balanceByHeight,
+  balanceByWeight,
 }
