@@ -8,22 +8,25 @@ const {
 } = require('./util')
 
 describe('MultiLeafTree', () => {
-  let tree = null
-  beforeEach(() => tree = new MultiLeafTree())
+  performGenericMultiLeafTreeTests(MultiLeafTree)
+})
 
+function performGenericMultiLeafTreeTests(TreeConstructor) {
   describe('#find', () => {
-    testWithDifferentKeyInsertionOrders(testFind, MultiLeafTree)
+    testWithDifferentKeyInsertionOrders(testFind, TreeConstructor)
   })
   describe('#intervalFind', () => {
-    testWithDifferentKeyInsertionOrders(testIntervalFind, MultiLeafTree)
+    testWithDifferentKeyInsertionOrders(testIntervalFind, TreeConstructor)
   })
   describe('#delete', () => {
-    testWithDifferentKeyInsertionOrders(testDeletion, MultiLeafTree)
+    testWithDifferentKeyInsertionOrders(testDeletion, TreeConstructor)
   })
   describe('#insert', () => {
-    testWithDifferentKeyInsertionOrders(testInsertion, MultiLeafTree)
+    testWithDifferentKeyInsertionOrders(testInsertion, TreeConstructor)
   })
-})
+}
+
+module.exports = performGenericMultiLeafTreeTests
 
 function testFind(getTree) {
   const numEl = 100

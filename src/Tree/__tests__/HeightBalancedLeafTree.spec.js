@@ -5,21 +5,28 @@ const {
 } = require('./util')
 const util = require('../treeUtils')
 const Tree = require('../HeightBalancedLeafTree')
+const performGenericLeafTreeTests = require('./LeafTree.spec')
 
 describe('HeightBalancedLeafTree', () => {
-  describe('properties', () => {
-    testWithDifferentKeyInsertionOrders(testTreeProperties, Tree)
-  })
-
-  describe('#insert', () => {
-    testWithDifferentKeyInsertionOrders(testInsertion, Tree)
-  })
-  describe('#delete', () => {
-    testWithDifferentKeyInsertionOrders(testDeletion, Tree)
-  })
+  performGenericLeafTreeTests(Tree)
+  performTestsSpecificToHeightBalancedTrees(Tree)
 })
 
-const computeMinimumLeaveCount = height => {
+function performTestsSpecificToHeightBalancedTrees(TreeConstructor) {
+  describe('properties', () => {
+    testWithDifferentKeyInsertionOrders(testTreeProperties, TreeConstructor)
+  })
+  describe('#insert', () => {
+    testWithDifferentKeyInsertionOrders(testInsertion, TreeConstructor)
+  })
+  describe('#delete', () => {
+    testWithDifferentKeyInsertionOrders(testDeletion, TreeConstructor)
+  })
+}
+
+module.exports = performTestsSpecificToHeightBalancedTrees
+
+function computeMinimumLeaveCount(height) {
   const sqrt5 = Math.sqrt(5)
   const sqrt2 = Math.sqrt(2)
   const doubleOfSqrt5 = sqrt5 * 2
@@ -28,7 +35,8 @@ const computeMinimumLeaveCount = height => {
   const y = ((3 - sqrt5) / doubleOfSqrt5) * (((1 - sqrt5) / 2) ** height)
   return x - y
 }
-const computeMaxHeight = leaveCount => {
+
+function computeMaxHeight(leaveCount) {
   const sqrt5 = Math.sqrt(5)
   const CFib = 1 / Math.log2((1 + sqrt5) / 2)
   return Math.ceil(CFib * Math.log2(leaveCount))

@@ -12,34 +12,41 @@ describe('LeafTree', () => {
   describe('.height', () => {
     testWithDifferentKeyInsertionOrders(testTreeHeight, LeafTree)
   })
+  
   xdescribe('.averageDepth (of the leaves)', () => {
     it('should be <= (n - 1)(n + 2) / 2n (approx. 0.5n)')
   })
 
+  performGenericLeafTreeTests(LeafTree)
+})
+
+function performGenericLeafTreeTests(TreeConstructor) {
   describe('#find', () => {
-    testWithDifferentKeyInsertionOrders(testFind, LeafTree)
+    testWithDifferentKeyInsertionOrders(testFind, TreeConstructor)
   })
 
   describe('#insert', () => {
-    testWithDifferentKeyInsertionOrders(testInsertion, LeafTree)
+    testWithDifferentKeyInsertionOrders(testInsertion, TreeConstructor)
   })
 
   describe('.leaveCount', () => {
-    testWithDifferentKeyInsertionOrders(testLeaveCount, LeafTree)
+    testWithDifferentKeyInsertionOrders(testLeaveCount, TreeConstructor)
   })
 
   describe('.nodeCount', () => {
-    testWithDifferentKeyInsertionOrders(testNodeCount, LeafTree)
+    testWithDifferentKeyInsertionOrders(testNodeCount, TreeConstructor)
   })
 
   describe('#delete', () => {
-    testWithDifferentKeyInsertionOrders(testDeletion, LeafTree)
+    testWithDifferentKeyInsertionOrders(testDeletion, TreeConstructor)
   })
 
   describe('#intervalFind', () => {
-    testWithDifferentKeyInsertionOrders(testIntervalFind, LeafTree)
+    testWithDifferentKeyInsertionOrders(testIntervalFind, TreeConstructor)
   })
-})
+}
+
+module.exports = performGenericLeafTreeTests
 
 function testTreeProperties(getTree) {
   const numEl = 100

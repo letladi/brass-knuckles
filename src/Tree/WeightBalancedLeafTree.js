@@ -1,17 +1,17 @@
 const LeafTree = require('./LeafTree')
-const { balanceByWeight } = require('./treeUtils')
+const { balanceByWeight, defaultAlpha, defaultEpsilon } = require('./treeUtils')
 
 class WeightBalancedLeafTree extends LeafTree {
-  constructor(alpha = 0.288, epsilon = 0.005) {
+  constructor(alpha = defaultAlpha, epsilon = defaultEpsilon) {
     super()
-    this.alpha = 0.288
-    this.epsilon = 0.005
+    this.alpha = alpha
+    this.epsilon = epsilon
   }
+}
 
-  balance(stackedNodes) {
-    const { alpha, epsilon } = this
-    balanceByWeight(stackedNodes, alpha, epsilon)
-  }
+WeightBalancedLeafTree.prototype.balance = function(stackedNodes) {
+  const { alpha, epsilon } = this
+  balanceByWeight(stackedNodes, alpha, epsilon)
 }
 
 module.exports = WeightBalancedLeafTree

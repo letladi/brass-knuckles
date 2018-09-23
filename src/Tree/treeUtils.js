@@ -103,6 +103,9 @@ const balanceByHeight = (nodeStack) => {
   }
 }
 
+const defaultAlpha = 0.288
+const defaultEpsilon = 0.005
+
 module.exports = {
   height,
   swapKeys,
@@ -112,4 +115,6 @@ module.exports = {
   weight,
   balanceByHeight,
   balanceByWeight,
+  defaultAlpha,
+  defaultEpsilon,
 }

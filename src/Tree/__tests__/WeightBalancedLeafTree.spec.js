@@ -6,21 +6,29 @@ const {
 } = require('./util')
 const { weight } = require('../treeUtils')
 const Tree = require('../WeightBalancedLeafTree')
+const performGenericLeafTreeTests = require('./LeafTree.spec')
 
 describe('WeightBalancedLeafTree', () => {
+  performGenericLeafTreeTests(Tree)
+  performTestsSpecificToWeightBalancedTrees(Tree)
+})
+
+function performTestsSpecificToWeightBalancedTrees(TreeConstructor) {
   describe('tree properties', () => {
-    testWithDifferentKeyInsertionOrders(testTreeProperties, Tree)
+    testWithDifferentKeyInsertionOrders(testTreeProperties, TreeConstructor)
   })
   describe('#insert', () => {
-    testWithDifferentKeyInsertionOrders(testInsertion, Tree)
+    testWithDifferentKeyInsertionOrders(testInsertion, TreeConstructor)
   })
   describe('#delete', () => {
-    testWithDifferentKeyInsertionOrders(testDeletion, Tree)
+    testWithDifferentKeyInsertionOrders(testDeletion, TreeConstructor)
   })
   xdescribe('#averageDepth', () => {
-    testWithDifferentKeyInsertionOrders(testAverageDepth, Tree)
+    testWithDifferentKeyInsertionOrders(testAverageDepth, TreeConstructor)
   })
-})
+}
+
+module.exports = performTestsSpecificToWeightBalancedTrees
 
 function testTreeProperties(getTree) {
   const numEl = 100

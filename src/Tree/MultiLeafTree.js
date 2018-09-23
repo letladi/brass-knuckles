@@ -46,8 +46,10 @@ class MultiLeafTree extends LeafTree {
   insert(key, val) {
     if (this.isEmpty()) this.root = new Node(key, initializeListWith(val))
     else {
+      const stack = new Stack()
       let current = this.root
       while (!current.isLeaf()) {
+        stack.push(current)
         current = (key < current.key) ? current.left : current.right
       }
       if (current.key === key) {
@@ -65,6 +67,7 @@ class MultiLeafTree extends LeafTree {
           current.right = oldLeaf
         }
       }
+      this.balance(stack)
     }
   }
 
