@@ -2,7 +2,9 @@ const Node = require('./abTreeNode')
 const Stack = require('../ch1/Stack')
 
 class abTree {
-  constructor(a, b) {
+  constructor(a = 500, b = 2 * b) {
+
+    if (b < 2 * b) throw new Error(getConstructionExceptionMessage(a, b))
     this.root = null
     this.a = a
     this.b = b
@@ -127,5 +129,22 @@ class abTree {
   }
 
   delete(key) {
+    let current = null
+    let tempNode = null
+
+
   }
 }
+
+abTree.prototype.messages = {
+  bValueLessThanRequiredMinimum: 'The given b ({{b}}) is less than 2 * a (where a = {{a}})'
+}
+
+const getConstructionExceptionMessage = (a, b) => {
+  let message = abTree.prototype.messages.bValueLessThanRequiredMinimum
+  message.replace('{{a}}', a)
+  message.replace('{{b}}', b)
+  return message
+}
+
+module.exports = abTree

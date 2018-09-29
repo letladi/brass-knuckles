@@ -12,7 +12,7 @@ describe('LeafTree', () => {
   describe('.height', () => {
     testWithDifferentKeyInsertionOrders(testTreeHeight, LeafTree)
   })
-  
+
   xdescribe('.averageDepth (of the leaves)', () => {
     it('should be <= (n - 1)(n + 2) / 2n (approx. 0.5n)')
   })
