@@ -116,9 +116,13 @@ function testTraversal(getTree) {
 }
 
 function testTreeStructure(getTree) {
-  it('should maintain key order')
-  it('should maintain order between keys and their next nodes')
-  it('should have all the leaves on the same level')
+  test('key order is maintained')
+  test('maintains order between keys and their next nodes')
+  test('all leaves on the same depth')
+  test('non-root node degree >= a')
+  test('non-root node degree <= b')
+  test('root node degree >= 2')
+  test('root node degree <= b')
 }
 
 function testSizeProperty(getTree) {

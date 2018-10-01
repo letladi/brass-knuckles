@@ -1,13 +1,10 @@
-const LeafTree = require('./src/Tree/WeightBalancedLeafTree')
+const Tree = require('./src/Tree/abTree')
 
-const tree = new LeafTree()
-
-tree.insert(1, 'one')
-tree.insert(2, 'two')
-tree.insert(3, 'three')
-tree.insert(4, 'four')
-tree.insert(5, 'five')
-tree.insert(6, 'six')
-tree.insert(7, 'seven')
-
-//console.log(tree.delete(4))
+const tree = new Tree(4, 8)
+let i = 1
+while (i < 16) {
+  tree.insert(i, `number ${i++}`)
+}
+console.log(tree.root)
+console.log(tree.root.next[0])
+console.log(tree.root.next[1])

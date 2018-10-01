@@ -2,10 +2,10 @@ const Node = require('./abTreeNode')
 const Stack = require('../ch1/Stack')
 
 class abTree {
-  constructor(a = 500, b = 2 * b) {
+  constructor(a = 500, b = 2 * a) {
 
-    if (b < 2 * b) throw new Error(getConstructionExceptionMessage(a, b))
-    this.root = null
+    if (b < 2 * a) throw new Error(getConstructionExceptionMessage(a, b))
+    this.root = new Node()
     this.a = a
     this.b = b
   }
@@ -35,16 +35,15 @@ class abTree {
 
   insert(key, val) {
     if (this.isEmpty()) {
-      this.root = new Node()
-      this.root.keys[0] = key
-      this.root.next[0] = val
-      this.root.degree = 1
+      this.root.resetWithValue(key, val)
       return true
     } // insert into empty tree
 
     const stack = new Stack()
-    let curent = this.root
-    while (current.height > 0) {
+    let current = this.root
+    console.log('current=',current)
+    console.log('current.degree=', current.degree)
+    while (!current.isLeaf()) { // not at leaf
       let lower = 0
       let upper = current.degree
       stack.push(current)
@@ -56,6 +55,7 @@ class abTree {
           lower = mid
       }
       current = current.next[lower]
+      console.log('current2=', current)
     }
     // current is now a leaf node
 
@@ -80,7 +80,7 @@ class abTree {
         let i = b - 1
         let j = Math.floor((b - 1) / 2)
         while (j >= 0) {
-          if (insertDone || key < current.key[i]) {
+          if (insertDone || key < current.keys[i]) {
             newNode.next[j] = current.next[i]
             newNode.keys[j--] = current.keys[i--]
           } else {
@@ -96,7 +96,7 @@ class abTree {
             i--
           } else {
             current.next[i + 1] = val
-            curent.keys[i + 1] = key
+            current.keys[i + 1] = key
             insertDone = true
           }
         } // finished insertion
@@ -121,6 +121,8 @@ class abTree {
           current.next[0] = newNode
           current.next[1] = insertPoint
           current.keys[1] = insertKey
+          current.next.splice(2)
+          current.keys.splice(2)
           finished = true
         } // end splitting root
       } // end node splitting
@@ -129,21 +131,170 @@ class abTree {
   }
 
   delete(key) {
-    let current = null
     let tempNode = null
 
+    let i = null
+    let j = null
+    let current = this.root
+    const nodeStack = new Stack()
+    const indexStack = new Stack()
 
-  }
+    while (current.height > 0) { // not a leaf
+      let lower = 0
+      let upper = current.degree
+      const mid = Math.floor((upper + lower) / 2)
+      while (upper > lower + 1) {
+        if (key < current.keys[mid])
+          upper = mid
+        else
+          lower = mid
+      }
+      indexStack.push(lower)
+      nodeStack.push(current)
+      current = current.next[lower]
+    }
+    // now current is leaf node from which to delete
+    for (let i = 0; i < current.degree; i++)
+      if (current.keys[i] === key) break
+
+    if (i === current.degree) {
+      return null // delete failed; key does not exists
+    } else { // key exists, now delete from leaf node
+      const deleteObj = current.next[i]
+      current.degree -= 1
+      while (i < current.degree) {
+        current.next[i] = current.next[i + 1]
+        current.keys[i] = current.key[i + 1]
+        i++
+      } // deleted from node, now rebalance
+      let finished = false
+      const { a, b } = this
+      while (!finished) {
+        if (current.degree >= a) {
+          finished = true // node still full enough, can stop
+        } else { // node became underfull
+          if (nodeStack.isEmpty()) {
+            // current is root
+            if (current.degree >= 2) finished = true // root still necessary
+            else if (current.height === 0) finished = true // deleting last keys from root
+            else { // delete root, copy to keep address
+              tempNode = current.next[0]
+              for (let i = 0; i < tempNode.degree; i++) {
+                current.next[i] = tempNode.next[i]
+                current.keys[i] = tempNode.keys[i]
+              }
+              current.degree = tempNode.degree
+              current.height = tempNode.height
+              finished = true
+            }
+          } else { // done wit root
+            // delete from non-root node
+            let upper = nodeStack.pop()
+            let curr = indexStack.pop()
+            if (curr < upper.degree - 1) {
+              // not last
+              neighbor = upper.next[curr + 1]
+              if (neighbor.degree > a) {
+                // sharing possible
+                i = current.degree
+                if (current.height > 0) {
+                  current.keys[i] = upper.keys[curr + 1]
+                } else {
+                  // on leaf level, take leaf key
+                  current.keys[i] = neighbor.keys[0]
+                  neighbor.keys[0] = neighbor.keys[1]
+                }
+                current.next[i] = neighbor.next[0]
+                upper.keys[curr + 1] = neighbor.keys[1]
+                neighbor.next[0] = neighbor.next[1]
+
+                for (j = 2; j < neighbor.degree; j++) {
+                  neighbor.next[j - 1] = neighbor.next[j]
+                  neighbor.keys[j - 1] = neighbor.keys[j]
+                }
+                neighbor.degree -= 1
+                current.degree += 1
+                finished = true
+              } else { // sharing complete
+                // must join
+                i = current.degree
+                if (current.height > 0) curent.keys[i] = upper.keys[curr + 1]
+                else { // on leaf level, take leaf key
+                  current.keys[i] = neighbor.keys[0]
+                }
+                current.next[i] = neighbor.next[0]
+                for (j = 1; j < neighbor.degree; j++) {
+                  current.next[++i] = neighbor.next[j]
+                  current.keys[i] = neighbor.keys[j]
+                }
+                current.degree = i + 1
+                upper.degree -= 1
+                i = curr + 1
+                while (i < upper.degree) {
+                  upper.next[i] = upper.next[i + 1]
+                  upper.keys[i] = upper.keys[i + 1]
+                  i += 1
+                } // deleted from upper, now propagate up
+                current = upper
+              } // end of sharing/joining if-else
+            } else {
+              // current is last entry in upper
+              neighbor = upper.next[curr - 1]
+              if (neighbor.degree > a) {
+                // sharing possible
+                for (let j = current.degree; j > 1; j--) {
+                  current.next[j] = current.next[j - 1]
+                  current.keys[j] = current.keys[j - 1]
+                }
+                current.next[1] = current.next[0]
+                i = neighbor.degree
+                current.next[0] = neighbor.next[i - 1]
+                if (current.height > 0) {
+                  current.keys[1] = upper.keys[curr]
+                } else {
+                  // on leaf level, take leaf key
+                  current.keys[1] = current.keys[0]
+                  current.keys[0] = neighbor.keys[i - 1]
+                }
+                upper.keys[curr] = neighbor.keys[i - 1]
+                neighbor.degree -= 1
+                current.degree += 1
+                finished = true
+              } // sharing complete
+              else {
+                // must join
+                i = neighbor.degree
+                if (current.height > 0) neighbor.keys[i] = upper.keys[curr]
+                else neighbor.keys[i] = current.keys[i] // on leaf level, take leaf key
+
+                neighbor.next[i] = current.next[0]
+
+                for (j = 1; j < current.degree; j++) {
+                  neighbor.next[++i] = current.next[j]
+                  neighbor.keys[i] = current.keys[j]
+                }
+                neighbor.degree = i + 1
+                upper.degree -= 1
+                // deleted from upper, now propagate up
+                current = upper
+              } // end share/joining if-else
+            } // end of current is (not) last upper if-else
+          } // end of delete root/non-root if-else
+        } // end of full/underfull if-else
+      } // end of while not finished
+    }
+    return deleteObj
+  } // end of delete object exists if-else
 }
 
 abTree.prototype.messages = {
-  bValueLessThanRequiredMinimum: 'The given b ({{b}}) is less than 2 * a (where a = {{a}})'
+  bValueLessThanRequiredMinimum: 'The given b ({{b}}) is less than 2a (where a = {{a}})'
 }
 
 const getConstructionExceptionMessage = (a, b) => {
   let message = abTree.prototype.messages.bValueLessThanRequiredMinimum
-  message.replace('{{a}}', a)
-  message.replace('{{b}}', b)
+  message = message.replace('{{a}}', a)
+  message = message.replace('{{b}}', b)
   return message
 }
 
