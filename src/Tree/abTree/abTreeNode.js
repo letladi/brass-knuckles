@@ -1,3 +1,5 @@
+const binarySearch = require('../../util/binarySearch')
+
 class Node {
   constructor(key, val) {
     key ? this.resetWithValue(key, val) : this.reset()
@@ -41,6 +43,11 @@ class Node {
 
   isEmpty() {
     return this.degree === 0
+  }
+
+  search(key) {
+    const index = binarySearch(this.keys, key)
+    return { index, found: this.keys[index] === key }
   }
 }
 

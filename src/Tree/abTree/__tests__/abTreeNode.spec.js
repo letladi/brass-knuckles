@@ -1,5 +1,6 @@
 const { shuffle } = require('lodash')
 const Node = require('../abTreeNode')
+const { populateNode } = require('./testUtil')
 
 describe('abTreeNode', () => {
   let node = null
@@ -41,6 +42,7 @@ describe('abTreeNode', () => {
       expect(node.degree).toEqual(0)
     })
   })
+
   describe('#isEmpty', () => {
     it('returns true if node does not have any keys/values', () => {
       expect(node.isEmpty()).toEqual(true)
@@ -48,6 +50,32 @@ describe('abTreeNode', () => {
     it('returns false if node contains keys/values', () => {
       node.add(1, 'one')
       expect(node.isEmpty()).toEqual(false)
+    })
+  })
+
+  describe('#search', () => {
+    const numEl = 10
+    const existingKey = Math.floor(numEl / 2)
+    const existingKeyIndex = existingKey - 1
+    const missingKey = numEl + 2
+    const missingKeyIndex = numEl
+    describe('result.found', () => {
+      it('= true if key exists in the node', () => {
+        populateNode(numEl, node)
+        expect(node.search(existingKey).found).toEqual(true)
+      })
+      it('= false if key does not exist in the tree', () => {
+        populateNode(numEl, node)
+        expect(node.search(missingKey).found).toEqual(false)
+      })
+    })
+    it('= index where key must be inserted (when it does not exist)', () => {
+      populateNode(numEl, node)
+      expect(node.search(missingKey).index).toEqual(missingKeyIndex)
+    })
+    it('= index where key must be inserted (when it exists)', () => {
+      populateNode(numEl, node)
+      expect(node.search(existingKey).index).toEqual(existingKeyIndex)
     })
   })
 })

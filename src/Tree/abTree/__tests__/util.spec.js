@@ -1,5 +1,5 @@
 const Node = require('../abTreeNode')
-const { generateKeysAndValues } = require('../../__tests__/util')
+const { populateNode } = require('./testUtil')
 const util = require('../util')
 describe('abTree utilities', () => {
   let node = null
@@ -43,8 +43,3 @@ describe('abTree utilities', () => {
     })
   })
 })
-
-function populateNode(count, node) {
-  const valuesToAdd = generateKeysAndValues(count)
-  valuesToAdd.forEach(([key, val]) => node.add(key, val))
-}
