@@ -95,4 +95,5 @@ module.exports = {
   valueGenerator,
   duplicateValueGenerator,
   addDuplicateValues,
+  generateKeysAndValues,
 }

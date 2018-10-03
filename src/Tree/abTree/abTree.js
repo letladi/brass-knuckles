@@ -1,5 +1,5 @@
 const Node = require('./abTreeNode')
-const Stack = require('../ch1/Stack')
+const Stack = require('../../ch1/Stack')
 
 class abTree {
   constructor(a = 500, b = 2 * a) {
@@ -35,14 +35,12 @@ class abTree {
 
   insert(key, val) {
     if (this.isEmpty()) {
-      this.root.resetWithValue(key, val)
+      this.root.add(key, val)
       return true
     } // insert into empty tree
 
     const stack = new Stack()
     let current = this.root
-    console.log('current=',current)
-    console.log('current.degree=', current.degree)
     while (!current.isLeaf()) { // not at leaf
       let lower = 0
       let upper = current.degree
@@ -55,7 +53,6 @@ class abTree {
           lower = mid
       }
       current = current.next[lower]
-      console.log('current2=', current)
     }
     // current is now a leaf node
 
@@ -64,15 +61,7 @@ class abTree {
     while (!finished) {
       let start = (current.height > 0) ? 1 : 0
       if (current.degree < b) { // node still has room
-        let i = current.degree
-        while (i > start && current.keys[i - 1] > key) {
-          current.keys[i] = current.keys[i - 1]
-          current.next[i] = current.next[i - 1]
-          i--
-        }
-        current.keys[i] = key
-        current.next[i] = val
-        current.degree++
+        current.add(key, val)
         finished = true
       } else { // node is full, we must split it
         const newNode = new Node()

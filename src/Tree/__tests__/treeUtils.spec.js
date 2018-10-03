@@ -14,6 +14,7 @@ describe('tree utilities', () => {
       expect(target.right).toEqual(right)
     })
   })
+
   describe('swapKeys(node1, node2)', () => {
     it('swaps the keys of the nodes', () => {
       const node1 = new Node(1, 'one')
@@ -26,6 +27,7 @@ describe('tree utilities', () => {
     })
 
   })
+
   describe('height(node)', () => {
     it("= 0 if it's a leaf", () => {
       const node = new Node(1, 'one')
@@ -41,6 +43,7 @@ describe('tree utilities', () => {
       expect(util.height(testNode)).toEqual(2)
     })
   })
+
   describe('rotateRight(node)', () => {
     test('throws exception if node is not interior node', () => {
       const node = new Node(1, 'one')
@@ -92,6 +95,7 @@ describe('tree utilities', () => {
       expect(leftRef.left).toEqual(leftRightRef)
     })
   })
+
   describe('rotateLeft()', () => {
     it('throws exception if node is not interior node', () => {
       const node = new Node(1, 'one')
@@ -138,6 +142,7 @@ describe('tree utilities', () => {
       expect(node.left.right).toEqual(rightLeftRef)
     })
   })
+
   describe('weight(node)', () => {
     it('= 1 for leaf node', () => {
       const node = new Node(1, 'one')
