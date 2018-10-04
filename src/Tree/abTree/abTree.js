@@ -1,6 +1,9 @@
 const Node = require('./abTreeNode')
 const Stack = require('../../ch1/Stack')
-
+const binarySearch = require('../../util/binarySearch')
+const { isOverflowing } = require('./util')
+const { first } = require('../../util/index')
+let splitCount = 0
 class abTree {
   constructor(a = 500, b = 2 * a) {
 
@@ -12,25 +15,21 @@ class abTree {
 
   find(key) {
     let current = this.root
-    while (current.height >= 0) {
-      let lower = 0, upper = current.degree
-      while (upper > lower + 1) {
-        const mid = Math.floor((upper + lower) / 2)
-        if (key < current.keys[midIndex])
-          upper = mid
-        else
-          lower = mid
-      }
-      if (current.height > 0)
-        current = curent.next[lower]
-      else {
-        return (current.keys[lower] === key) ? current.next[lower] : null
-      }
+    while (!current.isLeaf()) { // not at leaf
+      const { index, found } = current.search(key)
+      current = current.next[index]
     }
+    // current is now a leaf node
+    const { index, found } = current.search(key)
+    return found ? current.next[index] : null
   }
 
   isEmpty() {
-    return this.root.height === 0 && this.root.degree === 0
+    return this.root.isEmpty()
+  }
+
+  get height() {
+    return this.root.height
   }
 
   insert(key, val) {
@@ -42,17 +41,55 @@ class abTree {
     const stack = new Stack()
     let current = this.root
     while (!current.isLeaf()) { // not at leaf
-      let lower = 0
-      let upper = current.degree
       stack.push(current)
-      while (upper > lower + 1) {
-        const mid = Math.floor((upper+lower) / 2)
-        if (key < current.keys[mid])
-          upper = mid
-        else
-          lower = mid
+      const { index, found } = current.search(key)
+      if (found) return false
+      current = current.next[index]
+    }
+    // current is now a leaf node
+    current.add(key, val)
+
+    stack.push(current)
+    this.balance(stack)
+  }
+
+  balance(stackedNodes) {
+    const { a, b } = this
+    let currentParent = null
+    while (!stackedNodes.isEmpty()) {
+      let current = stackedNodes.pop()
+      if (isOverflowing(current, b)) {
+        const rightNode = current.split()
+        const leftNode = current
+        if (current === this.root) {
+          const prevHeight = this.root.height
+          this.root = new Node()
+          this.root.add(first(rightNode.keys), leftNode)
+          this.root.next[this.root.degree] = rightNode
+
+          this.root.height = prevHeight + 1
+        } else {
+          currentParent = stackedNodes.pop()
+          currentParent.add(first(rightNode.keys), leftNode)
+          currentParent.next[currentParent.degree] = rightNode
+        }
       }
-      current = current.next[lower]
+    }
+  }
+
+  insertOld(key, val) {
+    if (this.isEmpty()) {
+      this.root.add(key, val)
+      return true
+    } // insert into empty tree
+
+    const stack = new Stack()
+    let current = this.root
+    while (!current.isLeaf()) { // not at leaf
+      stack.push(current)
+      const { index, found } = node.search(key)
+      if (found) return false
+      current = current.next[index - 1]
     }
     // current is now a leaf node
 
@@ -100,8 +137,7 @@ class abTree {
         } else { // splitting root: needs copy to keep root address
           const newNode = new Node()
           for (let i = 0; i < current.degree; i++) {
-            newNode.next[i] = current.next[i]
-            newNode.keys[i] = current.keys[i]
+            newNode.add(current.keys[i], current.next[i])
           }
           newNode.height = current.height
           newNode.degree = current.degree

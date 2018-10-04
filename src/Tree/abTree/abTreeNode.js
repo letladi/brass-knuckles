@@ -1,8 +1,8 @@
 const binarySearch = require('../../util/binarySearch')
 
 class Node {
-  constructor(key, val) {
-    key ? this.resetWithValue(key, val) : this.reset()
+  constructor() {
+    this.reset()
     this.comparator = (a, b) => (a < b) ? -1 : 1
   }
 
@@ -10,12 +10,6 @@ class Node {
     this.height = 0
     this.keys = []
     this.next = []
-  }
-
-  resetWithValue(key, val) {
-    this.reset()
-    this.keys[0] = key
-    this.next[0] = val
   }
 
   isLeaf() {
@@ -48,6 +42,15 @@ class Node {
   search(key) {
     const index = binarySearch(this.keys, key)
     return { index, found: this.keys[index] === key }
+  }
+
+  split() {
+    const half = Math.floor((this.degree + 1) / 2)
+    const right = new Node()
+    right.height = this.height
+    right.keys = this.keys.splice(half)
+    right.next = this.next.splice(half)
+    return right
   }
 }
 

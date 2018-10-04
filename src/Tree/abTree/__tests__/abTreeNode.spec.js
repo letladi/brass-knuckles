@@ -1,5 +1,6 @@
 const { shuffle } = require('lodash')
 const Node = require('../abTreeNode')
+const { valueGenerator } = require('../../__tests__/util')
 const { populateNode } = require('./testUtil')
 
 describe('abTreeNode', () => {
@@ -59,23 +60,59 @@ describe('abTreeNode', () => {
     const existingKeyIndex = existingKey - 1
     const missingKey = numEl + 2
     const missingKeyIndex = numEl
+
+    beforeEach(() => populateNode(numEl, node))
     describe('result.found', () => {
       it('= true if key exists in the node', () => {
-        populateNode(numEl, node)
         expect(node.search(existingKey).found).toEqual(true)
       })
       it('= false if key does not exist in the tree', () => {
-        populateNode(numEl, node)
         expect(node.search(missingKey).found).toEqual(false)
       })
     })
     it('= index where key must be inserted (when it does not exist)', () => {
-      populateNode(numEl, node)
       expect(node.search(missingKey).index).toEqual(missingKeyIndex)
     })
     it('= index where key must be inserted (when it exists)', () => {
-      populateNode(numEl, node)
       expect(node.search(existingKey).index).toEqual(existingKeyIndex)
+    })
+  })
+
+  describe('#split', () => {
+    const numEl = 10
+    const expectedKeysForOriginalNode = [1, 2, 3, 4, 5]
+    const expectedKeysForNewNode = [6, 7, 8, 9, 10]
+    const expectedValuesForOriginalNode = expectedKeysForOriginalNode.map((k) => valueGenerator(k))
+    const expectedValuesForNewNode = expectedKeysForNewNode.map((k) => valueGenerator(k))
+
+    beforeEach(() => populateNode(numEl, node))
+    it('returns another node with the same properties as the current node', () => {
+      const other = node.split()
+      expect(other.height).toEqual(node.height)
+      expect(other.degree).toEqual(node.degree)
+    })
+    it('divides degree by 2', () => {
+      node.height = 2
+      const oldDegree = node.degree
+      const other = node.split()
+      expect(node.degree).toEqual(Math.floor(oldDegree / 2))
+      expect(node.height).toEqual(other.height)
+    })
+    it('moves half the keys into the other node', () => {
+      const other = node.split()
+      expect(node.keys).toEqual(expectedKeysForOriginalNode)
+      expect(other.keys).toEqual(expectedKeysForNewNode)
+    })
+    it('moves half the "next" values in to the other node', () => {
+      const other = node.split()
+      expect(node.next).toEqual(expectedValuesForOriginalNode)
+      expect(other.next).toEqual(expectedValuesForNewNode)
+    })
+    it('will have 1 more value than new node if degree is odd', () => {
+      const node = new Node()
+      populateNode(numEl + 1, node)
+      const other = node.split()
+      expect(node.degree).toEqual(other.degree + 1)
     })
   })
 })
