@@ -4,29 +4,29 @@ const {
   testWithDifferentKeyInsertionOrders
 } = require('../../__tests__/util')
 
-xdescribe('abTree', () => {
+describe('abTree', () => {
   it('does not allow b to be less than 2a when constructing tree', () => {
     expect(() => new abTree(500, 900)).toThrow()
   })
-  describe('tree properties', () => {
+  xdescribe('tree properties', () => {
     testWithDifferentKeyInsertionOrders(testTreeProperties, abTree)
   })
   describe('#find', () => {
     testWithDifferentKeyInsertionOrders(testFind, abTree)
   })
-  describe('#insert', () => {
+  xdescribe('#insert', () => {
     testWithDifferentKeyInsertionOrders(testInsertion, abTree)
   })
-  describe('#describe', () => {
+  xdescribe('#describe', () => {
     testWithDifferentKeyInsertionOrders(testDeletion, abTree)
   })
-  describe('.size', () => {
+  xdescribe('.size', () => {
     testWithDifferentKeyInsertionOrders(testSizeProperty, abTree)
   })
-  describe('#traverse', () => {
+  xdescribe('#traverse', () => {
     testWithDifferentKeyInsertionOrders(testTraversal, abTree)
   })
-  describe('.leaveCount', () => {
+  xdescribe('.leaveCount', () => {
     testWithDifferentKeyInsertionOrders(testLeaveCount, abTree)
   })
 })
@@ -59,6 +59,10 @@ function testFind(getTree) {
     const tree = getTree(numEl)
     const keyToSearch = Math.floor(numEl / 2)
     expect(tree.find(keyToSearch)).toEqual(valueGenerator(keyToSearch))
+    // while (keyToSearch) {
+    //   expect(tree.find(keyToSearch)).toEqual(valueGenerator(keyToSearch))
+    //   keyToSearch--
+    // }
   })
   it('returns null if the key value does not exist', () => {
     const tree = getTree(numEl)

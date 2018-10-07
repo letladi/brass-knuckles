@@ -31,6 +31,13 @@ describe('abTreeNode', () => {
       const expectedValues = ['one', 'two', 'three', 'four', 'five', 'six', 'seven']
       expect(node.next).toEqual(expectedValues)
     })
+    it('allows addition of two values for one key', () => {
+      const expectedKeys = [-1, 1, 2, 3, 4, 5, 6, 7]
+      const expectedValues = ['zero-0', 'zero-1', 'one', 'two', 'three', 'four', 'five', 'six', 'seven']
+      node.add(-1, 'zero-0', 'zero-1')
+      expect(node.keys).toEqual(expectedKeys)
+      expect(node.next).toEqual(expectedValues)
+    })
   })
 
   describe('.degree', () => {

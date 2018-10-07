@@ -2,21 +2,28 @@ const Node = require('./abTreeNode')
 const Stack = require('../../ch1/Stack')
 const binarySearch = require('../../util/binarySearch')
 const { isOverflowing } = require('./util')
-const { first } = require('../../util/index')
-let splitCount = 0
+const { first, last } = require('../../util/index')
+
 class abTree {
-  constructor(a = 500, b = 2 * a) {
+  constructor(a = 4000, b = 2 * a + 1) {
 
     if (b < 2 * a) throw new Error(getConstructionExceptionMessage(a, b))
     this.root = new Node()
     this.a = a
     this.b = b
+
+    this._count = 0
   }
 
   find(key) {
     let current = this.root
     while (!current.isLeaf()) { // not at leaf
       const { index, found } = current.search(key)
+      if (key === 100000) {
+        console.log('\n\n\n')
+        console.log('index:', index)
+        console.log('current', current)
+      }
       current = current.next[index]
     }
     // current is now a leaf node
@@ -32,9 +39,14 @@ class abTree {
     return this.root.height
   }
 
+  get size() {
+    return this._count
+  }
+
   insert(key, val) {
     if (this.isEmpty()) {
       this.root.add(key, val)
+      this._count++
       return true
     } // insert into empty tree
 
@@ -43,11 +55,14 @@ class abTree {
     while (!current.isLeaf()) { // not at leaf
       stack.push(current)
       const { index, found } = current.search(key)
+
       if (found) return false
       current = current.next[index]
     }
     // current is now a leaf node
     current.add(key, val)
+
+    this._count++
 
     stack.push(current)
     this.balance(stack)
@@ -64,14 +79,14 @@ class abTree {
         if (current === this.root) {
           const prevHeight = this.root.height
           this.root = new Node()
-          this.root.add(first(rightNode.keys), leftNode)
-          this.root.next[this.root.degree] = rightNode
+          this.root.add(first(rightNode.keys), leftNode, rightNode)
+          // this.root.next[this.root.degree] = rightNode
 
           this.root.height = prevHeight + 1
         } else {
           currentParent = stackedNodes.pop()
-          currentParent.add(first(rightNode.keys), leftNode)
-          currentParent.next[currentParent.degree] = rightNode
+          currentParent.add(first(rightNode.keys), leftNode, rightNode)
+          // currentParent.next[currentParent.degree] = rightNode
         }
       }
     }

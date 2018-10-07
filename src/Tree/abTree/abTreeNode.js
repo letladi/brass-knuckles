@@ -3,7 +3,6 @@ const binarySearch = require('../../util/binarySearch')
 class Node {
   constructor() {
     this.reset()
-    this.comparator = (a, b) => (a < b) ? -1 : 1
   }
 
   reset() {
@@ -16,19 +15,15 @@ class Node {
     return this.height === 0
   }
 
-  compare(key1, key2) {
-    return this.comparator(key1, key2)
-  }
+  add(key, val1, val2) {
+    const { index, found } = this.search(key)
+    this.keys.splice(index, 0, key)
 
-  add(key, val) {
-    let i = this.keys.length
-    while (i > 0 && this.compare(key, this.keys[i - 1]) === -1) {
-      this.keys[i] = this.keys[i - 1]
-      this.next[i] = this.next[i - 1]
-      i--
+    if (val2) {
+      this.next.splice(index, 0, val1, val2)
+    } else {
+      this.next.splice(index, 0, val1)
     }
-    this.keys[i] = key
-    this.next[i] = val
   }
 
   get degree() {
