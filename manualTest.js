@@ -1,9 +1,9 @@
 const Tree = require('./src/Tree/abTree/abTree')
 
 const tree = new Tree(4)
-let i = 1
-while (i <= 100000) {
-  tree.insert(i, `number ${i++}`)
+let i = 15
+while (i) {
+  tree.insert(i, `number ${i--}`)
 }
  // tree.insert(0, 'zero')
  // tree.insert(-1, 'minus 1')
@@ -12,6 +12,3 @@ while (i <= 100000) {
 // tree.insert(3, 'three')
 // console.log(tree.find(50000))
 // console.log(tree.root.next)
-
-console.log(tree.size)
-console.log(tree.find(50000))

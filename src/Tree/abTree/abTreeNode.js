@@ -27,7 +27,7 @@ class Node {
   }
 
   get degree() {
-    return this.keys.length
+    return this.next.length
   }
 
   isEmpty() {
@@ -40,7 +40,7 @@ class Node {
   }
 
   split() {
-    const half = Math.floor((this.degree + 1) / 2)
+    const half = Math.ceil(this.degree / 2)
     const right = new Node()
     right.height = this.height
     right.keys = this.keys.splice(half)

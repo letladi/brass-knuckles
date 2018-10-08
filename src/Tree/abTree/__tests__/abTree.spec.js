@@ -57,7 +57,7 @@ function testFind(getTree) {
   const numEl = 200000
   it('returns the key value if it exists', () => {
     const tree = getTree(numEl)
-    const keyToSearch = Math.floor(numEl / 2)
+    let keyToSearch = numEl
     expect(tree.find(keyToSearch)).toEqual(valueGenerator(keyToSearch))
     // while (keyToSearch) {
     //   expect(tree.find(keyToSearch)).toEqual(valueGenerator(keyToSearch))
