@@ -1,5 +1,17 @@
 const binarySearch = require('../../util/binarySearch')
 
+function find(list, key) {
+  let lo = 0, hi = list.length
+  while (hi > lo + 1) {
+    const mid = Math.floor((hi + lo) / 2)
+    if (key < list[mid])
+      hi = mid
+    else
+      lo = mid
+  }
+  return lo
+}
+
 class Node {
   constructor() {
     this.reset()
@@ -15,19 +27,19 @@ class Node {
     return this.height === 0
   }
 
-  add(key, val1, val2) {
-    const { index, found } = this.search(key)
-    this.keys.splice(index, 0, key)
-
-    if (val2) {
-      this.next.splice(index, 0, val1, val2)
-    } else {
-      this.next.splice(index, 0, val1)
+  add(key, val) {
+    let i = this.keys.length
+    while (this.keys[i - 1] && key < this.keys[i - 1]) {
+      this.keys[i] = this.keys[i - 1]
+      this.next[i] = this.next[i - 1]
+      i--
     }
+    this.keys[i] = key
+    this.next[i] = val
   }
 
   get degree() {
-    return this.keys.length
+    return this.next.length
   }
 
   isEmpty() {

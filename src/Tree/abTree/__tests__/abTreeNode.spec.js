@@ -23,19 +23,12 @@ describe('abTreeNode', () => {
       const valuesToAdd = shuffle([[1, 'one'], [2, 'two'], [3, 'three'], [4, 'four'], [5, 'five'], [6, 'six'], [7, 'seven']])
       valuesToAdd.forEach(([key, val]) => node.add(key, val))
     })
-    it('it adds the key in the appropriate place in the "keys" array', () => {
+    it('adds the key in the appropriate place in the "keys" array', () => {
       const expectedKeys = [1, 2, 3, 4, 5, 6, 7]
       expect(node.keys).toEqual(expectedKeys)
     })
-    it('it adds the value in the appropriate place in the "next" array', () => {
+    it('adds the value in the appropriate place in the "next" array', () => {
       const expectedValues = ['one', 'two', 'three', 'four', 'five', 'six', 'seven']
-      expect(node.next).toEqual(expectedValues)
-    })
-    it('allows addition of two values for one key', () => {
-      const expectedKeys = [-1, 1, 2, 3, 4, 5, 6, 7]
-      const expectedValues = ['zero-0', 'zero-1', 'one', 'two', 'three', 'four', 'five', 'six', 'seven']
-      node.add(-1, 'zero-0', 'zero-1')
-      expect(node.keys).toEqual(expectedKeys)
       expect(node.next).toEqual(expectedValues)
     })
   })

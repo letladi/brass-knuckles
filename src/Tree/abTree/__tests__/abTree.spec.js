@@ -14,7 +14,7 @@ describe('abTree', () => {
   describe('#find', () => {
     testWithDifferentKeyInsertionOrders(testFind, abTree)
   })
-  xdescribe('#insert', () => {
+  describe('#insert', () => {
     testWithDifferentKeyInsertionOrders(testInsertion, abTree)
   })
   xdescribe('#describe', () => {
@@ -57,12 +57,12 @@ function testFind(getTree) {
   const numEl = 200000
   it('returns the key value if it exists', () => {
     const tree = getTree(numEl)
-    const keyToSearch = Math.floor(numEl / 2)
-    expect(tree.find(keyToSearch)).toEqual(valueGenerator(keyToSearch))
-    // while (keyToSearch) {
-    //   expect(tree.find(keyToSearch)).toEqual(valueGenerator(keyToSearch))
-    //   keyToSearch--
-    // }
+    let keyToSearch = numEl
+    //expect(tree.find(keyToSearch)).toEqual(valueGenerator(keyToSearch))
+    while (keyToSearch) {
+      expect(tree.find(keyToSearch)).toEqual(valueGenerator(keyToSearch))
+      keyToSearch--
+    }
   })
   it('returns null if the key value does not exist', () => {
     const tree = getTree(numEl)
@@ -84,7 +84,7 @@ function testInsertion(getTree) {
     const existingKey = Math.floor(numEl / 2)
     expect(tree.insert(existingKey, valueGenerator(existingKey))).toEqual(false)
   })
-  describe('insertion into empty tree', () => {
+  xdescribe('insertion into empty tree', () => {
     describe('elements inserted <= b', () => {
       it('leaveCount = 1', () => {
 
@@ -98,9 +98,9 @@ function testInsertion(getTree) {
       it('maintains key order')
     })
   })
-  it('increases the leaveCount on every (b + 1)-th insert')
-  it('increases the height on every (b + 1)x(b + 1)-th insert')
-  testTreeStructure(getTree)
+  // it('increases the leaveCount on every (b + 1)-th insert')
+  // it('increases the height on every (b + 1)x(b + 1)-th insert')
+  // testTreeStructure(getTree)
 }
 
 function testDeletion(getTree) {

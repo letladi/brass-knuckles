@@ -2,7 +2,20 @@ const Node = require('./abTreeNode')
 const Stack = require('../../ch1/Stack')
 const binarySearch = require('../../util/binarySearch')
 const { isOverflowing } = require('./util')
-const { first, last } = require('../../util/index')
+const { first, last, length } = require('../../util/index')
+
+function find(list, key) {
+  let lo = 0, hi = list.length
+  while (hi > lo + 1) {
+    const mid = Math.floor((hi + lo) / 2)
+    if (key < list[mid])
+      hi = mid
+    else
+      lo = mid
+  }
+  return lo
+}
+
 
 class abTree {
   constructor(a = 4000, b = 2 * a + 1) {
@@ -15,20 +28,30 @@ class abTree {
     this._count = 0
   }
 
+  // find(key) {
+  //   let current = this.root
+  //   while (!current.isLeaf()) { // not at leaf
+  //     const { index, found } = current.search(key)
+  //     if (key === 100000) {
+  //       console.log('\n\n\n')
+  //       console.log('index:', index)
+  //       console.log('current', current)
+  //     }
+  //     current = current.next[index]
+  //   }
+  //   // current is now a leaf node
+  //   const { index, found } = current.search(key)
+  //   return found ? current.next[index] : null
+  // }
+
   find(key) {
     let current = this.root
     while (!current.isLeaf()) { // not at leaf
-      const { index, found } = current.search(key)
-      if (key === 100000) {
-        console.log('\n\n\n')
-        console.log('index:', index)
-        console.log('current', current)
-      }
+      const index = find(current.keys, key)
       current = current.next[index]
     }
-    // current is now a leaf node
-    const { index, found } = current.search(key)
-    return found ? current.next[index] : null
+    const index = find(current.keys, key)
+    return (current.keys[index] === key) ? current.next[index] : null
   }
 
   isEmpty() {
@@ -53,40 +76,54 @@ class abTree {
     const stack = new Stack()
     let current = this.root
     while (!current.isLeaf()) { // not at leaf
-      stack.push(current)
-      const { index, found } = current.search(key)
-
-      if (found) return false
+      const index = find(current.keys, key)
+      stack.push({ node: current, index })
       current = current.next[index]
     }
     // current is now a leaf node
+    const index = find(current.keys, key)
+    const keyExists = current.keys[index] === key
+    if (keyExists) return false
     current.add(key, val)
 
     this._count++
 
-    stack.push(current)
+    stack.push({ node: current, index: null })
     this.balance(stack)
+    return true
   }
 
   balance(stackedNodes) {
-    const { a, b } = this
-    let currentParent = null
+    const { b } = this
     while (!stackedNodes.isEmpty()) {
-      let current = stackedNodes.pop()
-      if (isOverflowing(current, b)) {
-        const rightNode = current.split()
-        const leftNode = current
-        if (current === this.root) {
-          const prevHeight = this.root.height
-          this.root = new Node()
-          this.root.add(first(rightNode.keys), leftNode, rightNode)
-          // this.root.next[this.root.degree] = rightNode
+      let { node, index } = stackedNodes.pop()
+      if (isOverflowing(node, b)) {
+        if (node === this.root) {
+          const rightNode = node.split()
+          const leftNode = node
 
-          this.root.height = prevHeight + 1
+          const newRoot = new Node()
+          newRoot.height = this.root.height + 1
+          newRoot.add(first(leftNode.keys), leftNode)
+          newRoot.add(first(rightNode.keys), rightNode)
+          this.root = newRoot
         } else {
-          currentParent = stackedNodes.pop()
-          currentParent.add(first(rightNode.keys), leftNode, rightNode)
-          // currentParent.next[currentParent.degree] = rightNode
+          const rightNode = node.split()
+          // console.log('current', node)
+          const obj = stackedNodes.pop()
+          const parent = obj.node
+          const index = obj.index
+          // console.log('parent', parent)
+          // console.log('parent.next', parent.next)
+          // if (length(currentParent.keys) !== length(currentParent.next)) {
+          //   currentParent.add(first(current.keys))
+          // }
+
+          // console.log('rightNode', rightNode)
+          parent.keys[index] = first(node.keys)
+          parent.next[index] = node
+
+          parent.add(first(rightNode.keys), rightNode)
         }
       }
     }
