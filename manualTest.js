@@ -14,5 +14,4 @@ while (i) {
 // console.log(tree.find(50000))
 // console.log(tree.root.next)
 
-console.log(tree.root.keys)
-console.log(tree.root.next)
+console.log(tree.find(10))

@@ -1,21 +1,8 @@
 const Node = require('./abTreeNode')
 const Stack = require('../../ch1/Stack')
 const binarySearch = require('../../util/binarySearch')
-const { isOverflowing } = require('./util')
+const { find, isOverflowing, navigateTree } = require('./util')
 const { first, last, length } = require('../../util/index')
-
-function find(list, key) {
-  let lo = 0, hi = list.length
-  while (hi > lo + 1) {
-    const mid = Math.floor((hi + lo) / 2)
-    if (key < list[mid])
-      hi = mid
-    else
-      lo = mid
-  }
-  return lo
-}
-
 
 class abTree {
   constructor(a = 4000, b = 2 * a + 1) {
@@ -28,30 +15,11 @@ class abTree {
     this._count = 0
   }
 
-  // find(key) {
-  //   let current = this.root
-  //   while (!current.isLeaf()) { // not at leaf
-  //     const { index, found } = current.search(key)
-  //     if (key === 100000) {
-  //       console.log('\n\n\n')
-  //       console.log('index:', index)
-  //       console.log('current', current)
-  //     }
-  //     current = current.next[index]
-  //   }
-  //   // current is now a leaf node
-  //   const { index, found } = current.search(key)
-  //   return found ? current.next[index] : null
-  // }
-
   find(key) {
-    let current = this.root
-    while (!current.isLeaf()) { // not at leaf
-      const index = find(current.keys, key)
-      current = current.next[index]
-    }
-    const index = find(current.keys, key)
-    return (current.keys[index] === key) ? current.next[index] : null
+    const nodesOnNavigationPath = navigateTree(this.root, key)
+    const { node } = nodesOnNavigationPath.top()
+    const index = find(node.keys, key)
+    return (node.keys[index] === key) ? node.next[index] : null
   }
 
   isEmpty() {
@@ -71,140 +39,44 @@ class abTree {
       this.root.add(key, val)
       this._count++
       return true
-    } // insert into empty tree
-
-    const stack = new Stack()
-    let current = this.root
-    while (!current.isLeaf()) { // not at leaf
-      const index = find(current.keys, key)
-      stack.push({ node: current, index })
-      current = current.next[index]
     }
-    // current is now a leaf node
-    const index = find(current.keys, key)
-    const keyExists = current.keys[index] === key
+
+    const nodesOnNavigationPath = navigateTree(this.root, key)
+    const { node } = nodesOnNavigationPath.top()
+
+    const index = find(node.keys, key)
+    const keyExists = node.keys[index] === key
     if (keyExists) return false
-    current.add(key, val)
 
+    node.add(key, val)
     this._count++
-
-    stack.push({ node: current, index: null })
-    this.balance(stack)
+    this.balance(nodesOnNavigationPath)
     return true
   }
 
   balance(stackedNodes) {
     const { b } = this
     while (!stackedNodes.isEmpty()) {
-      let { node, index } = stackedNodes.pop()
-      if (isOverflowing(node, b)) {
-        if (node === this.root) {
-          const rightNode = node.split()
-          const leftNode = node
+      let { node: current } = stackedNodes.pop()
+      if (isOverflowing(current, b)) {
+        if (current === this.root) {
+          const newNode = current.split()
 
-          const newRoot = new Node()
-          newRoot.height = this.root.height + 1
-          newRoot.add(first(leftNode.keys), leftNode)
-          newRoot.add(first(rightNode.keys), rightNode)
-          this.root = newRoot
+          this.root = new Node()
+          this.root.height = this.root.height + 1
+          this.root.add(first(current.keys), current)
+          this.root.add(first(newNode.keys), newNode)
         } else {
-          const rightNode = node.split()
-          // console.log('current', node)
-          const obj = stackedNodes.pop()
-          const parent = obj.node
-          const index = obj.index
-          // console.log('parent', parent)
-          // console.log('parent.next', parent.next)
-          // if (length(currentParent.keys) !== length(currentParent.next)) {
-          //   currentParent.add(first(current.keys))
-          // }
+          const rightNode = current.split()
+          const { node: parent, index } = stackedNodes.pop()
 
-          // console.log('rightNode', rightNode)
-          parent.keys[index] = first(node.keys)
-          parent.next[index] = node
+          parent.keys[index] = first(current.keys)
+          parent.next[index] = current
 
           parent.add(first(rightNode.keys), rightNode)
         }
       }
     }
-  }
-
-  insertOld(key, val) {
-    if (this.isEmpty()) {
-      this.root.add(key, val)
-      return true
-    } // insert into empty tree
-
-    const stack = new Stack()
-    let current = this.root
-    while (!current.isLeaf()) { // not at leaf
-      stack.push(current)
-      const { index, found } = node.search(key)
-      if (found) return false
-      current = current.next[index - 1]
-    }
-    // current is now a leaf node
-
-    const { a, b } = this
-    let finished = false
-    while (!finished) {
-      let start = (current.height > 0) ? 1 : 0
-      if (current.degree < b) { // node still has room
-        current.add(key, val)
-        finished = true
-      } else { // node is full, we must split it
-        const newNode = new Node()
-        let insertDone = false
-        let i = b - 1
-        let j = Math.floor((b - 1) / 2)
-        while (j >= 0) {
-          if (insertDone || key < current.keys[i]) {
-            newNode.next[j] = current.next[i]
-            newNode.keys[j--] = current.keys[i--]
-          } else {
-            newNode.next[j] = val
-            newNode.keys[j--] = key
-            insertDone = true
-          }
-        } // upper half done, insert in lower half, if necessary
-        while (!insertDone) {
-          if (key < current.keys[i] && i >= start) {
-            current.next[i + 1] = current.next[i]
-            current.keys[i + 1] = current.keys[i]
-            i--
-          } else {
-            current.next[i + 1] = val
-            current.keys[i + 1] = key
-            insertDone = true
-          }
-        } // finished insertion
-        current.degree = b + 1 - Math.floor((b + 1) / 2)
-        newNode.degree = Math.floor((b + 1) / 2)
-        newNode.height = current.height
-        // split nodes complete, now insert the new node above
-        const insertPoint = newNode
-        const insertKey = newNode.keys[0]
-        if (!stack.isEmpty()) { // not at root; move one level up
-          current = stack.pop()
-        } else { // splitting root: needs copy to keep root address
-          const newNode = new Node()
-          for (let i = 0; i < current.degree; i++) {
-            newNode.add(current.keys[i], current.next[i])
-          }
-          newNode.height = current.height
-          newNode.degree = current.degree
-          current.height++
-          current.degree = 2
-          current.next[0] = newNode
-          current.next[1] = insertPoint
-          current.keys[1] = insertKey
-          current.next.splice(2)
-          current.keys.splice(2)
-          finished = true
-        } // end splitting root
-      } // end node splitting
-    } // end of rebalancing
-    return true
   }
 
   delete(key) {
