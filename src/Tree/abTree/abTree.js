@@ -59,21 +59,17 @@ class abTree {
     while (!stackedNodes.isEmpty()) {
       let { node: current } = stackedNodes.pop()
       if (isOverflowing(current, b)) {
+        const newNode = current.split()
         if (current === this.root) {
-          const newNode = current.split()
-
           this.root = new Node()
           this.root.height = this.root.height + 1
           this.root.add(first(current.keys), current)
           this.root.add(first(newNode.keys), newNode)
         } else {
-          const rightNode = current.split()
           const { node: parent, index } = stackedNodes.pop()
-
           parent.keys[index] = first(current.keys)
           parent.next[index] = current
-
-          parent.add(first(rightNode.keys), rightNode)
+          parent.add(first(newNode.keys), newNode)
         }
       }
     }
