@@ -29,6 +29,9 @@ describe('abTree', () => {
   describe('.leaveCount', () => {
     testWithDifferentKeyInsertionOrders(testLeaveCount, abTree)
   })
+  describe('.height', () => {
+    testWithDifferentKeyInsertionOrders(testHeight, abTree)
+  })
 })
 
 const leaveCountMin = (height, a) => 2 * a ** (height - 1)
@@ -82,18 +85,13 @@ function testInsertion(getTree) {
     const existingKey = Math.floor(numEl / 2)
     expect(tree.insert(existingKey, valueGenerator(existingKey))).toEqual(false)
   })
-  xdescribe('insertion into empty tree', () => {
+  describe('insertion into empty tree', () => {
     describe('elements inserted <= b', () => {
-      it('leaveCount = 1', () => {
-
+      it('leaveCount = 1 after first insert', () => {
+        const tree = new abTree()
+        tree.insert(1, 'one')
+        expect(tree.leaveCount).toEqual(1)
       })
-      it('elements = number of elements inserted')
-    })
-    describe('elements inserted = b (splits root)', () => {
-      it('increases the leaveCount')
-      it('increases the height')
-      it('values are contained only in the leaves')
-      it('maintains key order')
     })
   })
   // testTreeStructure(getTree)
@@ -160,7 +158,7 @@ function testSizeProperty(getTree) {
 }
 
 function testLeaveCount(getTree) {
-  const numEl = 1000
+  const numEl = 600
   it('increases by one on every b+1 insert', () => {
     let prevLeaveCount = void(0)
     let count = 0
@@ -180,4 +178,22 @@ function testLeaveCount(getTree) {
   })
   //it('decreases by one on every a-1 deletion (assuming that a node was full before deletion)')
   //it('does not decrease on deletion-count >= a (assuming node was full before deletion)')
+}
+
+function testHeight(getTree) {
+  const numEl = 570
+  describe('elements inserted = b + 1', () => {
+    it('increases the height', () => {
+      let count = 0
+      let prevHeight = 0
+      getTree(numEl, (tree) => {
+        count++
+        const b = tree.b
+        if (count === b + 1) {
+          expect(tree.height).toEqual(prevHeight + 1)
+        }
+        prevHeight = tree.height
+      })
+    })
+  })
 }
