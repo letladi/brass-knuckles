@@ -20,7 +20,7 @@ describe('abTree', () => {
   xdescribe('#describe', () => {
     testWithDifferentKeyInsertionOrders(testDeletion, abTree)
   })
-  xdescribe('.size', () => {
+  describe('.size', () => {
     testWithDifferentKeyInsertionOrders(testSizeProperty, abTree)
   })
   xdescribe('#traverse', () => {
@@ -58,7 +58,6 @@ function testFind(getTree) {
   it('returns the key value if it exists', () => {
     const tree = getTree(numEl)
     let keyToSearch = numEl
-    //expect(tree.find(keyToSearch)).toEqual(valueGenerator(keyToSearch))
     while (keyToSearch) {
       expect(tree.find(keyToSearch)).toEqual(valueGenerator(keyToSearch))
       keyToSearch--
@@ -131,10 +130,22 @@ function testTreeStructure(getTree) {
 }
 
 function testSizeProperty(getTree) {
-  it('= 0 for an empty tree')
-  it('increases by one on every insert')
-  it('decreases by one on every deletion')
-  it('equals the number of elements inserted in the tree')
+  it('= 0 for an empty tree', () => {
+    const tree = getTree(0)
+    expect(tree.size).toEqual(0)
+  })
+  it('increases by one on every insert', () => {
+    let count = 0
+    getTree(100, (tree) => {
+      expect(tree.size).toEqual(++count)
+    })
+  })
+  //it('decreases by one on every deletion')
+  it('equals the number of elements inserted in the tree', () => {
+    const numEl = 2000
+    const tree = getTree(numEl)
+    expect(tree.size).toEqual(numEl)
+  })
 }
 
 function testLeaveCount(getTree) {

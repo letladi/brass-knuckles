@@ -5,7 +5,7 @@ const { find, isOverflowing, navigateTree } = require('./util')
 const { first, last, length } = require('../../util/index')
 
 class abTree {
-  constructor(a = 4000, b = 2 * a + 1) {
+  constructor(a = 550, b = 2 * a + 1) {
 
     if (b < 2 * a) throw new Error(getConstructionExceptionMessage(a, b))
     this.root = new Node()
