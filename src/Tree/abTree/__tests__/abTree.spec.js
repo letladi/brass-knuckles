@@ -37,7 +37,7 @@ describe('abTree', () => {
 
 const leaveCountMin = (height, a) => 2 * a ** (height - 1)
 const leaveCountMax = (height, b) => b ** height
-const approximateHeightMax = (leaveCount, a) => Math.ceil(getBaseLog(a, leaveCount) + (1 - getBaseLog(a, 2)))//(1 / Math.log2(a)) * Math.log2(leaveCount) 
+const approximateHeightMax = (leaveCount, a) => Math.ceil(getBaseLog(a, leaveCount) + (1 - getBaseLog(a, 2)))
 
 function testTreeProperties(getTree) {
   const numEl = 200000
@@ -95,7 +95,6 @@ function testInsertion(getTree) {
       })
     })
   })
-  // testTreeStructure(getTree)
 }
 
 function testDeletion(getTree) {
@@ -127,16 +126,6 @@ function testTraversal(getTree) {
       expect(v).toEqual(valueGenerator(k))
     })
   })
-}
-
-function testTreeStructure(getTree) {
-  test('key order is maintained')
-  test('maintains order between keys and their next nodes')
-  test('all leaves on the same depth')
-  test('non-root node degree >= a')
-  test('non-root node degree <= b')
-  test('root node degree >= 2')
-  test('root node degree <= b')
 }
 
 function testSizeProperty(getTree) {
