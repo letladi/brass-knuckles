@@ -1,6 +1,7 @@
 const abTree = require('../abTree')
 const {
   valueGenerator,
+  getBaseLog,
   testWithDifferentKeyInsertionOrders
 } = require('../../__tests__/util')
 
@@ -8,7 +9,7 @@ describe('abTree', () => {
   it('does not allow b to be less than 2a when constructing tree', () => {
     expect(() => new abTree(500, 900)).toThrow()
   })
-  xdescribe('tree properties', () => {
+  describe('tree properties', () => {
     testWithDifferentKeyInsertionOrders(testTreeProperties, abTree)
   })
   describe('#find', () => {
@@ -17,7 +18,7 @@ describe('abTree', () => {
   describe('#insert', () => {
     testWithDifferentKeyInsertionOrders(testInsertion, abTree)
   })
-  xdescribe('#describe', () => {
+  xdescribe('#delete', () => {
     testWithDifferentKeyInsertionOrders(testDeletion, abTree)
   })
   describe('.size', () => {
@@ -36,11 +37,11 @@ describe('abTree', () => {
 
 const leaveCountMin = (height, a) => 2 * a ** (height - 1)
 const leaveCountMax = (height, b) => b ** height
-const approximateHeightMax = (leaveCount, a) => (1 / Math.log2(a)) * Math.log2(leaveCount)
+const approximateHeightMax = (leaveCount, a) => Math.ceil(getBaseLog(a, leaveCount) + (1 - getBaseLog(a, 2)))//(1 / Math.log2(a)) * Math.log2(leaveCount) 
 
 function testTreeProperties(getTree) {
   const numEl = 200000
-  const formulaForMaxHeightGivenLeaveCount = 'Math.ceil(loga(n) + (1 - loga2)) (approx. [1/log2(a))log2(n)]'
+  const formulaForMaxHeightGivenLeaveCount = 'Math.ceil(loga(n) + (1 - loga2)) (approx. [(1/log2(a))log2(n)]'
 
   test('if height = h >= 1; leaveCount >= 2a^(h-1)', () => {
     const tree = getTree(numEl)
@@ -52,7 +53,7 @@ function testTreeProperties(getTree) {
   })
   test(`if leaveCount = n >= 2; height <= ${formulaForMaxHeightGivenLeaveCount}`, () => {
     const tree = getTree(numEl)
-    expect(tree.height).toBeLessThanOrEqual(approximateHeightMax(tree.leaveCount))
+    expect(tree.height).toBeLessThanOrEqual(approximateHeightMax(tree.leaveCount, tree.a))
   })
 }
 

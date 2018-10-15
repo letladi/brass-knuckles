@@ -89,8 +89,14 @@ function addDuplicateValues(tree, numDuplicates, afterInsertCb = tree => tree) {
   }
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/log
+function getBaseLog(base, y) {
+  return Math.log(y) / Math.log(base);
+}
+
 module.exports = {
   testKeyOrder,
+  getBaseLog,
   testWithDifferentKeyInsertionOrders,
   valueGenerator,
   duplicateValueGenerator,
