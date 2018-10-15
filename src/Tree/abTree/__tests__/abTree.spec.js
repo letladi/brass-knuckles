@@ -23,10 +23,10 @@ describe('abTree', () => {
   describe('.size', () => {
     testWithDifferentKeyInsertionOrders(testSizeProperty, abTree)
   })
-  xdescribe('#traverse', () => {
+  describe('#traverse', () => {
     testWithDifferentKeyInsertionOrders(testTraversal, abTree)
   })
-  xdescribe('.leaveCount', () => {
+  describe('.leaveCount', () => {
     testWithDifferentKeyInsertionOrders(testLeaveCount, abTree)
   })
 })
@@ -76,7 +76,6 @@ function testInsertion(getTree) {
     const tree = getTree(numEl)
     const nextKeyEl = numEl + 1
     expect(tree.insert(nextKeyEl, valueGenerator(nextKeyEl))).toEqual(true)
-
   })
   it('returns false if insertion fails (like when there is a duplicate)', () => {
     const tree = getTree(numEl)
@@ -97,8 +96,6 @@ function testInsertion(getTree) {
       it('maintains key order')
     })
   })
-  // it('increases the leaveCount on every (b + 1)-th insert')
-  // it('increases the height on every (b + 1)x(b + 1)-th insert')
   // testTreeStructure(getTree)
 }
 
@@ -114,9 +111,23 @@ function testDeletion(getTree) {
 }
 
 function testTraversal(getTree) {
-  it('only traverses the leaves of the tree')
-  it('order of callback arguments is (key, value, indexInTheNode, node, tree)')
-  it('node of the callback is immutable')
+  const numEl = 100
+  it('traverses the tree in key order', () => {
+    const tree = getTree(numEl)
+    let prevKey = null
+    tree.traverse((k) => {
+      if (prevKey) {
+        expect(prevKey).toBeLessThanOrEqual(k)
+      }
+    })
+
+  })
+  it("traverses the tree with a key and it's value", () => {
+    const tree = getTree(numEl)
+    tree.traverse((k, v) => {
+      expect(v).toEqual(valueGenerator(k))
+    })
+  })
 }
 
 function testTreeStructure(getTree) {
@@ -140,7 +151,7 @@ function testSizeProperty(getTree) {
       expect(tree.size).toEqual(++count)
     })
   })
-  //it('decreases by one on every deletion')
+  //test('decreases by one on every deletion')
   it('equals the number of elements inserted in the tree', () => {
     const numEl = 2000
     const tree = getTree(numEl)
@@ -149,8 +160,24 @@ function testSizeProperty(getTree) {
 }
 
 function testLeaveCount(getTree) {
-  it('increases by one on every b+1 insert')
-  it('does not increase by one on insert-count <= b')
-  it('decreases by one on every a-1 deletion (assuming that a node was full before deletion)')
-  it('does not decrease on deletion-count >= a (assuming node was full before deletion)')
+  const numEl = 1000
+  it('increases by one on every b+1 insert', () => {
+    let prevLeaveCount = void(0)
+    let count = 0
+    getTree(numEl, (tree) => {
+      count++
+      if (prevLeaveCount !== void(0)) {
+        const b = tree.b
+        if (count === (b + 1)) {
+          expect(tree.leaveCount).toEqual(prevLeaveCount + 1)
+          count = 0
+        } else {
+          expect(tree.leaveCount).toEqual(prevLeaveCount)
+        }
+      }
+      prevLeaveCount = tree.leaveCount
+    })
+  })
+  //it('decreases by one on every a-1 deletion (assuming that a node was full before deletion)')
+  //it('does not decrease on deletion-count >= a (assuming node was full before deletion)')
 }

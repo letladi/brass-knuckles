@@ -11,7 +11,7 @@ class abTree {
     this.root = new Node()
     this.a = a
     this.b = b
-
+    this._leaveCount = 0
     this._count = 0
   }
 
@@ -38,6 +38,7 @@ class abTree {
     if (this.isEmpty()) {
       this.root.add(key, val)
       this._count++
+      this._leaveCount++
       return true
     }
 
@@ -59,6 +60,7 @@ class abTree {
     while (!stackedNodes.isEmpty()) {
       let { node: current } = stackedNodes.pop()
       if (isOverflowing(current, b)) {
+        if (current.isLeaf()) this._leaveCount++
         const newNode = current.split()
         if (current === this.root) {
           this.root = new Node()
@@ -73,6 +75,14 @@ class abTree {
         }
       }
     }
+  }
+
+  get leaveCount() {
+    return this._leaveCount
+  }
+
+  traverse(cb) {
+    traversalHelper(this.root, cb)
   }
 
   delete(key) {
@@ -236,7 +246,16 @@ abTree.prototype.messages = {
   bValueLessThanRequiredMinimum: 'The given b ({{b}}) is less than 2a (where a = {{a}})'
 }
 
-const getConstructionExceptionMessage = (a, b) => {
+function traversalHelper(node, cb) {
+  if (node) {
+    const isLeaf = node.isLeaf()
+    for (let i = 0, len = node.degree; i < len; i++) {
+      isLeaf ? cb(node.keys[i], node.next[i]) : traversalHelper(node.next[i], cb)
+    }
+  }
+}
+
+function getConstructionExceptionMessage(a, b) {
   let message = abTree.prototype.messages.bValueLessThanRequiredMinimum
   message = message.replace('{{a}}', a)
   message = message.replace('{{b}}', b)
