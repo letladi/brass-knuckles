@@ -33,6 +33,30 @@ describe('abTreeNode', () => {
     })
   })
 
+  describe('#delete', () => {
+    beforeEach(() => {
+      const valuesToAdd = shuffle([[1, 'one'], [2, 'two'], [3, 'three'], [4, 'four'], [5, 'five'], [6, 'six'], [7, 'seven']])
+      valuesToAdd.forEach(([key, val]) => node.add(key, val))
+    })
+    it('removes the key and its value', () => {
+      const keyToDelete = 4
+      const expectedKeys = [1, 2, 3, 5, 6, 7]
+      const expectedValues = ['one', 'two', 'three', 'five', 'six', 'seven']
+      node.delete(keyToDelete)
+      expect(node.keys).toEqual(expectedKeys)
+      expect(node.next).toEqual(expectedValues)
+    })
+    it('returns associated key value if deletion succeeded', () => {
+      const existingKey = 4
+      const expectedValue = 'four'
+      expect(node.delete(existingKey)).toEqual(expectedValue)
+    })
+    it('returns null if deletion failed (like when value does not exist)', () => {
+      const missingKey = 10
+      expect(node.delete(missingKey)).toEqual(null)
+    })
+  })
+
   describe('.degree', () => {
     it('= value to the number of keys in the "keys" array', () => {
         const valuesToAdd = [[1, 'one'], [2, 'two'], [3, 'three']]

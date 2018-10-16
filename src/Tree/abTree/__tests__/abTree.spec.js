@@ -5,7 +5,7 @@ const {
   testWithDifferentKeyInsertionOrders
 } = require('../../__tests__/util')
 
-describe('abTree', () => {
+xdescribe('abTree', () => {
   it('does not allow b to be less than 2a when constructing tree', () => {
     expect(() => new abTree(500, 900)).toThrow()
   })
@@ -18,7 +18,7 @@ describe('abTree', () => {
   describe('#insert', () => {
     testWithDifferentKeyInsertionOrders(testInsertion, abTree)
   })
-  xdescribe('#delete', () => {
+  describe('#delete', () => {
     testWithDifferentKeyInsertionOrders(testDeletion, abTree)
   })
   describe('.size', () => {
@@ -98,14 +98,48 @@ function testInsertion(getTree) {
 }
 
 function testDeletion(getTree) {
-  it('returns null if deletion failed (when tree is empty)')
-  it('returns null if deletion failed (when key does not exist in the tree)')
-  it('returns and removes the value associated with the deleted key')
-  it('does not decrease nodeCount if number of values >= "a" after deletion from a node')
-  it('decreases nodeCount if number of values < "a" after deletion from a node')
-  it('should maintain requirement of number of values >= a in each node')
-  it('should maintain requirement of number of values <= b in each node')
-  testTreeStructure(getTree)
+  const numEl = 200000
+  it('returns null if deletion failed (when tree is empty)', () => {
+    const tree = getTree(0)
+    expect(tree.delete(1)).toEqual(null)
+  })
+  it('returns null if deletion failed (when key does not exist in the tree)', () => {
+    const tree = getTree(numEl)
+    const missingKey = numEl + 1
+    expect(tree.delete(missingKey)).toEqual(null)
+  })
+  it('returns and removes the value associated with the deleted key', () => {
+    const tree = getTree(numEl)
+    const existingKey = Math.floor(numEl / 2)
+    expect(tree.find(existingKey)).toEqual(true)
+    tree.delete(existingKey)
+    expect(tree.find(existingKey)).toEqual(false)
+  })
+  it('does not decrease leaveCount if number of values >= "a" after deletion from a node', () => {
+    const numEl = 1500
+    const tree = getTree(numEl)
+    const prevLeaveCount = tree.leaveCount
+    let numToDelete = 100
+    while (numToDelete) tree.delete(numToDelete--)
+    expect(tree.leaveCount).toEqual(prevLeaveCount)
+  })
+  it('decreases leaveCount if number of values < "a" after deletion from a node', () => {
+    const numEl = 1500
+    const tree = getTree(numEl)
+    const prevLeaveCount = tree.leaveCount
+    let numToDelete = Math.floor(numEl / 2)
+    while (numToDelete) tree.delete(numToDelete--)
+    expect(tree.leaveCount).toEqual(prevLeaveCount - 1)
+
+  })
+  it('decreases the size by 1', () => {
+    const elCount = Math.floor(numEl / 10)
+    const tree = getTree(elCount)
+    const existingKey = Math.floor(elCount / 2)
+    const prevSize = tree.size
+    tree.delete(existingKey)
+    expect(tree.size).toEqual(prevSize - 1)
+  })
 }
 
 function testTraversal(getTree) {

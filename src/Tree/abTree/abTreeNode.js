@@ -1,4 +1,5 @@
 const binarySearch = require('../../util/binarySearch')
+const { first } = require('../../util/')
 
 function find(list, key) {
   let lo = 0, hi = list.length
@@ -36,6 +37,18 @@ class Node {
     }
     this.keys[i] = key
     this.next[i] = val
+  }
+
+  delete(key) {
+    const keys = this.keys
+    const values = this.next
+    const i = find(this.keys, key)
+    if (this.keys[i] === key) {
+      keys.splice(i, 1)
+      const valList = values.splice(i, 1 )
+      return first(valList)
+    }
+    return null
   }
 
   get degree() {
