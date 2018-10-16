@@ -139,4 +139,35 @@ describe('abTreeNode', () => {
       expect(node.degree).toEqual(other.degree + 1)
     })
   })
+
+  describe('#concat', () => {
+    let node1Keys, node2Keys, node1Values, node2values, node1, node2
+    const expectedKeys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    const expectedValues = expectedKeys.map((k) => valueGenerator(k))
+
+    beforeEach(() => {
+      node1 = new Node()
+      node2 = new Node()
+      node1Keys = shuffle([1, 2, 3, 4, 5])
+      node1Values = node1Keys.map((key) => {
+        const val = valueGenerator(key)
+        node1.add(key, val)
+        return val
+      })
+      node2Keys = shuffle([6, 7, 8, 9, 10])
+      node2Values = node2Keys.map((key) => {
+        const val = valueGenerator(key)
+        node2.add(key, val)
+        return val
+      })
+    })
+    it('it adds all the keys in the other node into the current node keys', () => {
+      node1.concat(node2)
+      expect(node1.keys).toEqual(expectedKeys)
+    })
+    it('it add all the values in the other node into the current node values', () => {
+      node1.concat(node2)
+      expect(node1.next).toEqual(expectedValues)
+    })
+  })
 })

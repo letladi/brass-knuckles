@@ -72,6 +72,11 @@ class Node {
     right.next = this.next.splice(half)
     return right
   }
+
+  concat(other) {
+    this.keys = this.keys.concat(other.keys)
+    this.next = this.next.concat(other.next)
+  }
 }
 
 module.exports = Node

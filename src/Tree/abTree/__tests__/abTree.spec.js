@@ -5,7 +5,7 @@ const {
   testWithDifferentKeyInsertionOrders
 } = require('../../__tests__/util')
 
-xdescribe('abTree', () => {
+describe('abTree', () => {
   it('does not allow b to be less than 2a when constructing tree', () => {
     expect(() => new abTree(500, 900)).toThrow()
   })
@@ -111,9 +111,9 @@ function testDeletion(getTree) {
   it('returns and removes the value associated with the deleted key', () => {
     const tree = getTree(numEl)
     const existingKey = Math.floor(numEl / 2)
-    expect(tree.find(existingKey)).toEqual(true)
+    expect(tree.find(existingKey)).toEqual(valueGenerator(existingKey))
     tree.delete(existingKey)
-    expect(tree.find(existingKey)).toEqual(false)
+    expect(tree.find(existingKey)).toEqual(null)
   })
   it('does not decrease leaveCount if number of values >= "a" after deletion from a node', () => {
     const numEl = 1500
@@ -130,6 +130,15 @@ function testDeletion(getTree) {
     let numToDelete = Math.floor(numEl / 2)
     while (numToDelete) tree.delete(numToDelete--)
     expect(tree.leaveCount).toEqual(prevLeaveCount - 1)
+
+  })
+  it('decreases height if number of values < "a" after deletion from a node', () => {
+    const numEl = 1500
+    const tree = getTree(numEl)
+    const prevHeight = tree.height
+    let numToDelete = Math.floor(numEl / 2)
+    while (numToDelete) tree.delete(numToDelete--)
+    expect(tree.height).toEqual(prevHeight - 1)
 
   })
   it('decreases the size by 1', () => {

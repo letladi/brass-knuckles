@@ -4,6 +4,10 @@ const binarySearch = require('../../util/binarySearch')
 const { find, isOverflowing, isUnderflowing, navigateTree } = require('./util')
 const { first, last, length } = require('../../util/index')
 
+function isAlmostUnderfull(node, min) {
+  return (node.degree - 1) === min
+}
+
 class abTree {
   constructor(a = 550, b = 2 * a + 1) {
 
@@ -51,11 +55,11 @@ class abTree {
 
     node.add(key, val)
     this._count++
-    this.balance(nodesOnNavigationPath)
+    this.balanceAfterInsertion(nodesOnNavigationPath)
     return true
   }
 
-  balance(stackedNodes) {
+  balanceAfterInsertion(stackedNodes) {
     const { b } = this
     while (!stackedNodes.isEmpty()) {
       let { node: current } = stackedNodes.pop()
@@ -91,14 +95,57 @@ class abTree {
     const nodesOnNavigationPath = navigateTree(this.root, key)
     const { node } = nodesOnNavigationPath.top()
 
-    const index = find(node.keys, key)
-    const keyExists = node.keys[index] === key
-    if (keyExists) return false
+    const value = node.delete(key)
+    if (value) {
+      this._count--
+      this.balanceAfterDeletion(nodesOnNavigationPath)
+      return value
+    }
+    return null
+  }
 
-    node.add(key, val)
-    this._count++
-    this.balance(nodesOnNavigationPath)
-    return true
+  balanceAfterDeletion(stackedNodes) {
+    const { a } = this
+    while (!stackedNodes.isEmpty()) {
+      const { node: current } = stackedNodes.pop()
+
+      if (current === this.root) {
+        if (current.degree === 1) {
+          this.root = first(current.next)
+          this._height--
+        }
+      } else {
+        if (isUnderflowing(current, a)) {
+         const { node: parent, index } = stackedNodes.pop()
+         const prevNode = parent.next[index - 1]
+         if (prevNode) {
+           if (isAlmostUnderfull(prevNode, a)) {
+             if (current.isLeaf()) this._leaveCount--
+             prevNode.concat(current)
+             parent.delete(parent.keys[index])
+           } else {
+             const lastKeyInPreviousNode = prevNode.pop()
+             const lastValueInPreviousNode = prevNode.pop()
+             parent.keys[index] = lastKeyInPreviousNode
+             current.add(lastKeyInPreviousNode, lastValueInPreviousNode)
+           }
+         } else {
+           const nextNode = parent.next[index + 1]
+           if (isAlmostUnderfull(nextNode, a)) {
+             if (current.isLeaf()) this._leaveCount--
+             current.concat(nextNode)
+             parent.delete(parent.keys[index + 1])
+           } else {
+
+             const firstKeyInNextNode = nextNode.keys.shift()
+             const firstValueInNextNode = nextNode.next.shift()
+             parent.keys[index + 1] = first(nextNode.keys)
+             current.add(firstKeyInNextNode, firstValueInNextNode)
+           }
+         }
+       }
+      }
+    }
   }
 }
 
