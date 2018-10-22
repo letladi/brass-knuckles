@@ -2,49 +2,57 @@ const Stack = require('../ch1/Stack')
 const Node = require('./LeafTreeNode')
 const { copyNode, height } = require('./treeUtils')
 
+function navigateTree(node, key) {
+  const stack = new Stack()
+  while (!node.isLeaf()) {
+    stack.push(node)
+    node = (key < node.key) ? node.left : node.right
+  }
+  stack.push(node)
+  return stack
+}
+
 class LeafTree {
   constructor() {
-    this.root = new Node()
+    this.root = this.createNode()
   }
 
   isEmpty() {
     return this.root.isEmpty()
   }
 
+  createNode(key, left, right) {
+    return new Node(key, left, right)
+  }
+
   find(key) {
     if (this.isEmpty()) return null
-    let current = this.root
-    while (!current.isLeaf()) {
-      current = (key < current.key) ? current.left : current.right
-    }
-    return (current.key === key) ? current.value : null
+    const nodesOnNavigationPath = navigateTree(this.root, key)
+    const node = nodesOnNavigationPath.top()
+    return (node.key === key) ? node.value : null
   }
 
   insert(key, val) {
-    if (this.isEmpty()) this.root = new Node(key, val)
+    if (this.isEmpty()) this.root = this.createNode(key, val)
     else {
-      const stack = new Stack()
-      let current = this.root
-      while (!current.isLeaf()) {
-        stack.push(current)
-        current = (key < current.key) ? current.left : current.right
-      }
+      const nodesOnNavigationPath = navigateTree(this.root, key)
+      const node = nodesOnNavigationPath.top()
 
-      if (current.key === key) return false
+      if (node.key === key) return false
       else {
-        let oldLeaf = new Node(current.key, current.value)
-        const newLeaf = new Node(key, val)
+        let oldLeaf = this.createNode(node.key, node.value)
+        const newLeaf = this.createNode(key, val)
 
-        if (current.key < key) {
-          current.left = oldLeaf
-          current.right = newLeaf
-          current.key = key
+        if (node.key < key) {
+          node.left = oldLeaf
+          node.right = newLeaf
+          node.key = key
         } else {
-          current.left = newLeaf
-          current.right = oldLeaf
+          node.left = newLeaf
+          node.right = oldLeaf
         }
       }
-      this.balance(stack)
+      this.balance(nodesOnNavigationPath)
     }
     return true
   }
@@ -59,38 +67,24 @@ class LeafTree {
       }
       return null
     } else {
-      let current = this.root
-      let currentParent = null
-      let currentSibling = null
-      const stack = new Stack()
+      const nodesOnNavigationPath = navigateTree(this.root, key)
+      const node = nodesOnNavigationPath.pop()
 
-      while (!current.isLeaf()) {
-        stack.push(current)
-        currentParent = current
-        if (key < current.key) {
-          current = currentParent.left
-          currentSibling = currentParent.right
-        } else {
-          current = currentParent.right
-          currentSibling = currentParent.left
-        }
-      }
-      if (current.key !== key) return null
+      if (node.key !== key) return null
       else {
-        copyNode(currentParent, currentSibling)
-        /* currentParent is now a leaf so we remove it from the stack
-           before balancing the nodes
-        */
-        stack.pop()
-        this.balance(stack)
-        return current.value
+        const parent = nodesOnNavigationPath.pop()
+        const sibling = parent.left === node ? parent.right : parent.left
+        copyNode(parent, sibling)
+
+        this.balance(nodesOnNavigationPath)
+        return node.value
       }
     }
   }
 
   /*
     This function is overridden in subclasses which
-    balance their nodes in some way
+    balance their nodes
   */
   balance(stackedNodes) {
     stackedNodes.clear()
@@ -148,7 +142,7 @@ class LeafTree {
       const current = stack.pop()
       if (current.isLeaf()) {
         if (a <= current.key && current.key < b) {
-          const temp = new Node(current.key, current.value, resultList)
+          const temp = this.createNode(current.key, current.value, resultList)
           resultList = temp
         }
       } else if (b <= current.key) {

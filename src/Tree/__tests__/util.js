@@ -94,7 +94,12 @@ function getBaseLog(base, y) {
   return Math.log(y) / Math.log(base);
 }
 
+function isEven(x) {
+  return i % 2 === 0
+}
+
 module.exports = {
+  isEven,
   testKeyOrder,
   getBaseLog,
   testWithDifferentKeyInsertionOrders,

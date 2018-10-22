@@ -9,6 +9,10 @@ describe('LeafTree', () => {
     testWithDifferentKeyInsertionOrders(testTreeProperties, LeafTree)
   })
 
+  performGenericLeafTreeTests(LeafTree)
+})
+
+function performGenericLeafTreeTests(TreeConstructor) {
   describe('.height', () => {
     testWithDifferentKeyInsertionOrders(testTreeHeight, LeafTree)
   })
@@ -16,11 +20,6 @@ describe('LeafTree', () => {
   xdescribe('.averageDepth (of the leaves)', () => {
     it('should be <= (n - 1)(n + 2) / 2n (approx. 0.5n)')
   })
-
-  performGenericLeafTreeTests(LeafTree)
-})
-
-function performGenericLeafTreeTests(TreeConstructor) {
   describe('#find', () => {
     testWithDifferentKeyInsertionOrders(testFind, TreeConstructor)
   })
