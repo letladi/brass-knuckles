@@ -1,5 +1,5 @@
 const assert = require('assert')
-const Stack = require('../../ch1/Stack')
+const Stack = require('../../Stack/Stack')
 
 function isOverflowing(node, maxDegree) {
   assert(maxDegree, 'maximum degree value to compare with is required')

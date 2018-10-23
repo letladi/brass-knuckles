@@ -22,6 +22,8 @@
     "lodash": "^4.17.11"
   },
   "jest": {
-    "testMatch": ["**/?(*.)+(spec|test).js"]
+    "testMatch": [
+      "**/?(*.)+(spec|test).js"
+    ]
   }
 }

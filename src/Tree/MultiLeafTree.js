@@ -1,6 +1,6 @@
 const LeafTree = require('./LeafTree')
-const LinkedList = require('../ch1/LinkedList')
-const Stack = require('../ch1/Stack')
+const LinkedList = require('../List/LinkedList')
+const Stack = require('../Stack/Stack')
 const Node = require('./LeafTreeNode')
 
 const initializeListWith = (val) => {

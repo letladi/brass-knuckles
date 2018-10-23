@@ -1,5 +1,5 @@
 const MultiLeafTree = require('../MultiLeafTree')
-const LinkedList = require('../../ch1/LinkedList')
+const LinkedList = require('../../List/LinkedList')
 const {
   valueGenerator,
   duplicateValueGenerator,

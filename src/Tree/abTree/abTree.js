@@ -1,5 +1,5 @@
 const Node = require('./abTreeNode')
-const Stack = require('../../ch1/Stack')
+const Stack = require('../../Stack/Stack')
 const binarySearch = require('../../util/binarySearch')
 const { find, isOverflowing, isUnderflowing, navigateTree } = require('./util')
 const { first, last, length } = require('../../util/index')

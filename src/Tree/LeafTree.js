@@ -1,4 +1,4 @@
-const Stack = require('../ch1/Stack')
+const Stack = require('../Stack/Stack')
 const Node = require('./LeafTreeNode')
 const { copyNode, height } = require('./treeUtils')
 
