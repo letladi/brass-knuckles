@@ -25,7 +25,6 @@ describe('tree utilities', () => {
       expect(node1.key).toEqual(originalNode2Key)
       expect(node2.key).toEqual(originalNode1Key)
     })
-
   })
 
   describe('height(node)', () => {

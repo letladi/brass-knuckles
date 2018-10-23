@@ -1,4 +1,4 @@
-const Stack = require('../Stack')
+const Stack = require('./Stack')
 
 describe('Stack', () => {
   let stack = null
