@@ -18,14 +18,6 @@ class rbTree extends LeafTree {
     return new Node(key, left, right)
   }
 
-  insert(key, val) {
-    return super.insert(key, val)
-  }
-
-  delete(key) {
-    return super.delete(key)
-  }
-
   balance(stackedNodes) {
     let current = stackedNodes.pop()
     let finished = false

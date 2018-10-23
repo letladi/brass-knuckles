@@ -20,12 +20,17 @@ function performGenericLeafTreeTests(TreeConstructor) {
   xdescribe('.averageDepth (of the leaves)', () => {
     it('should be <= (n - 1)(n + 2) / 2n (approx. 0.5n)')
   })
+
   describe('#find', () => {
     testWithDifferentKeyInsertionOrders(testFind, TreeConstructor)
   })
 
   describe('#insert', () => {
     testWithDifferentKeyInsertionOrders(testInsertion, TreeConstructor)
+  })
+
+  describe('#set', () => {
+    testWithDifferentKeyInsertionOrders(testSetMethod, TreeConstructor)
   })
 
   describe('.leaveCount', () => {
@@ -63,6 +68,11 @@ function testTreeProperties(getTree) {
     const tree = getTree(numEl)
     expect(tree.interiorNodeCount).toEqual(tree.leaveCount - 1)
   })
+}
+
+function testSetMethod(getTree) {
+  it('replaces a key value with a new one')
+  it('inserts a key value if it does exist')
 }
 
 function testFind(getTree) {

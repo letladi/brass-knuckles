@@ -15,6 +15,7 @@ function testTreeProperties(getTree) {
   const tree = getTree(randomElCount)
   const height = tree.height
   if (isEven(height)) {
+    console.log('height=', height)
     test('for height = h (where h is even); leaveCount >= 2**((h/2)+1) - 1', () => {
       expect(tree.leaveCount).toBeGreaterThanOrEqual(calculateMinLeaveCountForEvenHeight(height))
     })
@@ -28,6 +29,8 @@ function testTreeProperties(getTree) {
     const tree = getTree(numEl)
     expect(tree.height).toBeLessThanOrEqual(calculateMaxHeight(tree.leaveCount))
   })
+
+  // test('all paths from the root to its leaves contain the same number of black nodes')
 }
 
 function calculateMinLeaveCountForOddHeight(h) {
