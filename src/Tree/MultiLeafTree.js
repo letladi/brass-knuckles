@@ -11,7 +11,7 @@ const initializeListWith = (val) => {
 
 const addToValueList = (node, val) => {
   const list = node.value
-  list.insertFirst(val)
+  list.insertLast(val)
 }
 
 const resetValueListWith = (node, val) => {

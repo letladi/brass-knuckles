@@ -53,7 +53,7 @@ function testFind(getTree) {
     while (i) {
       const values = tree.find(i)
       expect(values instanceof LinkedList).toEqual(true)
-      expect(values.entries()).toEqual([duplicateValueGenerator(i), valueGenerator(i)])
+      expect(values.entries()).toEqual([valueGenerator(i), duplicateValueGenerator(i)])
       i--
     }
   })
@@ -62,7 +62,7 @@ function testFind(getTree) {
     addDuplicateValues(tree, duplicateNumEl)
     let i = duplicateNumEl
     while (i) {
-      expect(tree.find(i, false)).toEqual([duplicateValueGenerator(i), valueGenerator(i)])
+      expect(tree.find(i, false)).toEqual([valueGenerator(i), duplicateValueGenerator(i)])
       i--
     }
   })
@@ -83,7 +83,7 @@ function testIntervalFind(getTree) {
     interval.each(({ key,  valueList }) => {
       expect(valueList instanceof LinkedList).toEqual(true)
       expect(key).toEqual(i)
-      expect(valueList.entries()).toEqual([duplicateValueGenerator(i), valueGenerator(i)])
+      expect(valueList.entries()).toEqual([valueGenerator(i), duplicateValueGenerator(i)])
       i--
     })
   })
@@ -131,7 +131,7 @@ function testDeletion(getTree) {
     let i = duplicateNumEl
     while (i) {
       const valueList = tree.delete(i)
-      expect(valueList.entries()).toEqual([duplicateValueGenerator(i), valueGenerator(i)])
+      expect(valueList.entries()).toEqual([valueGenerator(i), duplicateValueGenerator(i)])
       i--
     }
   })
@@ -184,8 +184,10 @@ function testSetMethod(getTree) {
     const tree = getTree(numEl)
     const numDups = 4
     const keyToReplace = Math.floor(numEl / 2)
-    const originalValues = addDuplicates(tree, keyToReplace)
-    expect(tree.find(keyToReplace, false)).toEqual(originalValues)
+    const originalValue = tree.find(keyToReplace, false)
+    const duplicatesValues = addDuplicates(tree, keyToReplace, numDups)
+    const expectedValues = originalValue.concat(duplicatesValues)
+    expect(tree.find(keyToReplace, false)).toEqual(expectedValues)
     const newVal = 'new-val'
     tree.set(keyToReplace, newVal)
     expect(tree.find(keyToReplace, false)).toEqual([newVal])
