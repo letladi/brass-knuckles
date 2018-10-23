@@ -57,6 +57,33 @@ class LeafTree {
     return true
   }
 
+  set(key, val) {
+    if (this.isEmpty()) this.root = this.createNode(key, val)
+    else {
+      const nodesOnNavigationPath = navigateTree(this.root, key)
+      const node = nodesOnNavigationPath.top()
+
+      if (node.key === key) {
+        node.left = val
+        return
+      }
+      else {
+        let oldLeaf = this.createNode(node.key, node.value)
+        const newLeaf = this.createNode(key, val)
+
+        if (node.key < key) {
+          node.left = oldLeaf
+          node.right = newLeaf
+          node.key = key
+        } else {
+          node.left = newLeaf
+          node.right = oldLeaf
+        }
+      }
+      this.balance(nodesOnNavigationPath)
+    }
+  }
+
   delete(key) {
     if (this.isEmpty()) return null
     else if (this.root.isLeaf()) {

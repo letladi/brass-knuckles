@@ -24,6 +24,9 @@ function performGenericMultiLeafTreeTests(TreeConstructor) {
   describe('#insert', () => {
     testWithDifferentKeyInsertionOrders(testInsertion, TreeConstructor)
   })
+  describe('#set', () => {
+    testWithDifferentKeyInsertionOrders(testSetMethod, TreeConstructor)
+  })
 }
 
 module.exports = performGenericMultiLeafTreeTests
@@ -162,5 +165,29 @@ function testInsertion(getTree) {
     addDuplicateValues(tree, duplicateNumEl, (tree) => {
       expect(tree.leaveCount).toEqual(oldLeaveCount)
     })
+  })
+}
+
+function addDuplicates(tree, key, numDups) {
+  const values = []
+  while (numDups) {
+    const val = `dup-${numDups--}`
+    tree.insert(key, val)
+    values.push(val)
+  }
+  return values
+}
+
+function testSetMethod(getTree) {
+  it('replaces the old value(s) with a new value', () => {
+    const numEl = 20
+    const tree = getTree(numEl)
+    const numDups = 4
+    const keyToReplace = Math.floor(numEl / 2)
+    const originalValues = addDuplicates(tree, keyToReplace)
+    expect(tree.find(keyToReplace, false)).toEqual(originalValues)
+    const newVal = 'new-val'
+    tree.set(keyToReplace, newVal)
+    expect(tree.find(keyToReplace, false)).toEqual([newVal])
   })
 }

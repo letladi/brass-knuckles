@@ -71,8 +71,21 @@ function testTreeProperties(getTree) {
 }
 
 function testSetMethod(getTree) {
-  it('replaces a key value with a new one')
-  it('inserts a key value if it does exist')
+  const numEl = 2000
+  it('replaces a key value with a new one', () => {
+    const tree = getTree(numEl)
+    const keyToReplace = Math.floor(numEl / 2)
+    const newVal = 'new-value'
+    tree.set(keyToReplace, newVal)
+    expect(tree.find(keyToReplace)).toEqual(newVal)
+  })
+  it('inserts a key value if it does exist', () => {
+    const tree = getTree(numEl)
+    const newKey = numEl + 1
+    const newVal = valueGenerator(newKey)
+    tree.set(newKey, newVal)
+    expect(tree.find(newKey)).toEqual(newVal)
+  })
 }
 
 function testFind(getTree) {

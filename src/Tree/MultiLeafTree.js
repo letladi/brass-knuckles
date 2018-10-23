@@ -14,6 +14,12 @@ const addToValueList = (node, val) => {
   list.insertFirst(val)
 }
 
+const resetValueListWith = (node, val) => {
+  const list = node.value
+  list.clear()
+  list.insertLast(val)
+}
+
 class MultiLeafTree extends LeafTree {
   find(key, lazy = true) {
     const valueList = super.find(key) || new LinkedList()
@@ -54,6 +60,34 @@ class MultiLeafTree extends LeafTree {
       }
       if (current.key === key) {
         addToValueList(current, val)
+      }
+      else {
+        let oldLeaf = new Node(current.key, current.value)
+        const newLeaf = new Node(key, initializeListWith(val))
+        if (current.key < key) {
+          current.left = oldLeaf
+          current.right = newLeaf
+          current.key = key
+        } else {
+          current.left = newLeaf
+          current.right = oldLeaf
+        }
+      }
+      this.balance(stack)
+    }
+  }
+
+  set(key, val) {
+    if (this.isEmpty()) this.root = new Node(key, initializeListWith(val))
+    else {
+      const stack = new Stack()
+      let current = this.root
+      while (!current.isLeaf()) {
+        stack.push(current)
+        current = (key < current.key) ? current.left : current.right
+      }
+      if (current.key === key) {
+        return resetValueListWith(current, val)
       }
       else {
         let oldLeaf = new Node(current.key, current.value)
