@@ -95,7 +95,7 @@ function getBaseLog(base, y) {
 }
 
 function isEven(x) {
-  return i % 2 === 0
+  return x % 2 === 0
 }
 
 module.exports = {
