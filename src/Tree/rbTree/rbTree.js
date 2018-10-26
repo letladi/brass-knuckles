@@ -30,7 +30,7 @@ class rbTree extends LeafTree {
       } else { // current is red, sibling black
         if (isSameNode(parent.left, current)) {
           const sibling = parent.right
-          if (current.right.isBlack) {
+          if (current.right.isBlack()) {
             rotateRight(parent)
             parent.right.turnRed()
             parent.turnBlack()
@@ -44,7 +44,7 @@ class rbTree extends LeafTree {
           }
         } else { // current === parent.right
           const sibling = parent.left
-          if (current.left.isBlack) {
+          if (current.left.isBlack()) {
             rotateLeft(parent)
             parent.left.turnRed()
             parent.turnBlack()
@@ -61,7 +61,7 @@ class rbTree extends LeafTree {
       } // end sibling red/black
       if  (!finished && !stackedNodes.isEmpty()) { // parent is red, conflict possibly propagates upward
         current = stackedNodes.pop()
-        if (current.isBlack) finished = true // no conflict above
+        if (current.isBlack()) finished = true // no conflict above
         // else current is parent node of red-red conflict
       }
     }
@@ -73,8 +73,8 @@ class rbTree extends LeafTree {
 module.exports = rbTree
 
 function haveSameColor(node1, node2) {
-  return (node1.isRed && node2.isRed) ||
-    (node1.isBlack && node2.isBlack)
+  return (node1.isRed() && node2.isRed()) ||
+    (node1.isBlack() && node2.isBlack())
 }
 
 function isSameNode(node1, node2) {
