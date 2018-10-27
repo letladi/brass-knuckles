@@ -10,6 +10,7 @@ const {
   interiorNodeCount,
 } =  require('../treeUtils')
 const LeafTree = require('../LeafTree')
+const Node = require('../LeafTreeNode')
 
 describe('LeafTree', () => {
   describe('tree properties', () => {
@@ -24,7 +25,7 @@ function performGenericLeafTreeTests(TreeConstructor) {
     testWithDifferentKeyInsertionOrders(testTreeHeight, LeafTree)
   })
 
-  xdescribe('averageDepth() (of the leaves)', () => {
+  describe('averageDepth() (of the leaves)', () => {
     testWithDifferentKeyInsertionOrders(testAverageDepth, LeafTree)
   })
 
@@ -284,8 +285,16 @@ function testAverageDepth(getTree) {
     const tree = getTree(numEl)
     expect(averageDepth(tree)).toBeLessThanOrEqual(calculateMaxAverageDepth(leaveCount(tree)))
   })
+  it('should be >= log(n)', () => {
+    const tree = getTree(numEl)
+    expect(averageDepth(tree)).toBeGreaterThanOrEqual(calculateMinAverageDepth(leaveCount(tree)))
+  })
 }
 
 function calculateMaxAverageDepth(leaveCount) {
   return (leaveCount - 1) * (leaveCount + 2) / (2 * leaveCount)
+}
+
+function calculateMinAverageDepth(leaveCount) {
+  return Math.log2(leaveCount)
 }

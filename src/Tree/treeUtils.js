@@ -1,5 +1,6 @@
 const assert = require('assert')
 const Stack = require('../Stack/Stack')
+const LeafTreeNode = require('./LeafTreeNode')
 
 const swapKeys = (node1, node2) => {
   const tempKey = node1.key
@@ -140,7 +141,6 @@ function height(tree) {
 function nodeCount(tree) {
   let count = 0
   if (tree.isEmpty()) return count
-
   traverse(tree, () => count++)
   return count
 }
@@ -151,6 +151,13 @@ function interiorNodeCount(tree) {
   traverse(tree, (node) => count += node.isLeaf() ? 0 : 1)
   return count
 }
+
+function totalDepth(node, depth = 0) {
+  if (!LeafTreeNode.isNode(node)) return 0
+  return depth + totalDepth(node.left, depth + 1) + totalDepth(node.right, depth + 1)
+}
+// TODO: Look at other implementations of this concept
+const averageDepth = tree => totalDepth(getRoot(tree)) / nodeCount(tree)
 
 const defaultAlpha = 0.288
 const defaultEpsilon = 0.005
@@ -169,5 +176,6 @@ module.exports = {
   leaveCount,
   nodeCount,
   traverse,
+  averageDepth,
   interiorNodeCount,
 }

@@ -34,7 +34,7 @@ function testTreeProperties(getTree) {
 
   test('if a red node has lower neighbors, they are black', () => {
     const tree = getTree(numEl)
-    tree.traverse((node) => {
+    traverse(tree, (node) => {
       if (node.isRed() && !node.isLeaf()) {
         expect(node.left.isBlack()).toEqual(true)
         expect(node.right.isBlack()).toEqual(true)
