@@ -19,6 +19,8 @@ class rbTree extends LeafTree {
   }
 
   balance(stackedNodes) {
+    if (stackedNodes.isEmpty()) return
+    
     let current = stackedNodes.pop()
     let finished = false
     while (!stackedNodes.isEmpty() && !finished) {

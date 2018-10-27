@@ -127,8 +127,7 @@ function leaveCount(tree) {
 }
 
 function heightHelper(node) {
-  if (node.isLeaf()) return 0
-  return 1 + Math.max(heightHelper(node.left), heightHelper(node.right))
+  return node.isLeaf() ? 0 : 1 + Math.max(heightHelper(node.left), heightHelper(node.right))
 }
 
 const has = (obj, key) => key in obj

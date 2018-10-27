@@ -9,7 +9,21 @@ describe('rbTree', () => {
   describe('tree properties', () => {
     testWithDifferentKeyInsertionOrders(testTreeProperties, Tree)
   })
+  describe('#delete (overridden)', () => {
+    testWithDifferentKeyInsertionOrders(testDeletion, Tree)
+  })
 })
+
+function testDeletion(getTree) {
+  const numEl = 100
+  it('should be able to delete all inserted values', () => {
+    const tree = getTree(numEl)
+    let numToDelete = 100
+    expect(tree.isEmpty()).toEqual(false)
+    while (numToDelete) tree.delete(numToDelete--)
+    expect(tree.isEmpty()).toEqual(true)
+  })
+}
 
 function testTreeProperties(getTree) {
   const numEl = 20000
