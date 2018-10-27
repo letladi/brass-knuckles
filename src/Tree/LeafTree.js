@@ -1,6 +1,6 @@
 const Stack = require('../Stack/Stack')
 const Node = require('./LeafTreeNode')
-const { copyNode, height } = require('./treeUtils')
+const { copyNode } = require('./treeUtils')
 
 function navigateTree(node, key) {
   const stack = new Stack()
@@ -109,55 +109,8 @@ class LeafTree {
     }
   }
 
-  /*
-    This function is overridden in subclasses which
-    balance their nodes
-  */
   balance(stackedNodes) {
     stackedNodes.clear()
-  }
-
-  traverse(cb) {
-    let current = this.root
-    const stack = new Stack()
-
-    while (current || !stack.isEmpty()) {
-      if (current) {
-        stack.push(current)
-        current = current.left
-      } else {
-        current = stack.pop()
-        cb(current)
-        current = current.right
-      }
-    }
-  }
-
-  get leaveCount() {
-    let count = 0
-    if (this.isEmpty()) return count
-
-    this.traverse((node) => count += node.isLeaf() ? 1 : 0)
-    return count
-  }
-
-  get nodeCount() {
-    let count = 0
-    if (this.isEmpty()) return count
-
-    this.traverse(() => count++)
-    return count
-  }
-
-  get height() {
-    return height(this.root)
-  }
-
-  get interiorNodeCount() {
-    let count = 0
-    if (this.isEmpty()) return count
-    this.traverse((node) => count += node.isLeaf() ? 0 : 1)
-    return count
   }
 
   intervalFind(a, b) {
@@ -182,13 +135,6 @@ class LeafTree {
       }
     }
     return resultList
-  }
-
-  /* the average depth of the leaves; the average over all objects of the distance
-    we have to go to reach that object
-  */
-  get averageDepth() {
-
   }
 }
 

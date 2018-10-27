@@ -1,4 +1,5 @@
 const { shuffle } = require('lodash')
+const { traverse } = require('../treeUtils')
 
 const valueGenerator = key => key * 2
 
@@ -46,7 +47,7 @@ function testKeyOrder(getTree, beforeVerification = (tree) => tree) {
   it('maintains order of the keys', () => {
     const tree = getTree()
     beforeVerification(tree)
-    tree.traverse((node) => {
+    traverse(tree, (node) => {
       if (!node.isLeaf()) {
         const rKey = node.right.key
         const lKey = node.left.key

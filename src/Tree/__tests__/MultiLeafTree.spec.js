@@ -6,6 +6,9 @@ const {
   addDuplicateValues,
   testWithDifferentKeyInsertionOrders
 } = require('./util')
+const {
+  leaveCount
+} = require('../treeUtils')
 
 describe('MultiLeafTree', () => {
   performGenericMultiLeafTreeTests(MultiLeafTree)
@@ -154,16 +157,16 @@ function testInsertion(getTree) {
   it('increases the leaveCount for each unique key insert', () => {
     let oldLeaveCount = 0
     getTree(numEl, (tree) => {
-      expect(tree.leaveCount).toEqual(oldLeaveCount + 1)
-      oldLeaveCount = tree.leaveCount
+      expect(leaveCount(tree)).toEqual(oldLeaveCount + 1)
+      oldLeaveCount = leaveCount(tree)
     })
   })
   it('does not increase leaveCount for subsequent inserts of similar key values', () => {
     const duplicateNumEl = 20
     const tree = getTree(numEl)
-    const oldLeaveCount = tree.leaveCount
+    const oldLeaveCount = leaveCount(tree)
     addDuplicateValues(tree, duplicateNumEl, (tree) => {
-      expect(tree.leaveCount).toEqual(oldLeaveCount)
+      expect(leaveCount(tree)).toEqual(oldLeaveCount)
     })
   })
 }

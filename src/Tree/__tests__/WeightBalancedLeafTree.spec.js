@@ -2,9 +2,14 @@ const assert = require('assert')
 const {
   testKeyOrder,
   valueGenerator,
-  testWithDifferentKeyInsertionOrders
+  testWithDifferentKeyInsertionOrders,
 } = require('./util')
-const { weight } = require('../treeUtils')
+const {
+  weight,
+  height,
+  leaveCount,
+  traverse,
+} = require('../treeUtils')
 const Tree = require('../WeightBalancedLeafTree')
 const performGenericLeafTreeTests = require('./LeafTree.spec')
 
@@ -34,13 +39,13 @@ function testTreeProperties(getTree) {
   const numEl = 100
   test('if height = h >= 2; leaveCount >= (1 / 1-α)^h', () => {
     const tree = getTree(numEl)
-    assert(tree.height >= 2, 'height must be greater than 2')
-    expect(tree.leaveCount).toBeGreaterThanOrEqual(computeMinLeaveCount(tree.height, tree.alpha))
+    assert(height(tree) >= 2, 'height must be greater than 2')
+    expect(leaveCount(tree)).toBeGreaterThanOrEqual(computeMinLeaveCount(height(tree), tree.alpha))
   })
   const maxHeightFormula = 'log(1 / 1-α)n = (1 / log2(1 / 1-α)) * log2n'
   test(`if leaveCount = n; height <= ${ maxHeightFormula } `, () => {
     const tree = getTree(numEl)
-    expect(tree.height).toBeLessThanOrEqual(computeMaxHeight(tree.leaveCount, tree.alpha))
+    expect(height(tree)).toBeLessThanOrEqual(computeMaxHeight(leaveCount(tree), tree.alpha))
   })
   function computeMinLeaveCount(height, alpha) {
     return (1 / (1 - alpha)) ** height
@@ -64,7 +69,7 @@ function testBalanceCriteria(getTree, beforeVerification = (tree) => tree) {
   it('maintains tree balance criteria', () => {
     const tree = getTree()
     beforeVerification(tree)
-    tree.traverse((node) => {
+    traverse(tree, (node) => {
       if (!node.isLeaf()) {
         expect(isBalanced(node, tree.alpha)).toEqual(true)
       } else {

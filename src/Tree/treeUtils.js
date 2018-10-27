@@ -1,14 +1,10 @@
 const assert = require('assert')
+const Stack = require('../Stack/Stack')
 
 const swapKeys = (node1, node2) => {
   const tempKey = node1.key
   node1.key = node2.key
   node2.key = tempKey
-}
-
-const height = node => {
-  if (node.isLeaf()) return 0
-  return 1 + Math.max(height(node.left), height(node.right))
 }
 
 const copyNode = (target, src) => Object.assign(target, src)
@@ -103,6 +99,59 @@ const balanceByHeight = (nodeStack) => {
   }
 }
 
+const getRoot = tree => tree.root
+
+function traverse(tree, cb) {
+  let current = getRoot(tree)
+  const stack = new Stack()
+
+  while (current || !stack.isEmpty()) {
+    if (current) {
+      stack.push(current)
+      current = current.left
+    } else {
+      current = stack.pop()
+      cb(current)
+      current = current.right
+    }
+  }
+}
+
+function leaveCount(tree) {
+  let count = 0
+  if (tree.isEmpty()) return count
+
+  traverse(tree, (node) => count += node.isLeaf() ? 1 : 0)
+  return count
+}
+
+function heightHelper(node) {
+  if (node.isLeaf()) return 0
+  return 1 + Math.max(heightHelper(node.left), heightHelper(node.right))
+}
+
+const has = (obj, key) => key in obj
+
+function height(tree) {
+  const root = has(tree, 'root') ? getRoot(tree) : tree
+  return heightHelper(root)
+}
+
+function nodeCount(tree) {
+  let count = 0
+  if (tree.isEmpty()) return count
+
+  traverse(tree, () => count++)
+  return count
+}
+
+function interiorNodeCount(tree) {
+  let count = 0
+  if (tree.isEmpty()) return count
+  traverse(tree, (node) => count += node.isLeaf() ? 0 : 1)
+  return count
+}
+
 const defaultAlpha = 0.288
 const defaultEpsilon = 0.005
 
@@ -117,4 +166,8 @@ module.exports = {
   balanceByWeight,
   defaultAlpha,
   defaultEpsilon,
+  leaveCount,
+  nodeCount,
+  traverse,
+  interiorNodeCount,
 }

@@ -1,7 +1,14 @@
 const {
   valueGenerator,
-  testWithDifferentKeyInsertionOrders
+  testWithDifferentKeyInsertionOrders,
 } = require('./util')
+const {
+  height,
+  leaveCount,
+  nodeCount,
+  averageDepth,
+  interiorNodeCount,
+} =  require('../treeUtils')
 const LeafTree = require('../LeafTree')
 
 describe('LeafTree', () => {
@@ -13,12 +20,12 @@ describe('LeafTree', () => {
 })
 
 function performGenericLeafTreeTests(TreeConstructor) {
-  describe('.height', () => {
+  describe('height()', () => {
     testWithDifferentKeyInsertionOrders(testTreeHeight, LeafTree)
   })
 
-  xdescribe('.averageDepth (of the leaves)', () => {
-    it('should be <= (n - 1)(n + 2) / 2n (approx. 0.5n)')
+  xdescribe('averageDepth() (of the leaves)', () => {
+    testWithDifferentKeyInsertionOrders(testAverageDepth, LeafTree)
   })
 
   describe('#find', () => {
@@ -33,11 +40,11 @@ function performGenericLeafTreeTests(TreeConstructor) {
     testWithDifferentKeyInsertionOrders(testSetMethod, TreeConstructor)
   })
 
-  describe('.leaveCount', () => {
+  describe('leaveCount()', () => {
     testWithDifferentKeyInsertionOrders(testLeaveCount, TreeConstructor)
   })
 
-  describe('.nodeCount', () => {
+  describe('nodeCount()', () => {
     testWithDifferentKeyInsertionOrders(testNodeCount, TreeConstructor)
   })
 
@@ -56,17 +63,17 @@ function testTreeProperties(getTree) {
   const numEl = 100
   test('if height = h; leaveCount <= 2**h', () => {
     const tree = getTree(numEl)
-    const height = tree.height
-    expect(tree.leaveCount).toBeLessThanOrEqual(2**height)
+    const h = height(tree)
+    expect(leaveCount(tree)).toBeLessThanOrEqual(2**h)
   })
   test('if height = h; leaveCount >= h + 1', () => {
     const tree = getTree(numEl)
-    const height = tree.height
-    expect(tree.leaveCount).toBeGreaterThanOrEqual(height + 1)
+    const h = height(tree)
+    expect(leaveCount(tree)).toBeGreaterThanOrEqual(h + 1)
   })
   test('if interiorNodeCount = h; leaveCount = h + 1', () => {
     const tree = getTree(numEl)
-    expect(tree.interiorNodeCount).toEqual(tree.leaveCount - 1)
+    expect(interiorNodeCount(tree)).toEqual(leaveCount(tree) - 1)
   })
 }
 
@@ -111,25 +118,25 @@ function testTreeHeight(getTree) {
   const numEl = 20
   it('should be >= Math.ceil(log n)', () => {
     const tree = getTree(numEl)
-    const logN = Math.log2(tree.nodeCount)
-    expect(tree.height).toBeGreaterThanOrEqual(Math.ceil(logN))
+    const logN = Math.log2(nodeCount(tree))
+    expect(height(tree)).toBeGreaterThanOrEqual(Math.ceil(logN))
   })
   it('should be <= n - 1', () => {
     const tree = getTree(numEl)
-    const n = tree.nodeCount
-    expect(tree.height).toBeLessThanOrEqual(n - 1)
+    const n = nodeCount(tree)
+    expect(height(tree)).toBeLessThanOrEqual(n - 1)
   })
 }
 
 function testLeaveCount(getTree) {
   it('is 0 if empty', () => {
     const tree = getTree()
-    expect(tree.leaveCount).toEqual(0)
+    expect(leaveCount(tree)).toEqual(0)
   })
   it('counts the number of leaves in the tree', () => {
     const numEl = 10
     const tree = getTree(numEl)
-    expect(tree.leaveCount).toEqual(numEl)
+    expect(leaveCount(tree)).toEqual(numEl)
   })
 }
 
@@ -153,21 +160,21 @@ function testInsertion(getTree) {
   it('increases the leaveCount of the tree by one', () => {
     let count = 0
     getTree(numEl, (tree) => {
-      expect(tree.leaveCount).toEqual(++count)
+      expect(leaveCount(tree)).toEqual(++count)
     })
   })
   it('increases the nodeCount of the tree by one on the first insert', () => {
     const tree = getTree(1)
-    expect(tree.nodeCount).toEqual(1)
+    expect(nodeCount(tree)).toEqual(1)
   })
   it('increases the nodeCount by two after the first insert', () => {
     let count = 0
     let oldNodeCount = 0
     getTree(numEl, (tree) => {
       if (count) {
-        expect(tree.nodeCount).toEqual(oldNodeCount + 2)
+        expect(nodeCount(tree)).toEqual(oldNodeCount + 2)
       }
-      oldNodeCount = tree.nodeCount
+      oldNodeCount = nodeCount(tree)
       count++
     })
   })
@@ -182,21 +189,21 @@ function testNodeCount(getTree) {
   const numEl = 20
   it('is 0 if empty', () => {
     const tree = getTree(0)
-    expect(tree.nodeCount).toEqual(0)
+    expect(nodeCount(tree)).toEqual(0)
   })
   it('increases by one on the very first insert', () => {
     const tree = getTree(1)
-    expect(tree.nodeCount).toEqual(1)
+    expect(nodeCount(tree)).toEqual(1)
   })
   it('increases by two after every subsequent insert', () => {
     let count = 0
     let oldNodeCount = 0
     getTree(numEl, (tree) => {
       if (count) {
-        expect(tree.nodeCount).toEqual(oldNodeCount + 2)
+        expect(nodeCount(tree)).toEqual(oldNodeCount + 2)
       }
       count++
-      oldNodeCount = tree.nodeCount
+      oldNodeCount = nodeCount(tree)
     })
   })
 }
@@ -223,21 +230,21 @@ function testDeletion(getTree) {
   it('decreases leaveCount by 1', () => {
     let numKeysToDelete = Math.floor(numEl / 20)
     const tree = getTree(numEl)
-    let oldLeaveCount = tree.leaveCount
+    let oldLeaveCount = leaveCount(tree)
     while (numKeysToDelete) {
       tree.delete(numKeysToDelete--)
-      expect(tree.leaveCount).toEqual(oldLeaveCount - 1)
-      oldLeaveCount = tree.leaveCount
+      expect(leaveCount(tree)).toEqual(oldLeaveCount - 1)
+      oldLeaveCount = leaveCount(tree)
     }
   })
   it('decreases nodeCount by two', () => {
     let numKeysToDelete = Math.floor(numEl / 20)
     const tree = getTree(numEl)
-    let oldNodeCount = tree.nodeCount
+    let oldNodeCount = nodeCount(tree)
     while (numKeysToDelete) {
       tree.delete(numKeysToDelete--)
-      expect(tree.nodeCount).toEqual(oldNodeCount - 2)
-      oldNodeCount = tree.nodeCount
+      expect(nodeCount(tree)).toEqual(oldNodeCount - 2)
+      oldNodeCount = nodeCount(tree)
     }
   })
 }
@@ -269,4 +276,16 @@ function testIntervalFind(getTree) {
     const interval = tree.intervalFind(50, 51)
     expect(interval.right).toEqual(null)
   })
+}
+
+function testAverageDepth(getTree) {
+  const numEl = 2000
+  it('should be <= (n - 1)(n + 2) / 2n (approx. 0.5n)', () => {
+    const tree = getTree(numEl)
+    expect(averageDepth(tree)).toBeLessThanOrEqual(calculateMaxAverageDepth(leaveCount(tree)))
+  })
+}
+
+function calculateMaxAverageDepth(leaveCount) {
+  return (leaveCount - 1) * (leaveCount + 2) / (2 * leaveCount)
 }

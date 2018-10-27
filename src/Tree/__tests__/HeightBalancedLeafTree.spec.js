@@ -47,12 +47,12 @@ function testTreeProperties(getTree) {
   const leaveCountForBalancedTree = '(3+√5 / 2√5)(1+√5 / 2)^h - (3-√5 / 2√5)(1-√5 / 2)^h'
   test('if leaveCount = N; height <= approx. 1.44logN', () => {
     const tree = getTree(numEl)
-    expect(numEl).toEqual(tree.leaveCount)
-    expect(tree.height).toBeLessThanOrEqual(computeMaxHeight(tree.leaveCount))
+    expect(numEl).toEqual(util.leaveCount(tree))
+    expect(util.height(tree)).toBeLessThanOrEqual(computeMaxHeight(util.leaveCount(tree)))
   })
   test(`if height = h; leaveCount >= ${ leaveCountForBalancedTree }`, () => {
     const tree = getTree(numEl)
-    expect(tree.leaveCount).toBeGreaterThanOrEqual(computeMinimumLeaveCount(tree.height))
+    expect(util.leaveCount(tree)).toBeGreaterThanOrEqual(computeMinimumLeaveCount(util.height(tree)))
   })
 }
 
@@ -84,7 +84,7 @@ function testBalanceCriteria(getTree, beforeVerification = (tree) => tree) {
   it('maintains tree balance criteria', () => {
     const tree = getTree()
     beforeVerification(tree)
-    tree.traverse((node) => {
+  util.traverse(tree, (node) => {
       if (!node.isLeaf()) {
         const rHeight = util.height(node.right)
         const lHeight = util.height(node.left)

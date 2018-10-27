@@ -5,6 +5,7 @@ class Node {
     this.key = key
     this.left = left
     this.right = right
+    this.height = 0
   }
 
   static isNode(val) {
