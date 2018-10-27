@@ -13,7 +13,7 @@ class Node extends LeafTreeNode {
     this.color = RED
   }
 
-  get isRed() {
+  isRed() {
     return this.color === RED
   }
 
@@ -21,7 +21,7 @@ class Node extends LeafTreeNode {
     return this.color = BLACK
   }
 
-  get isBlack() {
+  isBlack() {
     return this.color === BLACK
   }
 }
