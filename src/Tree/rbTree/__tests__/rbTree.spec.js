@@ -15,11 +15,11 @@ describe('rbTree', () => {
 })
 
 function testDeletion(getTree) {
-  const numEl = 100
+  const numEl = 1000
   it('should be able to delete all inserted values', () => {
     const tree = getTree(numEl)
-    let numToDelete = 100
     expect(tree.isEmpty()).toEqual(false)
+    let numToDelete = numEl
     while (numToDelete) tree.delete(numToDelete--)
     expect(tree.isEmpty()).toEqual(true)
   })
@@ -30,7 +30,6 @@ function testTreeProperties(getTree) {
   const randomElCount = Math.floor(Math.random() * numEl) + 100
   const tree = getTree(randomElCount)
   const h = height(tree)
-  console.log('height=', h, isEven(h))
   if (isEven(h)) {
     test('for height = h (where h is even); leaveCount >= 2**((h/2)+1) - 1', () => {
       expect(leaveCount(tree)).toBeGreaterThanOrEqual(calculateMinLeaveCountForEvenHeight(h))

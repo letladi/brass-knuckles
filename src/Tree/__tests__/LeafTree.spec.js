@@ -37,7 +37,7 @@ function performGenericLeafTreeTests(TreeConstructor) {
     testWithDifferentKeyInsertionOrders(testInsertion, TreeConstructor)
   })
 
-  xdescribe('#set', () => {
+  describe('#set', () => {
     testWithDifferentKeyInsertionOrders(testSetMethod, TreeConstructor)
   })
 

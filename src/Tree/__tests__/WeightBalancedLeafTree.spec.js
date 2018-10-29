@@ -9,6 +9,7 @@ const {
   height,
   leaveCount,
   traverse,
+  averageDepth,
 } = require('../treeUtils')
 const Tree = require('../WeightBalancedLeafTree')
 const performGenericLeafTreeTests = require('./LeafTree.spec')
@@ -28,7 +29,7 @@ function performTestsSpecificToWeightBalancedTrees(TreeConstructor) {
   describe('#delete', () => {
     testWithDifferentKeyInsertionOrders(testDeletion, TreeConstructor)
   })
-  xdescribe('#averageDepth', () => {
+  describe('#averageDepth', () => {
     testWithDifferentKeyInsertionOrders(testAverageDepth, TreeConstructor)
   })
 }
@@ -97,6 +98,16 @@ function testDeletion(getTree) {
 }
 
 function testAverageDepth(getTree) {
+  const numEl = 2000
   const averageDepthFormula = '(-1 * logn) / (αlogα + (1-α)log(1-α))'
-  test(`if leaveCount = n; averageDepth <= ${ averageDepthFormula}`)
+  test(`if leaveCount = n; averageDepth <= ${ averageDepthFormula}`, () => {
+    const tree = getTree(numEl)
+    expect(averageDepth(tree)).toBeLessThanOrEqual(calculateMaxAverageDepth(leaveCount(tree), tree.alpha))
+  })
+}
+
+function calculateMaxAverageDepth(leaveCount, alpha) {
+  const numerator = -1 * Math.log2(leaveCount)
+  const denominator = alpha * Math.log2(alpha) + (1 -alpha) * Math.log2(1 - alpha)
+  return numerator / denominator
 }
