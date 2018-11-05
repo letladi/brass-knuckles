@@ -29,6 +29,21 @@ function testTreeProperties(getTree) {
   const numEl = 20000
   const randomElCount = Math.floor(Math.random() * numEl) + 100
   const tree = getTree(randomElCount)
+
+  verifyLeaveCountProperty(tree)
+
+  test('for leaveCount = n; h <= 2logn - O(1)', () => {
+    const tree = getTree(numEl)
+    verifyHeightProperty(tree)
+  })
+
+  test('if a red node has lower neighbors, they are black', () => {
+    const tree = getTree(numEl)
+    verifyColorProperty(tree)
+  })
+}
+
+function verifyLeaveCountProperty(tree) {
   const h = height(tree)
   if (isEven(h)) {
     test('for height = h (where h is even); leaveCount >= 2**((h/2)+1) - 1', () => {
@@ -39,20 +54,18 @@ function testTreeProperties(getTree) {
       expect(leaveCount(tree)).toBeGreaterThanOrEqual(calculateMinLeaveCountForOddHeight(h))
     })
   }
+}
 
-  test('for leaveCount = n; h <= 2logn - O(1)', () => {
-    const tree = getTree(numEl)
-    expect(height(tree)).toBeLessThanOrEqual(calculateMaxHeight(leaveCount(tree)))
-  })
+function verifyHeightProperty(tree) {
+  expect(height(tree)).toBeLessThanOrEqual(calculateMaxHeight(leaveCount(tree)))
+}
 
-  test('if a red node has lower neighbors, they are black', () => {
-    const tree = getTree(numEl)
-    traverse(tree, (node) => {
-      if (node.isRed() && !node.isLeaf()) {
-        expect(node.left.isBlack()).toEqual(true)
-        expect(node.right.isBlack()).toEqual(true)
-      }
-    })
+function verifyColorProperty(tree) {
+  traverse(tree, (node) => {
+    if (node.isRed() && !node.isLeaf()) {
+      expect(node.left.isBlack()).toEqual(true)
+      expect(node.right.isBlack()).toEqual(true)
+    }
   })
 }
 

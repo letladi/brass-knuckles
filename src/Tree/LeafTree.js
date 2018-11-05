@@ -32,6 +32,10 @@ class LeafTree {
     return (node.key === key) ? node.value : null
   }
 
+  add(key, val) {
+    return this.insert(key, val)
+  }
+
   insert(key, val) {
     if (this.isEmpty()) this.root = this.createNode(key, val)
     else {

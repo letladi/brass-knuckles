@@ -33,6 +33,10 @@ function performGenericLeafTreeTests(TreeConstructor) {
     testWithDifferentKeyInsertionOrders(testFind, TreeConstructor)
   })
 
+  describe('#add', () => {
+    testWithDifferentKeyInsertionOrders(testAdd, TreeConstructor)
+  })
+
   describe('#insert', () => {
     testWithDifferentKeyInsertionOrders(testInsertion, TreeConstructor)
   })
@@ -142,19 +146,27 @@ function testLeaveCount(getTree) {
 }
 
 function testInsertion(getTree) {
+  performInsertionTests(getTree, false)
+}
+
+function testAdd(getTree) {
+  performInsertionTests(getTree, true)
+}
+
+function performInsertionTests(getTree, useAddMethod) {
   const numEl = 20
   it('returns false (fails) if we attempt to insert a key that already exists in the tree', () => {
-    const tree = getTree(numEl)
+    const tree = getTree(numEl, null, useAddMethod)
     const existingKey = Math.floor(numEl / 2)
     expect(tree.insert(existingKey, 'existingKey')).toEqual(false)
   })
   it('returns true if insertion succeeded', () => {
-    const tree = getTree(numEl)
+    const tree = getTree(numEl, null, useAddMethod)
     const nextKey = numEl + 1
     expect(tree.insert(nextKey, 'nextKey')).toEqual(true)
   })
   it('should be able to insert in empty tree', () => {
-    const tree = getTree(0)
+    const tree = getTree(0, null, useAddMethod)
     tree.insert(1, 'one')
     expect(tree.isEmpty()).toEqual(false)
   })
@@ -162,10 +174,10 @@ function testInsertion(getTree) {
     let count = 0
     getTree(numEl, (tree) => {
       expect(leaveCount(tree)).toEqual(++count)
-    })
+    }, useAddMethod)
   })
   it('increases the nodeCount of the tree by one on the first insert', () => {
-    const tree = getTree(1)
+    const tree = getTree(1, null, useAddMethod)
     expect(nodeCount(tree)).toEqual(1)
   })
   it('increases the nodeCount by two after the first insert', () => {
@@ -177,11 +189,11 @@ function testInsertion(getTree) {
       }
       oldNodeCount = nodeCount(tree)
       count++
-    })
+    }, useAddMethod)
   })
   it('all the key value pairs inserted will exist in the tree', () => {
     let keyCount = numEl
-    const tree = getTree(keyCount)
+    const tree = getTree(keyCount, null, useAddMethod)
     while (keyCount) expect(tree.find(keyCount--)).not.toEqual(null)
   })
 }

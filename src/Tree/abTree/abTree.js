@@ -10,7 +10,6 @@ function isAlmostUnderfull(node, min) {
 
 class abTree {
   constructor(a = 550, b = 2 * a + 1) {
-
     if (b < 2 * a) throw new Error(getConstructionExceptionMessage(a, b))
     this.root = new Node()
     this.a = a

@@ -15,11 +15,11 @@ describe('Stack', () => {
   })
 
   describe('#push', () => {
-      const elementsAndSizesAfterTheyAreAdded = [
-        ['one', 1],
-        ['two', 2],
-        ['three', 3]
-      ]
+    const elementsAndSizesAfterTheyAreAdded = [
+      ['one', 1],
+      ['two', 2],
+      ['three', 3]
+    ]
     it('should add elements to the stack', () => {
       elementsAndSizesAfterTheyAreAdded.forEach(([el, sizeAfterAddition]) => {
         stack.push(el)
