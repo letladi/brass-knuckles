@@ -12,6 +12,9 @@ describe('rbTree', () => {
   describe('#delete (overridden)', () => {
     testWithDifferentKeyInsertionOrders(testDeletion, Tree)
   })
+  describe('#delete (when #add is used to insert items)', () => {
+    testWithDifferentKeyInsertionOrders(testDeletionWhenAddIsUsed, Tree)
+  })
 })
 
 function testDeletion(getTree) {
@@ -23,6 +26,10 @@ function testDeletion(getTree) {
     while (numToDelete) tree.delete(numToDelete--)
     expect(tree.isEmpty()).toEqual(true)
   })
+}
+
+function testDeletionWhenAddIsUsed(getTree) {
+  return testDeletion((numEl) => getTree(numEl, null, true))
 }
 
 function testTreeProperties(getTree) {

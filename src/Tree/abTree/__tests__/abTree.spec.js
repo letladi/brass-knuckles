@@ -6,7 +6,7 @@ const {
   testWithDifferentKeyInsertionOrders
 } = require('../../__tests__/util')
 
-describe('abTree', () => {
+xdescribe('abTree', () => {
   it('does not allow b to be less than 2a when constructing tree', () => {
     expect(() => new abTree(500, 900)).toThrow()
   })
