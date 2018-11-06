@@ -67,7 +67,7 @@ class abTree {
         const newNode = current.split()
         if (current === this.root) {
           this.root = new Node()
-          this.root.height = this.root.height + 1
+          this.root.height = current.height + 1
           this.root.add(first(current.keys), current)
           this.root.add(first(newNode.keys), newNode)
         } else {
