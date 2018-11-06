@@ -1,7 +1,9 @@
 const Node = require('./abTreeNode')
 const Stack = require('../../Stack/Stack')
 const binarySearch = require('../../util/binarySearch')
-const { find, isOverflowing, isUnderflowing, navigateTree } = require('./util')
+const {
+  find, isOverflowing, isUnderflowing, navigateTree, defaultAValue, defaultBValue,
+} = require('./util')
 const { first, last, length } = require('../../util/index')
 
 function isAlmostUnderfull(node, min) {
@@ -9,7 +11,7 @@ function isAlmostUnderfull(node, min) {
 }
 
 class abTree {
-  constructor(a = 550, b = 2 * a + 1) {
+  constructor(a = defaultAValue, b = defaultBValue) {
     if (b < 2 * a) throw new Error(getConstructionExceptionMessage(a, b))
     this.root = new Node()
     this.a = a

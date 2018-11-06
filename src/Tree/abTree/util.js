@@ -35,9 +35,14 @@ function find(list, key) {
   return lo
 }
 
+const defaultAValue = 550
+const defaultBValue = 2 * defaultAValue + 1
+
 module.exports = {
   find,
   navigateTree,
   isOverflowing,
   isUnderflowing,
+  defaultAValue,
+  defaultBValue,
 }

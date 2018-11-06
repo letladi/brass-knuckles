@@ -1,11 +1,12 @@
 const abTree = require('../abTree')
+const { defaultAValue, defaultBValue } = require('../util')
 const {
   valueGenerator,
   getBaseLog,
   testWithDifferentKeyInsertionOrders
 } = require('../../__tests__/util')
 
-xdescribe('abTree', () => {
+describe('abTree', () => {
   it('does not allow b to be less than 2a when constructing tree', () => {
     expect(() => new abTree(500, 900)).toThrow()
   })
@@ -94,6 +95,20 @@ function testInsertion(getTree) {
         expect(tree.leaveCount).toEqual(1)
       })
     })
+  })
+  it('should increase height on the b-th insert in a node', () => {
+    const tree = getTree(defaultBValue)
+    const prevHeight = tree.height
+    const nextKey = defaultBValue + 1
+    tree.insert(nextKey, valueGenerator(nextKey))
+    expect(tree.height).toEqual(prevHeight + 1)
+  })
+  it('should increase the leaveCount on the b-th insert in a node', () => {
+    const tree = getTree(defaultBValue)
+    const prevLeaveCount = tree.leaveCount
+    const nextKey = defaultBValue + 1
+    tree.insert(nextKey, valueGenerator(nextKey))
+    expect(tree.leaveCount).toEqual(prevLeaveCount + 1)
   })
 }
 
