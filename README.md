@@ -3,7 +3,7 @@ Advanced Data Structures for JavaScript
 
 
 This project is under active development ⚡️
-=======================================
+-------------------------------------------
 
 Brass-Knuckles provides many data structures. From the basics like: `Stack`, `Queue`,
 `LinkedList`, `OrderedLinkedList` and `DoublyLinkedList`.
