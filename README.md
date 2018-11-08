@@ -1,6 +1,10 @@
 Advanced Data Structures for JavaScript
 =======================================
-[![Build Status](https://travis-ci.org/Letladi/brass-knuckles.svg?branch=master)](https://travis-ci.org/Letladi/brass-knuckles)
+<p align="center">
+  <a href=https://circleci.com/gh/Letladi/brass-knuckles">
+    <img src="https://circleci.com/gh/Letladi/brass-knuckles.svg?style=svg" alt="Build Status">
+  </a>
+</p>
 
 This project is under active development ⚡️
 -------------------------------------------
