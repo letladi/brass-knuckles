@@ -1,7 +1,7 @@
 Advanced Data Structures for JavaScript
 =======================================
 <p align="center">
-  <a href=https://circleci.com/gh/Letladi/brass-knuckles">
+  <a href="https://circleci.com/gh/Letladi/brass-knuckles">
     <img src="https://circleci.com/gh/Letladi/brass-knuckles.svg?style=svg" alt="Build Status">
   </a>
 </p>
