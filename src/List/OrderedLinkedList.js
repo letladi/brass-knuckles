@@ -3,10 +3,6 @@ const LinkedList = require('./LinkedList')
 const { isNull } = require('../util/')
 
 class OrderedLinkedList extends LinkedList {
-  constructor() {
-    super()
-  }
-
   search(item) {
     let found = false
     let current = this._first
@@ -34,7 +30,7 @@ class OrderedLinkedList extends LinkedList {
       this._count++
     } else {
       current = this._first
-      while (current && found === false)
+      while (current && !found)
         if (current.info >= item) found = true
         else {
           prev = current
@@ -74,7 +70,7 @@ class OrderedLinkedList extends LinkedList {
     else {
       current = this._first
 
-      while (current && found === false)
+      while (current && !found)
         if (current.info >= item) found = true
         else {
           prev = current
