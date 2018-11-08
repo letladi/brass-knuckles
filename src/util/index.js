@@ -8,10 +8,13 @@ const isNull = val => val === null
 
 const isEven = x => x % 2 === 0
 
+const isZero = x => x === 0
+
 module.exports = {
   first,
   last,
   length,
   isNull,
   isEven,
+  isZero,
 }

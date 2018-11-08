@@ -1,5 +1,5 @@
 const Node = require('./Node/LinkedListNode')
-const { isNull } = require('../util/')
+const { isNull, isZero } = require('../util/')
 
 class LinkedList {
   constructor() {
@@ -122,7 +122,7 @@ class LinkedList {
         prev = this._first
         current = this._first.link
 
-        while (current && found === false) {
+        while (current && !found) {
           if (current.info !== item) {
             prev = current
             current = current.link
@@ -263,7 +263,7 @@ class LinkedList {
     let found = false
     let current = this._first
 
-    while (current && found === false)
+    while (current && !found)
       if (current.info === item) found = true
       else current = current.link
 
@@ -307,7 +307,7 @@ class LinkedList {
     let prev = null
     let current = this._first
 
-    while (current && found === false) {
+    while (current && !found) {
       if (current.info === val) found = true
       else {
         prev = current
@@ -316,12 +316,12 @@ class LinkedList {
       }
     }
 
-    if (found === false) return list
+    if (!found) return list
     else {
       this._count = index
       this._last = prev
 
-      if (index === 0) this._first = this._last = null
+      if (isZero(index)) this._first = this._last = null
       else this._last.link = null
 
       while (current) {
@@ -456,15 +456,15 @@ class LinkedList {
     const resultingSublist1 = sublist.mergeSort()
     const resultingSublist2 = this.mergeSort()
 
-    let walker1 = resultingSublist1[Symbol.iterator]()
-    let walker2 = resultingSublist2[Symbol.iterator]()
+    let walker1 = resultingSublist1.iterator()
+    let walker2 = resultingSublist2.iterator()
 
     let walker1Val = walker1.next()
     let walker2Val = walker2.next()
 
     this.clear()
 
-    while (walker1Val.done === false || walker2Val.done === false) {
+    while (!walker1Val.done || !walker2Val.done) {
       if (walker1Val.done) {
         this.insertLast(walker2Val.value)
         walker2Val = walker2.next()
