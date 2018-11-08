@@ -1,6 +1,6 @@
 Advanced Data Structures for JavaScript
 =======================================
-
+[![Build Status](https://travis-ci.org/Letladi/brass-knuckles.svg?branch=master)](https://travis-ci.org/Letladi/brass-knuckles)
 
 This project is under active development ⚡️
 -------------------------------------------
@@ -9,7 +9,7 @@ Brass-Knuckles provides many data structures. From the basics like: `Stack`, `Qu
 `LinkedList`, `OrderedLinkedList` and `DoublyLinkedList`.
 
 There are different kinds of `Tree` structures. The trees follow the 'leaf tree' model,
-that is, all data is stored is stored in the leaf nodes of the tree.
+that is, all data is stored in the leaf nodes of the tree.
 
 `LeafTree` defines the base class on which most of the trees are based.
 `MultiLeafTree` is subclass of `LeafTree` that allows duplicate insertions into the tree.
