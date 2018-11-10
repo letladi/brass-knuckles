@@ -9,7 +9,7 @@ Advanced Data Structures for JavaScript
 This project is under active development ⚡️
 -------------------------------------------
 
-Brass-Knuckles provides many data structures. From the basics like: `Stack`, `Queue`,
+Brass-Knuckles provides many [data structures][]. From the basics like: `Stack`, `Queue`,
 `LinkedList`, `OrderedLinkedList` and `DoublyLinkedList`.
 
 There are different kinds of `Tree` structures. The trees follow the 'leaf tree' model,
@@ -29,7 +29,7 @@ that is, all data is stored in the leaf nodes of the tree.
 [BTree]: https://en.wikipedia.org/wiki/B-tree
 [balanced search trees]: https://en.wikipedia.org/wiki/Self-balancing_binary_search_tree
 [red black tree]: https://en.wikipedia.org/wiki/Red%E2%80%93black_tree
-
+[data structures]: https://www.amazon.com/Advanced-Data-Structures-Peter-Brass/dp/0521880378/ref=sr_1_2?ie=UTF8&qid=1541833203&sr=8-2&keywords=advanced+data+structures
 
 
 License

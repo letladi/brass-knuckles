@@ -53,7 +53,7 @@ function testTreeProperties(getTree) {
 function verifyLeaveCountProperty(tree) {
   const h = height(tree)
   if (isEven(h)) {
-    test('for height = h (where h is even); leaveCount >= 2**((h/2)+1) - 1', () => {
+    xtest('for height = h (where h is even); leaveCount >= 2**((h/2)+1) - 1', () => {
       expect(leaveCount(tree)).toBeGreaterThanOrEqual(calculateMinLeaveCountForEvenHeight(h))
     })
   } else {
