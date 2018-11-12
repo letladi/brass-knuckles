@@ -172,17 +172,19 @@ class rbTree extends LeafTree {
       let parent = null
       let sibling = null
 
-      while (!current.isLeaf()) {
-        // handle case 1
-        if (current.left.isRed() || current.right.isRed()) {
-          parent = current
-          sibling = key < current.key ? current.left : current.right
-        } else if (current.left.isBlack() && current.right.isBlack() && current.key < parent.key)
+      // while (!current.isLeaf()) {
+      //   // handle case 1
+      //   if (current.left.isRed() || current.right.isRed()) {
+      //     parent = current
+      //     sibling = key < current.key ? current.left : current.right
+      //   } else if (current.left.isBlack() && current.right.isBlack() && current.key < parent.key) {
+      //
+      //   }
         // handle case 2
         // handle case 3
       }
     }
-  }
+  
 }
 
 module.exports = rbTree

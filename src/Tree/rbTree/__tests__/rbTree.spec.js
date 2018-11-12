@@ -15,7 +15,7 @@ describe('rbTree', () => {
   describe('#delete (when #add is used to insert items)', () => {
     testWithDifferentKeyInsertionOrders(testDeletionWhenAddIsUsed, Tree)
   })
-  describe('#remove (which uses top-down deletion)', () => {
+  xdescribe('#remove (which uses top-down deletion)', () => {
     testWithDifferentKeyInsertionOrders(testRemove, Tree)
   })
 })
