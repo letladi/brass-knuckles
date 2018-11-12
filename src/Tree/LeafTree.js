@@ -12,6 +12,17 @@ function navigateTree(node, key) {
   return stack
 }
 
+function attachLeaves(node, leave1, leave2) {
+  if (node.key < key) {
+    node.left = oldLeaf
+    node.right = newLeaf
+    node.key = key
+  } else {
+    node.left = newLeaf
+    node.right = oldLeaf
+  }
+}
+
 class LeafTree {
   constructor() {
     this.root = this.createNode()
@@ -83,8 +94,8 @@ class LeafTree {
           node.left = newLeaf
           node.right = oldLeaf
         }
+        this.balance(nodesOnNavigationPath)
       }
-      this.balance(nodesOnNavigationPath)
     }
   }
 

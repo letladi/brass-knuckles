@@ -100,8 +100,8 @@ class MultiLeafTree extends LeafTree {
           current.left = newLeaf
           current.right = oldLeaf
         }
+        this.balance(stack)
       }
-      this.balance(stack)
     }
   }
 
