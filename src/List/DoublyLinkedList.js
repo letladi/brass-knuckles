@@ -42,7 +42,7 @@ class DoublyLinkedList extends LinkedList {
     let found = false
     let current = this._first
 
-    while (current && found === false)
+    while (current && !found)
       if (current.info >= item) found = true
       else current = current.next
 
@@ -73,7 +73,7 @@ class DoublyLinkedList extends LinkedList {
     } else {
       current = this._first
 
-      while (current && found === false)
+      while (current && !found)
         if (current.info >= item) found = true
         else {
           prev = current
@@ -120,7 +120,7 @@ class DoublyLinkedList extends LinkedList {
     } else {
       current = this._first
 
-      while (current && found === false)
+      while (current && !found)
         if (current.info >= item) found = true
         else current = current.next
 

@@ -158,7 +158,30 @@ class rbTree extends LeafTree {
   }
 
   remove(key) {
+    if (this.isEmpty()) return null
+    else if (this.root.isLeaf()) {
+      if (this.root.key === key) {
+        const deleteVal = this.root.value
+        this.root.left = null
+        this.root.turnBlack()
+        return deleteVal
+      }
+      return null
+    } else {
+      let current = this.root
+      let parent = null
+      let sibling = null
 
+      while (!current.isLeaf()) {
+        // handle case 1
+        if (current.left.isRed() || current.right.isRed()) {
+          parent = current
+          sibling = key < current.key ? current.left : current.right
+        } else if (current.left.isBlack() && current.right.isBlack() && current.key < parent.key)
+        // handle case 2
+        // handle case 3
+      }
+    }
   }
 }
 

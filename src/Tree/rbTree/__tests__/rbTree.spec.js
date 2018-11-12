@@ -15,6 +15,9 @@ describe('rbTree', () => {
   describe('#delete (when #add is used to insert items)', () => {
     testWithDifferentKeyInsertionOrders(testDeletionWhenAddIsUsed, Tree)
   })
+  describe('#remove (which uses top-down deletion)', () => {
+    testWithDifferentKeyInsertionOrders(testRemove, Tree)
+  })
 })
 
 function testDeletion(getTree) {
@@ -24,6 +27,54 @@ function testDeletion(getTree) {
     expect(tree.isEmpty()).toEqual(false)
     let numToDelete = numEl
     while (numToDelete) tree.delete(numToDelete--)
+    expect(tree.isEmpty()).toEqual(true)
+  })
+}
+
+function testRemove(getTree) {
+  const numEl = 1000
+  it('returns null is deletion failed (when tree is empty)', () => {
+    const tree = getTree(0)
+    expect(tree.delete(1)).toEqual(null)
+  })
+  it('returns null if deletion failed (when key does not exist in the tree)', () => {
+    const tree = getTree(numEl)
+    const nextKey = numEl + 1
+    expect(tree.delete(nextKey)).toEqual(null)
+  })
+  it('returns and removes the value associated with the deleted key', () => {
+    let numKeysToDelete = Math.floor(numEl / 20)
+    const tree = getTree(numEl)
+    while (numKeysToDelete) {
+      expect(tree.delete(numKeysToDelete)).toEqual(valueGenerator(numKeysToDelete))
+      numKeysToDelete--
+    }
+  })
+  it('decreases leaveCount by 1', () => {
+    let numKeysToDelete = Math.floor(numEl / 20)
+    const tree = getTree(numEl)
+    let oldLeaveCount = leaveCount(tree)
+    while (numKeysToDelete) {
+      tree.delete(numKeysToDelete--)
+      expect(leaveCount(tree)).toEqual(oldLeaveCount - 1)
+      oldLeaveCount = leaveCount(tree)
+    }
+  })
+  it('decreases nodeCount by two', () => {
+    let numKeysToDelete = Math.floor(numEl / 20)
+    const tree = getTree(numEl)
+    let oldNodeCount = nodeCount(tree)
+    while (numKeysToDelete) {
+      tree.delete(numKeysToDelete--)
+      expect(nodeCount(tree)).toEqual(oldNodeCount - 2)
+      oldNodeCount = nodeCount(tree)
+    }
+  })
+  it('should be able to remove all inserted values', () => {
+    const tree = getTree(numEl)
+    expect(tree.isEmpty()).toEqual(false)
+    let numToDelete = numEl
+    while (numToDelete) tree.remove(numToDelete--)
     expect(tree.isEmpty()).toEqual(true)
   })
 }

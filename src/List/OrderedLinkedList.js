@@ -7,7 +7,7 @@ class OrderedLinkedList extends LinkedList {
     let found = false
     let current = this._first
 
-    while (current && found === false)
+    while (current && !found)
       if (current.info >= item) found = true
       else current = current.link
 
