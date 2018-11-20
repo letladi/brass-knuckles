@@ -32,19 +32,50 @@ that allow duplicate value insertions for a single key)
 - `HeightBalancedLeafTree`
 - `abTree` (a type of [BTree][])
 - `rbTree` (a [red black tree][])
-
+- `FingerTree`
+- `SplayTree`
+- `SkipList`
 
 Balanced search trees that allow duplicate value insertion:
 - `WeightBalancedMultiLeafTree`
 - `HeightBalancedMultiLeafTree`
 
+Interval Trees
+- `IntervalTree`
+- `SegmentTree`
+- `orTree` (Orthogonal Range Tree)
+- `hdSegmentTree` (Higher-Dimensional Segment Tree)
+- `kdTree`
+
+[Heaps][]:
+- `Heap`
+- `hoTree` (Heap-Ordered Tree)
+- `hfTree` (Half-Ordered Tree)
+- `LeftistHeap` (Leftist Heap)
+- `SkewHeap`
+- `BinomialHeap`
+- `FibonacciHeap`
+- `DoubleEndedHeap`
+- `MultidimensionalHeap`
+
+String Structures:
+- `Trie`
+- `Dictionary`
+- `SuffixTree`
+- `SuffixArray`
+
+[Hash Tables][]:
+- `HashTable`
+- `HashTree`
+- `BloomFilters`
 
 [BTree]: https://en.wikipedia.org/wiki/B-tree
 [Balanced search trees]: https://en.wikipedia.org/wiki/Self-balancing_binary_search_tree
 [red black tree]: https://en.wikipedia.org/wiki/Red%E2%80%93black_tree
 [data structures]: https://www.amazon.com/Advanced-Data-Structures-Peter-Brass/dp/0521880378/ref=sr_1_2?ie=UTF8&qid=1541833203&sr=8-2&keywords=advanced+data+structures
 [Search trees]: https://en.wikipedia.org/wiki/Search_tree
-
+[Heaps]: https://en.wikipedia.org/wiki/Heap_(data_structure)
+[Hash Tables]: https://en.wikipedia.org/wiki/Hash_table
 License
 -------
 
