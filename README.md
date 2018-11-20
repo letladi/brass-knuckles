@@ -49,9 +49,9 @@ Interval Trees
 
 [Heaps][]:
 - `Heap`
-- `hoTree` (Heap-Ordered Tree)
-- `hfTree` (Half-Ordered Tree)
-- `LeftistHeap` (Leftist Heap)
+- `HeapOrderedTree`
+- `halfOrderedTree`
+- `LeftistHeap`
 - `SkewHeap`
 - `BinomialHeap`
 - `FibonacciHeap`
@@ -67,7 +67,19 @@ String Structures:
 [Hash Tables][]:
 - `HashTable`
 - `HashTree`
-- `BloomFilters`
+- `BloomFilter`
+
+License
+-------
+
+brass-knuckles is [MIT-licensed](https://opensource.org/licenses/MIT).
+
+
+Thanks
+-------
+
+[Peter Brass][] for his excellent book on data structures
+
 
 [BTree]: https://en.wikipedia.org/wiki/B-tree
 [Balanced search trees]: https://en.wikipedia.org/wiki/Self-balancing_binary_search_tree
@@ -76,7 +88,4 @@ String Structures:
 [Search trees]: https://en.wikipedia.org/wiki/Search_tree
 [Heaps]: https://en.wikipedia.org/wiki/Heap_(data_structure)
 [Hash Tables]: https://en.wikipedia.org/wiki/Hash_table
-License
--------
-
-brass-knucles is [MIT-licensed](https://opensource.org/licenses/MIT).
+[Peter Brass]: https://www.ccny.cuny.edu/profiles/peter-brass
