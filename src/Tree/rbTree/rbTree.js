@@ -1,5 +1,5 @@
 const LeafTree = require('../LeafTree')
-const Node = require('./rbTreeNode')
+const Node = require('./RBTreeNode')
 const {
   height,
   swapKeys,
@@ -8,7 +8,7 @@ const {
   rotateLeft,
 } = require('../treeUtils')
 
-class rbTree extends LeafTree {
+class RBTree extends LeafTree {
   constructor() {
     super()
     this.root.turnBlack()
@@ -184,10 +184,10 @@ class rbTree extends LeafTree {
         // handle case 3
       }
     }
-  
+
 }
 
-module.exports = rbTree
+module.exports = RBTree
 
 function haveSameColor(node1, node2) {
   return (node1.isRed() && node2.isRed()) ||

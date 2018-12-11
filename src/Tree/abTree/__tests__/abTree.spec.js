@@ -1,4 +1,4 @@
-const abTree = require('../abTree')
+const Tree = require('../ABTree')
 const { defaultAValue, defaultBValue } = require('../util')
 const {
   valueGenerator,
@@ -6,33 +6,33 @@ const {
   testWithDifferentKeyInsertionOrders
 } = require('../../__tests__/util')
 
-describe('abTree', () => {
+describe('ABTree', () => {
   it('does not allow b to be less than 2a when constructing tree', () => {
-    expect(() => new abTree(500, 900)).toThrow()
+    expect(() => new Tree(500, 900)).toThrow()
   })
   describe('tree properties', () => {
-    testWithDifferentKeyInsertionOrders(testTreeProperties, abTree)
+    testWithDifferentKeyInsertionOrders(testTreeProperties, Tree)
   })
   describe('#find', () => {
-    testWithDifferentKeyInsertionOrders(testFind, abTree)
+    testWithDifferentKeyInsertionOrders(testFind, Tree)
   })
   describe('#insert', () => {
-    testWithDifferentKeyInsertionOrders(testInsertion, abTree)
+    testWithDifferentKeyInsertionOrders(testInsertion, Tree)
   })
   describe('#delete', () => {
-    testWithDifferentKeyInsertionOrders(testDeletion, abTree)
+    testWithDifferentKeyInsertionOrders(testDeletion, Tree)
   })
   describe('.size', () => {
-    testWithDifferentKeyInsertionOrders(testSizeProperty, abTree)
+    testWithDifferentKeyInsertionOrders(testSizeProperty, Tree)
   })
   describe('#traverse', () => {
-    testWithDifferentKeyInsertionOrders(testTraversal, abTree)
+    testWithDifferentKeyInsertionOrders(testTraversal, Tree)
   })
   describe('.leaveCount', () => {
-    testWithDifferentKeyInsertionOrders(testLeaveCount, abTree)
+    testWithDifferentKeyInsertionOrders(testLeaveCount, Tree)
   })
   describe('.height', () => {
-    testWithDifferentKeyInsertionOrders(testHeight, abTree)
+    testWithDifferentKeyInsertionOrders(testHeight, Tree)
   })
 })
 
@@ -90,7 +90,7 @@ function testInsertion(getTree) {
   describe('insertion into empty tree', () => {
     describe('elements inserted <= b', () => {
       it('leaveCount = 1 after first insert', () => {
-        const tree = new abTree()
+        const tree = new Tree()
         tree.insert(1, 'one')
         expect(tree.leaveCount).toEqual(1)
       })

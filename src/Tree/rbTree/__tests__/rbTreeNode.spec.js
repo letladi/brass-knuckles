@@ -1,4 +1,4 @@
-const Node = require('../rbTreeNode')
+const Node = require('../RBTreeNode')
 describe('rbTreeNode', () => {
 let node = null
   beforeEach(() => {

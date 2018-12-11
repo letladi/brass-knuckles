@@ -1,5 +1,5 @@
 const { shuffle } = require('lodash')
-const Node = require('../abTreeNode')
+const Node = require('../ABTreeNode')
 const { valueGenerator } = require('../../__tests__/util')
 const { populateNode } = require('./testUtil')
 

@@ -1,10 +1,10 @@
-const Tree = require('../rbTree')
+const Tree = require('../RBTree')
 const performGenericLeafTreeTests = require('../../__tests__/LeafTree.spec')
-const Node = require('../rbTreeNode')
+const Node = require('../RBTreeNode')
 const { isEven, testWithDifferentKeyInsertionOrders } = require('../../__tests__/util')
 const { height, leaveCount, traverse } = require('../../treeUtils')
 
-describe('rbTree', () => {
+describe('RBTree', () => {
   performGenericLeafTreeTests(Tree)
   describe('tree properties', () => {
     testWithDifferentKeyInsertionOrders(testTreeProperties, Tree)

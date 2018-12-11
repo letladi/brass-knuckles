@@ -1,4 +1,4 @@
-const Node = require('./abTreeNode')
+const Node = require('./ABTreeNode')
 const Stack = require('../../Stack/Stack')
 const binarySearch = require('../../util/binarySearch')
 const {
