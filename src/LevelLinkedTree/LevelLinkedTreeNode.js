@@ -1,28 +1,44 @@
-const LeafTreeNode = require('../LeafTreeNode')
+const LeafTreeNode = require('../LeafTree/LeafTreeNode')
 
-class Node {
-  constructor(key = null, left = null, right = null, levelLeft = null, levelRight = null) {
-    this.key = key
-    this.left = left
-    this.right = right
-    this.levelLeft = levelLeft
-    this.levelRight = levelRight
+class Node extends LeafTreeNode {
+  constructor(key = null, left = null, right = null) {
+    super(key, left, right)
+    this.levelRight = null
+    this.levelLeft = null
+    this.parent = null
   }
 
   linkLeft(node) {
     this.levelLeft = node
+    node.levelRight = this
   }
 
   linkRight(node) {
     this.levelRight = node
+    node.levelLeft = this
   }
 
-  unLinkLeft() {
+  linkParent(node) {
+    this.parent = node
+  }
+
+  unlinkParent() {
+    this.parent = null
+  }
+
+  unlinkLeft() {
+    this.levelLeft.levelRight = null
     this.levelLeft = null
   }
 
-  unLinkRight() {
+  unlinkRight() {
+    this.levelRight.levelLeft = null
     this.levelRight = null
+  }
+
+  unlinkFromLevel() {
+    this.unlinkLeft()
+    this.unlinkRight()
   }
 }
 
