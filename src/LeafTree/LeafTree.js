@@ -104,7 +104,7 @@ class LeafTree {
     else if (this.root.isLeaf()) {
       if (this.root.key === key) {
         const deleteVal = this.root.value
-        this.root.left = null
+        this.root.reset()
         return deleteVal
       }
       return null

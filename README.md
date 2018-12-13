@@ -30,9 +30,9 @@ that allow duplicate value insertions for a single key)
 [Balanced search trees][] (with `O(logN)` performance on insertion, search and deletion):
 - `WeightBalancedLeafTree`
 - `HeightBalancedLeafTree`
-- `abTree` (a type of [BTree][])
-- `rbTree` (a [red black tree][])
-- `FingerTree`
+- `ABTree` (a type of [BTree][])
+- `RBTree` (a [red black tree][])
+- `LevelLinkedTree`
 - `SplayTree`
 - `SkipList`
 

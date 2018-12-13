@@ -40,17 +40,21 @@ class LevelLinkedTree extends LeafTree {
         if (node.key < key) {
           node.left = oldLeaf
           node.right = newLeaf
+
           oldLeaf.linkRight(newLeaf)
+          oldLeaf.linkLeft(getLeftMostLeaveNodeOfParentSibling(oldLeaf))
+          newLeaf.linkRight(getRightMostLeaveNodeOfParentSibling(newLeaf))
           oldLeaf.linkParent(node)
-          newLeaf.linkLeft(oldLeaf)
           newLeaf.linkParent(node)
           node.key = key
         } else {
           node.left = newLeaf
-          newLeaf.linkRight(oldLeaf)
-          newLeaf.linkParent(node)
           node.right = oldLeaf
+
           oldLeaf.linkLeft(newLeaf)
+          oldLeaf.linkRight(getRightMostLeaveNodeOfParentSibling(oldLeaf))
+          newLeaf.linkLeft(getLeftMostLeaveNodeOfParentSibling(newLeaf))
+          newLeaf.linkParent(node)
           oldLeaf.linkParent(node)
         }
       }
@@ -73,22 +77,47 @@ class LevelLinkedTree extends LeafTree {
         let oldLeaf = this.createNode(node.key, node.value)
         const newLeaf = this.createNode(key, val)
 
-        if (node.key < key) {
-          node.left = oldLeaf
-          node.right = newLeaf
-          oldLeaf.linkRight(newLeaf)
-          oldLeaf.linkParent(node)
-          newLeaf.linkLeft(oldLeaf)
-          newLeaf.linkParent(node)
-          node.key = key
-        } else {
-          node.left = newLeaf
-          newLeaf.linkRight(oldLeaf)
-          newLeaf.linkParent(node)
-          node.right = oldLeaf
-          oldLeaf.linkLeft(newLeaf)
-          oldLeaf.linkParent(node)
-        }
+        // case 1: if the new leaf is the right of its parent,
+        //    we link it to its parent
+        //    its left sibling becomes its levelLeft
+        //    case 1.1: we look at its parent;
+        //      case 1.1.1: if the parent is a left child, we look for the left-most child leaf of its right sibling
+        //      case 1.1.2: we look for a levelRight of the parent (or a right sibling or levelRight of any of its ancestors)
+        //                  and then we get the left-most child of that left sibling or levelRight
+        //                  if there is no left sibling, we get the right leaf of the left-most interior node
+
+        // case 2: the new leaf is the left of its parent
+        //    we link it to its parent
+        //    its right sibling becomes its levelRight
+        //    case 2.1: we look at its parent
+        //      case 2.1.1: if the parent is a right child, we look for the right-most child leaf of its left sibling
+        //      case 2.1.2: we for a levelLeft of the parent (or a left sibling or levelLeft of its closest ancestor)
+        //                  and then we get the right-most child leaf of that left sibling of levelLeft
+        //                    if there is no right sibling, we get the left leaf of the right-most interior node
+        //
+
+        // we must now adjust the levelLinks of the parent
+        // case 1: the sibling of the parent is a leaf
+        //    we must remove the level links of the parent
+        // 
+
+
+        // if (node.key < key) {
+        //   node.left = oldLeaf
+        //   node.right = newLeaf
+        //   oldLeaf.linkRight(newLeaf)
+        //   oldLeaf.linkParent(node)
+        //   newLeaf.linkLeft(oldLeaf)
+        //   newLeaf.linkParent(node)
+        //   node.key = key
+        // } else {
+        //   node.left = newLeaf
+        //   newLeaf.linkRight(oldLeaf)
+        //   newLeaf.linkParent(node)
+        //   node.right = oldLeaf
+        //   oldLeaf.linkLeft(newLeaf)
+        //   oldLeaf.linkParent(node)
+        // }
         this.balance(nodesOnNavigationPath)
       }
     }
@@ -165,6 +194,18 @@ function findHelper(node, key) {
     else if (!isNull(current.levelLeft)) return findHelper(current.levelLeft, key)
      else return null
   } // end of: if query is left of finder
+}
+
+function getNextLeftMostLeafNode(node) {
+  let result = null
+  let  parent = node.parent
+  if (node === parent.left) {
+    const levelLeftOfParent = parent.levelLeft
+    if (isNull(levelLeftOfParent)) {
+      parent = parent.parent
+      if (isNull(parent)) return result
+    }
+  }
 }
 
 module.exports = LevelLinkedTree
